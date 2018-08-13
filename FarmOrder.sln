@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmOrder", "FarmOrder\FarmOrder.csproj", "{A50300D2-4D29-440B-B209-968D787B0758}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmOrder.Tests", "FarmOrder.Tests\FarmOrder.Tests.csproj", "{A1DC0BD8-0170-487B-918F-2BA76322964E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A50300D2-4D29-440B-B209-968D787B0758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A50300D2-4D29-440B-B209-968D787B0758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A50300D2-4D29-440B-B209-968D787B0758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A50300D2-4D29-440B-B209-968D787B0758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1DC0BD8-0170-487B-918F-2BA76322964E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1DC0BD8-0170-487B-918F-2BA76322964E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1DC0BD8-0170-487B-918F-2BA76322964E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1DC0BD8-0170-487B-918F-2BA76322964E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3226143C-0967-4810-AA7E-A3ACC15FCB8D}
+	EndGlobalSection
+EndGlobal
