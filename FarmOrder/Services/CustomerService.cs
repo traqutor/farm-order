@@ -5,6 +5,7 @@ using System.Web;
 using FarmOrder.Models;
 using FarmOrder.Models.Customers;
 using FarmOrder.Data;
+using System.Data.Entity;
 
 namespace FarmOrder.Services
 {
@@ -20,7 +21,7 @@ namespace FarmOrder.Services
 
         public SearchResults<CustomerListEntryViewModel> GetCustomers(string userId, bool isAdmin, int page)
         {
-            var query = _context.Customers.Where(c => c.EntityStatus == Data.Entities.EntityStatus.NORMAL).OrderByDescending(c => c.CreationDate).AsQueryable();
+            var query = _context.Customers.Include(c => c.CustomerSites).Where(c => c.EntityStatus == Data.Entities.EntityStatus.NORMAL).OrderByDescending(c => c.CreationDate).AsQueryable();
 
             if (!isAdmin)
             {

@@ -11,6 +11,8 @@ using Owin;
 using FarmOrder.Providers;
 using FarmOrder.Models;
 using FarmOrder.Data;
+using Microsoft.Owin.Cors;
+
 
 namespace FarmOrder
 {
@@ -23,6 +25,7 @@ namespace FarmOrder
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+            app.UseCors(CorsOptions.AllowAll);
             // Configure the db context and user manager to use a single instance per request
             app.CreatePerOwinContext(FarmOrderDBContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
