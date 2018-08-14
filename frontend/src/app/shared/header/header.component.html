@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
-    *ngIf="false"
+    *ngIf="authService.isAuthenticated()"
     #drawer
     class="sidenav"
     fixedInViewport="true"
@@ -9,9 +9,8 @@
     [opened]="!(isHandset$ | async)">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+      <a mat-list-item routerLink="orders">Orders</a>
+      <a mat-list-item href="#">New Order</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -25,6 +24,9 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>FarmOrder</span>
+      <div class="spacer"></div>
+      <button mat-button routerLink="users">Users</button>
+      <button mat-button (click)="authService.logout()">Logout</button>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

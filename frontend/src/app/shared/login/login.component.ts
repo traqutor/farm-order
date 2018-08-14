@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.router.navigateByUrl('dashboard');
+        this.router.navigateByUrl('orders');
       }, err => {
         this.isLogging = false;
         this.err = true;

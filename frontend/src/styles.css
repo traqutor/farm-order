@@ -9,3 +9,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
   align-items: center;
   height: calc(100vh - 64px);
 }
+
+.spacer {
+  flex: 1 1 auto;
+}
