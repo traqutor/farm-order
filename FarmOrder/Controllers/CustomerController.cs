@@ -11,7 +11,6 @@ using System.Web.Http;
 
 namespace FarmOrder.Controllers
 {
-    //[Authorize]
     public class CustomerController : ApiController
     {
         private readonly CustomerService _service;
@@ -24,9 +23,9 @@ namespace FarmOrder.Controllers
         public SearchResults<CustomerListEntryViewModel> Get(int page)
         {
             if (User.IsInRole("Admin"))
-               return _service.GetCustomers(User.Identity.GetUserId(), true, page);
+                return _service.GetCustomers(User.Identity.GetUserId(), true, page);
             else
-               return _service.GetCustomers(User.Identity.GetUserId(), true, page);
+                return _service.GetCustomers(User.Identity.GetUserId(), false, page);
         }
     }
 }

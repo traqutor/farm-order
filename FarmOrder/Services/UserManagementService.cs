@@ -5,6 +5,7 @@ using System.Web;
 using FarmOrder.Models.Users;
 using FarmOrder.Data;
 using FarmOrder.Models;
+using System.Data.Entity;
 
 namespace FarmOrder.Services
 {
@@ -20,15 +21,22 @@ namespace FarmOrder.Services
 
         public SearchResults<UserListEntryViewModel> GetUsers(string userId, bool isAdmin, int page, int? customerId, int? siteId)
         {
-            var query = _context.Users;
+            var query = _context.Users.OrderBy(u => u.UserName).AsQueryable();
 
             if (!isAdmin)
             {
-                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
-               // query = query.Where(u => u.CustomerId)
+                var loggedUser = _context.Users.Include(u => u.Customer).SingleOrDefault(u => u.Id == userId);
+                query = query.Where(u => u.CustomerId == loggedUser.CustomerId);
             }
 
-            throw new NotImplementedException();
+            int totalCount = query.Count();
+
+            query = query.Take(_pageSize).Skip(_pageSize * page);
+
+            return new SearchResults<UserListEntryViewModel>{
+                ResultsCount = totalCount,
+                Results = query.ToList().Select(el => new UserListEntryViewModel(el)).ToList()
+            };
         }
     }
 }

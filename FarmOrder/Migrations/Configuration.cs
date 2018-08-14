@@ -54,7 +54,7 @@ namespace FarmOrder.Migrations
 
 
             #region customers and sites creation
-
+            
             Customer customer1 = new Customer()
             {
                 Id = 1,
@@ -123,7 +123,7 @@ namespace FarmOrder.Migrations
             context.CustomerSites.AddOrUpdate(site2);
             context.CustomerSites.AddOrUpdate(site3);
             context.CustomerSites.AddOrUpdate(site4);
-
+            
             #endregion
 
             #region SystemAdmin creation
@@ -201,6 +201,19 @@ namespace FarmOrder.Migrations
                 var result = UserManager.AddToRole(user5.Id, "CustomerAdmin");
             }
 
+            #endregion
+
+            #region binding users to the sites
+
+            /* CustomerSiteUser csu1 = new CustomerSiteUser
+             {
+                 Id = 1,
+                 UserId = user2.Id,
+                 CustomerSiteId = site1.Id
+             };
+
+             context.CustomerSiteUsers.AddOrUpdate(csu1);
+            */
             #endregion
 
             context.SaveChanges();
