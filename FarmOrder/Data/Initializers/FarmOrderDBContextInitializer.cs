@@ -22,24 +22,24 @@ namespace FarmOrder.Data.Initializers
             #region Roles creation
 
 
-            if (!roleManager.RoleExists("SystemAdmin"))
+            if (!roleManager.RoleExists("Admin"))
             {
                 var role = new IdentityRole();
-                role.Name = "SystemAdmin";
+                role.Name = "Admin";
                 roleManager.Create(role);
             }
 
             if (!roleManager.RoleExists("CustomerAdmin"))
             {
                 var role = new IdentityRole();
-                role.Name = "OrganisationAdmin";
+                role.Name = "CustomerAdmin";
                 roleManager.Create(role);
             }
 
             if (!roleManager.RoleExists("Customer"))
             {
                 var role = new IdentityRole();
-                role.Name = "ContentAdmin";
+                role.Name = "Customer";
                 roleManager.Create(role);
             }
 
@@ -49,10 +49,10 @@ namespace FarmOrder.Data.Initializers
 
             var user = new User();
             user.UserName = "sysadmin";
-            user.Email = "sysadmin@gmail.com";
+            //user.Email = "sysadmin@gmail.com";
             user.EmailConfirmed = true;
 
-            string userPWD = "thinkfast!";
+            string userPWD = "Profisol";
 
             var chkUser = UserManager.Create(user, userPWD);
             #endregion
