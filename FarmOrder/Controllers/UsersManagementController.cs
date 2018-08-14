@@ -1,7 +1,9 @@
-﻿using FarmOrder.Models;
+﻿using FarmOrder.Data.Entities;
+using FarmOrder.Models;
 using FarmOrder.Models.Users;
 using FarmOrder.Services;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,15 @@ namespace FarmOrder.Controllers
             if (User.IsInRole("Admin"))
                 return _service.GetUsers(User.Identity.GetUserId(), true, page, customerId, siteId);
             else  
-                return _service.GetUsers(User.Identity.GetUserId(), true, page, null, null);
+                return _service.GetUsers(User.Identity.GetUserId(), false, page, null, null);
+        }
+
+        public UserListEntryViewModel Post([FromBody]UserCreateModel model)
+        {
+            if (User.IsInRole("Admin"))
+                return _service.Add(User.Identity.GetUserId(), true, model);
+            else
+                return _service.Add(User.Identity.GetUserId(), false, model);
         }
     }
 }
