@@ -236,25 +236,34 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UsersManagementController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data\Entities\CustomerSites\CustomerSite.cs" />
     <Compile Include="Data\Entities\CustomerSites\CustomerSiteUser.cs" />
     <Compile Include="Data\Entities\Customers\Customer.cs" />
+    <Compile Include="Data\Entities\EntityStatus.cs" />
     <Compile Include="Data\Entities\User.cs" />
     <Compile Include="Data\FarmOrderDBContext.cs" />
     <Compile Include="Data\Initializers\FarmOrderDBContextInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808140908485_InitialMigration.cs" />
+    <Compile Include="Migrations\201808140908485_InitialMigration.Designer.cs">
+      <DependentUpon>201808140908485_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
     <Compile Include="Models\SearchResults.cs" />
     <Compile Include="Models\Users\UserListEntryViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -330,6 +339,11 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201808140908485_InitialMigration.resx">
+      <DependentUpon>201808140908485_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
