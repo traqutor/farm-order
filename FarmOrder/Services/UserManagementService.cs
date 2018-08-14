@@ -6,7 +6,6 @@ using FarmOrder.Models.Users;
 using FarmOrder.Data;
 using FarmOrder.Models;
 using System.Data.Entity;
-
 namespace FarmOrder.Services
 {
     public class UserManagementService
@@ -18,6 +17,7 @@ namespace FarmOrder.Services
         {
             _context = FarmOrderDBContext.Create();
         }
+
 
         public SearchResults<UserListEntryViewModel> GetUsers(string userId, bool isAdmin, int page, int? customerId, int? siteId)
         {
@@ -31,7 +31,7 @@ namespace FarmOrder.Services
 
             int totalCount = query.Count();
 
-            query = query.Take(_pageSize).Skip(_pageSize * page);
+            query = query.Include(u => u.Claims).Take(_pageSize).Skip(_pageSize * page);
 
             return new SearchResults<UserListEntryViewModel>{
                 ResultsCount = totalCount,
