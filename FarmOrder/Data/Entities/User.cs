@@ -13,9 +13,11 @@ namespace FarmOrder.Data.Entities
 {
     public class User : IdentityUser
     {
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
+
+        public EntityStatus EntityStatus { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)
         {

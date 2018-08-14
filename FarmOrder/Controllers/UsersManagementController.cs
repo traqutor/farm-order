@@ -29,7 +29,6 @@ namespace FarmOrder.Controllers
                 return _service.GetUsers(User.Identity.GetUserId(), true, page, null, null);
             else
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
-            
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using FarmOrder.Data.Entities;
+using FarmOrder.Data.Entities.Customers;
+using FarmOrder.Data.Entities.CustomerSites;
 using FarmOrder.Data.Initializers;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -25,12 +27,9 @@ namespace FarmOrder.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-           
-
         }
 
-        //public virtual DbSet<User> Users { get; set; }
-
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<CustomerSite> CustomerSites { get; set; }
     }
 }

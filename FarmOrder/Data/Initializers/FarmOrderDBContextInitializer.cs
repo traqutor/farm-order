@@ -1,4 +1,6 @@
 ﻿using FarmOrder.Data.Entities;
+using FarmOrder.Data.Entities.Customers;
+using FarmOrder.Data.Entities.CustomerSites;
 using FarmOrder.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -55,8 +57,32 @@ namespace FarmOrder.Data.Initializers
             string userPWD = "Profisol";
 
             var chkUser = UserManager.Create(user, userPWD);
+
             #endregion
 
+
+            #region customers and sites creation
+
+            Customer customer1 = new Customer()
+            {
+                CompanyName = "Profisol",
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
+            };
+
+            context.Customers.Add(customer1);
+
+            CustomerSite site1 = new CustomerSite()
+            {
+                SiteName = "Profisol Site one in Siedlce",
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow,
+                Customer = customer1
+            };
+
+            context.CustomerSites.Add(site1);
+
+            #endregion
 
             context.SaveChanges();
         }

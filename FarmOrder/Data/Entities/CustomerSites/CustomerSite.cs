@@ -16,5 +16,10 @@ namespace FarmOrder.Data.Entities.CustomerSites
         public virtual Customer Customer { get; set; }
 
         public string SiteName { get; set; }
+
+        public DateTime CreationDate { get; set; }
+        public DateTime ModificationDate { get; set; }
+
+        public EntityStatus EntityStatus { get; set; }
     }
 }
