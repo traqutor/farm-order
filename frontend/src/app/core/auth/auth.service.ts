@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
 
-interface AuthResponse {
+export interface AuthResponse {
   '.expires': string;
   '.issued': string;
   access_token: string;
@@ -14,6 +12,10 @@ interface AuthResponse {
   token_type: string;
   userName: string;
 }
+
+@Injectable({
+  providedIn: 'root'
+})
 
 export class AuthService {
 
@@ -23,13 +25,18 @@ export class AuthService {
     this.apiUrl = environment.url;
   }
 
-  login(credentials): void {
-    const {login, password} = credentials;
+  saveCredentialsToStorage(login: string, token: string) {
+    localStorage.setItem('login', login);
+    localStorage.setItem('token', token);
+  }
+
+  login(credentials): Observable<Object> {
+    const { login, password } = credentials;
     const body = new HttpParams()
       .set('grant_type', 'password')
       .set('userName', login)
       .set('password', password);
-    this.http.get(`${this.apiUrl}/token`)
+    return this.http.post(this.apiUrl + '/token', body.toString());
   }
 
 }

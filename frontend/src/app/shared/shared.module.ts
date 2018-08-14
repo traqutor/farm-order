@@ -15,6 +15,7 @@ import { AppMaterialModule } from '../app-material.module';
     LayoutModule,
     AppMaterialModule
   ],
+  providers: [],
   exports: [HeaderComponent],
   declarations: [HeaderComponent, LoginComponent]
 })
