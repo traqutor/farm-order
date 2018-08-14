@@ -31,7 +31,7 @@ namespace FarmOrder.Controllers
                 return _service.GetUsers(User.Identity.GetUserId(), false, page, null, null);
         }
 
-        public UserListEntryViewModel Post([FromBody]UserCreateModel model)
+        public UserListEntryViewModel Post([FromBody]UserListEntryViewModel model)
         {
             if (User.IsInRole("Admin"))
                 return _service.Add(User.Identity.GetUserId(), true, model);
