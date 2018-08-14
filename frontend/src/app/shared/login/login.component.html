@@ -1,0 +1,31 @@
+<div class="container">
+  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+    <mat-card>
+      <form class="singInForm" (ngSubmit)="onSignIn(f)" #f="ngForm">
+        <mat-form-field>
+          <input matInput
+                 placeholder="Login"
+                 type="text"
+                 name="login"
+                 ngModel>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 placeholder="Password"
+                 type="password"
+                 name="password" ngModel>
+        </mat-form-field>
+        <!--<div class="error-message" *ngIf="authService.error">{{authService.errorMessage}}-->
+        <!--</div>-->
+        <button mat-raised-button color="primary" type="submit" [disabled]="!f.valid">SignIn</button>
+      </form>
+
+      <!--<mat-progress-bar-->
+      <!--*ngIf="authService.isLogging"-->
+      <!--[color]="color"-->
+      <!--[mode]="'indeterminate'">-->
+      <!--</mat-progress-bar>-->
+
+    </mat-card>
+  </div>
+</div>
