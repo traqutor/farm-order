@@ -11,7 +11,7 @@ using System.Web.Http;
 
 namespace FarmOrder.Controllers
 {
-    [Authorize(Roles = "Admin, CustomerAdmin")]
+    //[Authorize(Roles = "Admin, CustomerAdmin")]
     public class UsersManagementController : ApiController
     {
         private readonly UserManagementService _service;
@@ -21,14 +21,12 @@ namespace FarmOrder.Controllers
             _service = new UserManagementService();
         }
 
-        public SearchResults<UserListEntryViewModel> Get(int page, int customerId, int siteId)
+        public SearchResults<UserListEntryViewModel> Get(int page, int? customerId, int? siteId)
         {
             if (User.IsInRole("Admin"))
                 return _service.GetUsers(User.Identity.GetUserId(), true, page, customerId, siteId);
-            else if (User.IsInRole("CustomerAdmin"))
+            else  
                 return _service.GetUsers(User.Identity.GetUserId(), true, page, null, null);
-            else
-                throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
     }
 }

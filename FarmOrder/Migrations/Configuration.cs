@@ -204,16 +204,34 @@ namespace FarmOrder.Migrations
             #endregion
 
             #region binding users to the sites
+            //not adding if already added
+            if(context.CustomerSiteUsers.Count() == 0) { 
+                 CustomerSiteUser csu1 = new CustomerSiteUser
+                 {
+                     Id = 1,
+                     UserId = user2.Id,
+                     CustomerSiteId = site1.Id
+                 };
 
-            /* CustomerSiteUser csu1 = new CustomerSiteUser
-             {
-                 Id = 1,
-                 UserId = user2.Id,
-                 CustomerSiteId = site1.Id
-             };
+                CustomerSiteUser csu2 = new CustomerSiteUser
+                {
+                    Id = 2,
+                    UserId = user3.Id,
+                    CustomerSiteId = site2.Id
+                };
 
-             context.CustomerSiteUsers.AddOrUpdate(csu1);
-            */
+                CustomerSiteUser csu3 = new CustomerSiteUser
+                {
+                    Id = 3,
+                    UserId = user5.Id,
+                    CustomerSiteId = site4.Id
+                };
+
+                context.CustomerSiteUsers.AddOrUpdate(csu1);
+                context.CustomerSiteUsers.AddOrUpdate(csu2);
+                context.CustomerSiteUsers.AddOrUpdate(csu3);
+            }
+
             #endregion
 
             context.SaveChanges();

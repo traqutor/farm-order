@@ -11,6 +11,7 @@ using System.Web.Http;
 
 namespace FarmOrder.Controllers
 {
+    //[Authorize]
     public class CustomerController : ApiController
     {
         private readonly CustomerService _service;

@@ -1,6 +1,7 @@
 ﻿using FarmOrder.Data.Entities;
 using FarmOrder.Models.Customers;
 using FarmOrder.Models.CustomerSites;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace FarmOrder.Models.Users
 
         public CustomerListEntryViewModel Customer { get; set; }
 
-        public List<CustomerSiteListEntryViewModel> UserSites { get; set; }
+        public List<CustomerSiteListEntryViewModel> UserSites { get; set; } = new List<CustomerSiteListEntryViewModel>();
+        public string RoleId { get; set; }
+        
 
         public UserListEntryViewModel()
         {
@@ -30,10 +33,16 @@ namespace FarmOrder.Models.Users
             if(entity.Customer != null)
                 Customer = new CustomerListEntryViewModel(entity.Customer);
 
-            //entity.CustomerSiteUser.foreach (var item in collection)
-            //{
+            RoleId = entity.Roles.FirstOrDefault().RoleId;
 
-            //}
+            UserSites = entity.CustomerSiteUser.Select(el => new CustomerSiteListEntryViewModel(el.CustomerSite)).ToList();
         }
+    }
+
+    public enum Permissions
+    {
+        CUSTOMER,
+        CUSTOMER_ADMIN,
+        ADMIN
     }
 }
