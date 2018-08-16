@@ -30,7 +30,7 @@ namespace FarmOrder.Services
 
             return new SearchResults<OrderChangeReasonListEntryViewModel>
             {
-                ResultsCount = query.Count(),
+                ResultsCount = totalCount,
                 Results = query.ToList().Select(el => new OrderChangeReasonListEntryViewModel(el)).ToList()
             };
         }

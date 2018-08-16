@@ -28,7 +28,7 @@ namespace FarmOrder.Services
 
             return new SearchResults<OrderStatusListEntryViewModel>
             {
-                ResultsCount = query.Count(),
+                ResultsCount = totalCount,
                 Results = query.ToList().Select(el => new OrderStatusListEntryViewModel(el)).ToList()
             };
         }

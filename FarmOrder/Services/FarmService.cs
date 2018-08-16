@@ -28,9 +28,14 @@ namespace FarmOrder.Services
                 query = query.Where(u => u.CustomerSite.CustomerId == loggedUser.CustomerId);
             }
 
+            int totalCount = query.Count();
+
+            if (page != null)
+                query = query.Take(_pageSize).Skip(_pageSize * page.Value);
+
             return new SearchResults<FarmListEntryViewModel>
             {
-                ResultsCount = query.Count(),
+                ResultsCount = totalCount,
                 Results = query.ToList().Select(el => new FarmListEntryViewModel(el)).ToList()
             };
         }

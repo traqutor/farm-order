@@ -261,6 +261,7 @@
     <Compile Include="Controllers\FarmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderChangeReasonController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrderStatusController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UsersManagementController.cs" />
@@ -297,7 +298,9 @@
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
     <Compile Include="Models\Farms\FarmListEntryViewModel.cs" />
     <Compile Include="Models\Orders\OrderChangeReasonListEntryViewModel.cs" />
+    <Compile Include="Models\Orders\OrderCreateModel.cs" />
     <Compile Include="Models\Orders\OrderListEntryViewModel.cs" />
+    <Compile Include="Models\Orders\OrderSearchModel.cs" />
     <Compile Include="Models\Orders\OrderStatusListEntryViewModel.cs" />
     <Compile Include="Models\SearchResults.cs" />
     <Compile Include="Models\Users\RoleListEntryViewModel.cs" />
@@ -311,6 +314,7 @@
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\FarmService.cs" />
     <Compile Include="Services\OrderChangeReasonService.cs" />
+    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\OrderStatusService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
