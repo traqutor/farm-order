@@ -1,4 +1,5 @@
-﻿using FarmOrder.Models;
+﻿using FarmOrder.Data.Entities;
+using FarmOrder.Models;
 using FarmOrder.Models.Users;
 using FarmOrder.Services;
 using System;
@@ -23,7 +24,10 @@ namespace FarmOrder.Controllers
 
         public SearchResults<RoleListEntryViewModel> GetRoles(int? page = null)
         {
-            return _service.GetRoles(page);
+            if(User.IsInRole(UserSystemRoles.Admin))
+                return _service.GetRoles(true, page);
+            else 
+                return _service.GetRoles(false, page);
         }
     }
 }

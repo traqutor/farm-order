@@ -1,4 +1,5 @@
 ﻿using FarmOrder.Data;
+using FarmOrder.Data.Entities;
 using FarmOrder.Models;
 using FarmOrder.Models.Users;
 using System;
@@ -18,16 +19,20 @@ namespace FarmOrder.Services
             _context = FarmOrderDBContext.Create();
         }
 
-        public SearchResults<RoleListEntryViewModel> GetRoles(int? page)
+        public SearchResults<RoleListEntryViewModel> GetRoles(bool isAdmin, int? page)
         {
             
             var query = _context.Roles.OrderByDescending(r => r.Id).AsQueryable();
-    
+
+            if (!isAdmin)
+                query = query.Where(role => role.Name != UserSystemRoles.Admin);
+
             int totalCount = query.Count();
 
             if (page != null)
                 query = query.Take(_pageSize).Skip(_pageSize * page.Value);
 
+           
 
             return new SearchResults<RoleListEntryViewModel>
             {

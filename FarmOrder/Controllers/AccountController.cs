@@ -17,6 +17,9 @@ using FarmOrder.Models;
 using FarmOrder.Providers;
 using FarmOrder.Results;
 using FarmOrder.Data.Entities;
+using FarmOrder.Models.Users;
+using FarmOrder.Data;
+using System.Linq;
 
 namespace FarmOrder.Controllers
 {
@@ -27,8 +30,13 @@ namespace FarmOrder.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
 
+        private readonly FarmOrderDBContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
         public AccountController()
         {
+            _context = FarmOrderDBContext.Create();
+            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_context));
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -55,16 +63,12 @@ namespace FarmOrder.Controllers
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
-        public UserInfoViewModel GetUserInfo()
+        public UserListEntryViewModel GetUserInfo()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
-            return new UserInfoViewModel
-            {
-                Email = User.Identity.GetUserName(),
-                HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
-            };
+            string loggedUserId = User.Identity.GetUserId();
+            var userToReturn = _context.Users.SingleOrDefault(u => u.Id == loggedUserId);
+            var possibleRoles = _roleManager.Roles.ToList();
+            return new UserListEntryViewModel(userToReturn, possibleRoles);
         }
 
         // POST api/Account/Logout
