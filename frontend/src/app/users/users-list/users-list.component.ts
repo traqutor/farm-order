@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../users.service';
 import { SharedService } from '../../shared/shared.service';
+import { Observable } from 'rxjs';
+import { User } from '../../shared/models/user';
 
 @Component({
   selector: 'app-users-list',
@@ -9,10 +11,12 @@ import { SharedService } from '../../shared/shared.service';
 })
 export class UsersListComponent implements OnInit {
 
-  customers$;
+  customers$: Observable<{ results: Array<User>, resultCount: number }>;
+  dataSource;
 
   constructor(private usersService: UsersService,
-              private sharedService: SharedService) { }
+              private sharedService: SharedService) {
+  }
 
   ngOnInit() {
     this.usersService.getUsers().subscribe(res => {
