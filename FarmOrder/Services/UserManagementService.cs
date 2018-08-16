@@ -57,17 +57,23 @@ namespace FarmOrder.Services
         {
             Customer selectedCustomer = _context.Customers.Include(c => c.CustomerSites).SingleOrDefault(c => c.Id == model.Customer.Id);
             IdentityRole role = _roleManager.FindById(model.RoleId);
+            List<string> errors = new List<string>();
 
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
 
                 if (selectedCustomer.Id != loggedUser.CustomerId)
-                    throw new HttpResponseException(System.Net.HttpStatusCode.Unauthorized);
-                if(role.Name == UserSystemRoles.Admin)
-                    throw new HttpResponseException(System.Net.HttpStatusCode.Unauthorized);
+                    errors.Add("User customerId and new user customerId can not be different.");
+                if (role.Name == UserSystemRoles.Admin)
+                    errors.Add("Normal user can not assign Admin role.");
             }
 
+            if(selectedCustomer == null)
+                errors.Add("Customer can not be empty.");
+
+            if (errors.Count > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
             var user = new User();
             user.UserName = model.UserName;
             user.EmailConfirmed = true;

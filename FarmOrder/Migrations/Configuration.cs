@@ -150,6 +150,7 @@ namespace FarmOrder.Migrations
             user2.UserName = "FamilyFoodsAdmin";
             //user.Email = "sysadmin@gmail.com";
             user2.EmailConfirmed = true;
+            user2.CustomerId = 2;
 
             string user2PWD = "Password";
 
@@ -165,6 +166,7 @@ namespace FarmOrder.Migrations
             user3.UserName = "WholenatureAdmin";
             //user.Email = "sysadmin@gmail.com";
             user3.EmailConfirmed = true;
+            user3.CustomerId = 3;
 
             string user3PWD = "Password";
 
@@ -178,6 +180,7 @@ namespace FarmOrder.Migrations
             var user4 = new User();
             user4.UserName = "ProfisolAdmin";
             user4.EmailConfirmed = true;
+            user4.CustomerId = 1;
 
             string user4PWD = "Password";
 
@@ -191,6 +194,7 @@ namespace FarmOrder.Migrations
             var user5 = new User();
             user5.UserName = "FamilyfoodsBrisbane";
             user5.EmailConfirmed = true;
+            user5.CustomerId = 2;
 
             string user5PWD = "Password";
 
