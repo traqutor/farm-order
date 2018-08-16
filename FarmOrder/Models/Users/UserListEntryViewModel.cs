@@ -13,14 +13,15 @@ namespace FarmOrder.Models.Users
     {
         public string Id { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }
+    
 
+        /// <summary>
+        /// Users customer that he belongs to, and inside the sides that user belongs to
+        /// </summary>
         public CustomerListEntryViewModel Customer { get; set; }
 
-        public List<CustomerSiteListEntryViewModel> UserSites { get; set; } = new List<CustomerSiteListEntryViewModel>();
         public string RoleId { get; set; }
-        
-
+    
         public UserListEntryViewModel()
         {
 
@@ -31,19 +32,14 @@ namespace FarmOrder.Models.Users
             Id = entity.Id;
             UserName = entity.UserName;
 
-            if(entity.Customer != null)
+            if(entity.Customer != null) { 
                 Customer = new CustomerListEntryViewModel(entity.Customer);
+                Customer.CustomerSites = entity.CustomerSiteUser.Select(el => new CustomerSiteListEntryViewModel(el.CustomerSite)).ToList();
+            }
 
             RoleId = entity.Roles.FirstOrDefault().RoleId;
 
-            UserSites = entity.CustomerSiteUser.Select(el => new CustomerSiteListEntryViewModel(el.CustomerSite)).ToList();
+            
         }
-    }
-
-    public enum Permissions
-    {
-        CUSTOMER,
-        CUSTOMER_ADMIN,
-        ADMIN
     }
 }

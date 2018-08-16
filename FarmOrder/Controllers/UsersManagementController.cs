@@ -13,7 +13,7 @@ using System.Web.Http;
 
 namespace FarmOrder.Controllers
 {
-    //[Authorize(Roles = "Admin, CustomerAdmin")]
+    [Authorize(Roles = "Admin, CustomerAdmin")]
     public class UsersManagementController : ApiController
     {
         private readonly UserManagementService _service;
@@ -31,12 +31,24 @@ namespace FarmOrder.Controllers
                 return _service.GetUsers(User.Identity.GetUserId(), false, page, null, null);
         }
 
-        public UserListEntryViewModel Post([FromBody]UserListEntryViewModel model)
+        public UserListEntryViewModel Post([FromBody]UserCreateModel model)
         {
+            if (!ModelState.IsValid)
+            {
+               
+                var error = new
+                {
+                    message = "Invalid request",
+                    errors = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, error));
+            }
+
             if (User.IsInRole("Admin"))
-                return _service.Add(User.Identity.GetUserId(), true, model);
+                return _service.Add(User.Identity.GetUserId(), true, model, Request);
             else
-                return _service.Add(User.Identity.GetUserId(), false, model);
+                return _service.Add(User.Identity.GetUserId(), false, model, Request);
         }
     }
 }

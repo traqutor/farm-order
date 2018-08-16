@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 using FarmOrder.Data.Entities;
 using FarmOrder.Data.Entities.CustomerSites;
 using System.Net.Http;
+using System.Net;
 
 namespace FarmOrder.Services
 {
@@ -52,7 +53,7 @@ namespace FarmOrder.Services
             };
         }
 
-        public UserListEntryViewModel Add(string userId, bool isAdmin, UserListEntryViewModel model)
+        public UserListEntryViewModel Add(string userId, bool isAdmin, UserCreateModel model, HttpRequestMessage request)
         {
             Customer selectedCustomer = _context.Customers.Include(c => c.CustomerSites).SingleOrDefault(c => c.Id == model.Customer.Id);
             IdentityRole role = _roleManager.FindById(model.RoleId);
@@ -80,9 +81,9 @@ namespace FarmOrder.Services
             {
                 var result = _userManager.AddToRole(user.Id, role.Name);
 
-                if (model.UserSites != null)
+                if (model.Customer?.CustomerSites != null)
                 {
-                    int[] sitesIds = model.UserSites.Select(s => s.Id).ToArray();
+                    int[] sitesIds = model.Customer.CustomerSites.Select(s => s.Id).ToArray();
                     List<CustomerSite> sites = selectedCustomer.CustomerSites.Where(cs => sitesIds.Contains(cs.Id)).ToList();
 
                     sites.ForEach(site =>
@@ -93,9 +94,13 @@ namespace FarmOrder.Services
             }
             else
             {
-                var resp = new HttpResponseMessage();
+                var error = new
+                {
+                    message = "Invalid request",
+                    errors = chkUser.Errors
+                };
 
-                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, error));
             }
 
             _context.SaveChanges();

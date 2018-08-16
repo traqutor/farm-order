@@ -10,6 +10,7 @@ using System.Web.Http;
 
 namespace FarmOrder.Controllers
 {
+    [Authorize]
     public class RoleController : ApiController
     {
         private readonly RoleService _service;
