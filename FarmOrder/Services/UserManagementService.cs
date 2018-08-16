@@ -51,10 +51,10 @@ namespace FarmOrder.Services
             int totalCount = query.Count();
 
             //query = query.Take(_pageSize).Skip(_pageSize * page);
-
+            var possibleRoles = _roleManager.Roles.ToList();
             return new SearchResults<UserListEntryViewModel>{
                 ResultsCount = totalCount,
-                Results = query.ToList().Select(el => new UserListEntryViewModel(el)).ToList()
+                Results = query.ToList().Select(el => new UserListEntryViewModel(el, possibleRoles)).ToList()
             };
         }
 
@@ -117,13 +117,28 @@ namespace FarmOrder.Services
             _context.SaveChanges();
 
             var userToReturn = _context.Users.SingleOrDefault(u => u.Id == user.Id);
+            var possibleRoles = _roleManager.Roles.ToList();
+            return new UserListEntryViewModel(userToReturn, possibleRoles);
+        }
 
-            return new UserListEntryViewModel(userToReturn);
+        public void Delete(string userId, bool isAdmin, string userToDeleteId, HttpRequestMessage request)
+        {
+            User userToDelete = _context.Users.SingleOrDefault(u => u.Id == userToDeleteId);
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+                if (userToDelete.CustomerId != loggedUser.CustomerId)
+                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new List<string> { "Can not delete User of a different customer." }));
+            }
+
+            _context.Users.Remove(userToDelete);
+            _context.SaveChanges();
         }
 
         public UserListEntryViewModel Update(string userId, bool isAdmin, string id, UserCreateModel model, HttpRequestMessage request)
         {
-            User userToUpdate = _context.Users.SingleOrDefault(u => u.Id == id);
+            User userToUpdate = _context.Users.Include(c => c.CustomerSiteUser).SingleOrDefault(u => u.Id == id);
             Customer selectedCustomer = _context.Customers.Include(c => c.CustomerSites).SingleOrDefault(c => c.Id == model.Customer.Id);
             IdentityRole role = _roleManager.FindById(model.RoleId);
             List<string> errors = new List<string>();
@@ -145,33 +160,42 @@ namespace FarmOrder.Services
             if (userToUpdate == null)
                 errors.Add("Invalid user.");
 
-
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
-
-
-           
-            /*_userManager.RemoveFromRole(userToUpdate, )
-            var result = _userManager.AddToRole(user.Id, role.Name);
+            var roles = _userManager.GetRoles(userToUpdate.Id);
+            _userManager.RemoveFromRoles(userToUpdate.Id, roles.ToArray());
+            var result = _userManager.AddToRole(userToUpdate.Id, role.Name);
 
             if (model.Customer?.CustomerSites != null)
             {
                 int[] sitesIds = model.Customer.CustomerSites.Select(s => s.Id).ToArray();
                 List<CustomerSite> sites = selectedCustomer.CustomerSites.Where(cs => sitesIds.Contains(cs.Id)).ToList();
 
-                sites.ForEach(site =>
-                {
-                    _context.CustomerSiteUsers.Add(new CustomerSiteUser { User = user, CustomerSiteId = site.Id });
-                });
-            }
-           */
+                List<CustomerSiteUser> bindingsToRemove = new List<CustomerSiteUser>();
+                List<CustomerSiteUser> bindingsToAdd = new List<CustomerSiteUser>();
 
+                userToUpdate.CustomerSiteUser.ForEach(el =>
+                {
+                    if (!sites.Any(s => s.Id == el.CustomerSiteId))
+                        bindingsToRemove.Add(el);
+                });
+
+                sites.ForEach(el =>
+                {
+                    if(!userToUpdate.CustomerSiteUser.Any(csu => csu.CustomerSiteId == el.Id))
+                        bindingsToAdd.Add(new CustomerSiteUser { UserId = userToUpdate.Id, CustomerSiteId = el.Id });
+                });
+
+                _context.CustomerSiteUsers.RemoveRange(bindingsToRemove);
+                _context.CustomerSiteUsers.AddRange(bindingsToAdd);
+            }
+          
             _context.SaveChanges();
          
             var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
-
-            return new UserListEntryViewModel(userToReturn);
+            var possibleRoles = _roleManager.Roles.ToList();
+            return new UserListEntryViewModel(userToReturn, possibleRoles);
         }
     }
 }
