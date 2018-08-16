@@ -23,7 +23,14 @@ namespace FarmOrder.Controllers
             _service = new UserManagementService();
         }
 
-        public SearchResults<UserListEntryViewModel> Get(int page, int? customerId, int? siteId)
+        /// <summary>
+        /// page ignored, pagination done in front end
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="customerId"></param>
+        /// <param name="siteId"></param>
+        /// <returns></returns>
+        public SearchResults<UserListEntryViewModel> Get(int? page, int? customerId, int? siteId)
         {
             if (User.IsInRole("Admin"))
                 return _service.GetUsers(User.Identity.GetUserId(), true, page, customerId, siteId);
@@ -35,13 +42,11 @@ namespace FarmOrder.Controllers
         {
             if (!ModelState.IsValid)
             {
-               
                 var error = new
                 {
                     message = "Invalid request",
                     errors = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
                 };
-
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, error));
             }
 
@@ -49,6 +54,24 @@ namespace FarmOrder.Controllers
                 return _service.Add(User.Identity.GetUserId(), true, model, Request);
             else
                 return _service.Add(User.Identity.GetUserId(), false, model, Request);
+        }
+
+        public UserListEntryViewModel Put(string id, [FromBody]UserCreateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = new
+                {
+                    message = "Invalid request",
+                    errors = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, error));
+            }
+
+            if (User.IsInRole("Admin"))
+                return _service.Update(User.Identity.GetUserId(), true, id, model, Request);
+            else
+                return _service.Update(User.Identity.GetUserId(), false, id, model, Request);
         }
     }
 }
