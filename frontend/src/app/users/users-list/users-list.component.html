@@ -1,3 +1,16 @@
-<p>
-  users-list works!
-</p>
+<div class="padding-content">
+  <div>
+    <h2 class="mat-title">Users List</h2>
+    <p class="mat-subheading-2">List of users define in system.</p>
+  </div>
+
+  <div *ngIf="(customers$ | async) as customers">
+    <mat-form-field>
+      <mat-select placeholder="Select customer to filter">
+        <mat-option *ngFor="let customer of customers.Results">
+          {{customer.name}}}asdas
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

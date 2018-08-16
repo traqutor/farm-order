@@ -13,3 +13,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 .spacer {
   flex: 1 1 auto;
 }
+
+.padding-content {
+  padding: 16px;
+}
