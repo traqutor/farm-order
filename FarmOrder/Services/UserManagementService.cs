@@ -42,6 +42,11 @@ namespace FarmOrder.Services
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
                 query = query.Where(u => u.CustomerId == loggedUser.CustomerId);
             }
+            else
+            {
+                if(customerId.HasValue && customerId != 0)
+                    query = query.Where(u => u.CustomerId == customerId.Value);
+            }
 
             int totalCount = query.Count();
 
