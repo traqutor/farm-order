@@ -19,7 +19,7 @@ namespace FarmOrder.Services
 {
     public class UserManagementService
     {
-        private readonly int _pageSize = 20;
+        //private readonly int _pageSize = 20;
         private readonly FarmOrderDBContext _context;
 
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -33,7 +33,7 @@ namespace FarmOrder.Services
         }
 
 
-        public SearchResults<UserListEntryViewModel> GetUsers(string userId, bool isAdmin, int page, int? customerId, int? siteId)
+        public SearchResults<UserListEntryViewModel> GetUsers(string userId, bool isAdmin, int? page, int? customerId, int? siteId)
         {
             var query = _context.Users.OrderBy(u => u.UserName).AsQueryable();
 
@@ -50,7 +50,7 @@ namespace FarmOrder.Services
 
             int totalCount = query.Count();
 
-            query = query.Take(_pageSize).Skip(_pageSize * page);
+            //query = query.Take(_pageSize).Skip(_pageSize * page);
 
             return new SearchResults<UserListEntryViewModel>{
                 ResultsCount = totalCount,
@@ -151,36 +151,24 @@ namespace FarmOrder.Services
 
 
 
-            /*var chkUser = _userManager.Create(user, userPWD);
+           
+            /*_userManager.RemoveFromRole(userToUpdate, )
+            var result = _userManager.AddToRole(user.Id, role.Name);
 
-            if (chkUser.Succeeded)
+            if (model.Customer?.CustomerSites != null)
             {
-                var result = _userManager.AddToRole(user.Id, role.Name);
+                int[] sitesIds = model.Customer.CustomerSites.Select(s => s.Id).ToArray();
+                List<CustomerSite> sites = selectedCustomer.CustomerSites.Where(cs => sitesIds.Contains(cs.Id)).ToList();
 
-                if (model.Customer?.CustomerSites != null)
+                sites.ForEach(site =>
                 {
-                    int[] sitesIds = model.Customer.CustomerSites.Select(s => s.Id).ToArray();
-                    List<CustomerSite> sites = selectedCustomer.CustomerSites.Where(cs => sitesIds.Contains(cs.Id)).ToList();
-
-                    sites.ForEach(site =>
-                    {
-                        _context.CustomerSiteUsers.Add(new CustomerSiteUser { User = user, CustomerSiteId = site.Id });
-                    });
-                }
+                    _context.CustomerSiteUsers.Add(new CustomerSiteUser { User = user, CustomerSiteId = site.Id });
+                });
             }
-            else
-            {
-                var error = new
-                {
-                    message = "Invalid request",
-                    errors = chkUser.Errors
-                };
-
-                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, error));
-            }
+           */
 
             _context.SaveChanges();
-            */
+         
             var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
 
             return new UserListEntryViewModel(userToReturn);

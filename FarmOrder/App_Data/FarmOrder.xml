@@ -481,6 +481,15 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:FarmOrder.Controllers.UsersManagementController.Get(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            page ignored, pagination done in front end
+            </summary>
+            <param name="page"></param>
+            <param name="customerId"></param>
+            <param name="siteId"></param>
+            <returns></returns>
+        </member>
         <member name="P:FarmOrder.Models.Users.UserCreateModel.Customer">
             <summary>
             Users customer that he belongs to, and inside the sides that user belongs to

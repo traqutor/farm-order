@@ -23,7 +23,14 @@ namespace FarmOrder.Controllers
             _service = new UserManagementService();
         }
 
-        public SearchResults<UserListEntryViewModel> Get(int page, int? customerId, int? siteId)
+        /// <summary>
+        /// page ignored, pagination done in front end
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="customerId"></param>
+        /// <param name="siteId"></param>
+        /// <returns></returns>
+        public SearchResults<UserListEntryViewModel> Get(int? page, int? customerId, int? siteId)
         {
             if (User.IsInRole("Admin"))
                 return _service.GetUsers(User.Identity.GetUserId(), true, page, customerId, siteId);
