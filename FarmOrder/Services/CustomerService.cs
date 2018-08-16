@@ -19,7 +19,7 @@ namespace FarmOrder.Services
             _context = FarmOrderDBContext.Create();
         }
 
-        public SearchResults<CustomerListEntryViewModel> GetCustomers(string userId, bool isAdmin, int page)
+        public SearchResults<CustomerListEntryViewModel> GetCustomers(string userId, bool isAdmin, int? page)
         {
             var query = _context.Customers.Include(c => c.CustomerSites).Where(c => c.EntityStatus == Data.Entities.EntityStatus.NORMAL).OrderByDescending(c => c.CreationDate).AsQueryable();
 
@@ -29,7 +29,9 @@ namespace FarmOrder.Services
             }
 
             int totalCount = query.Count();
-            query = query.Take(_pageSize).Skip(_pageSize * page);
+
+            if (page != null)
+                query = query.Take(_pageSize).Skip(_pageSize * page.Value);
 
             return new SearchResults<CustomerListEntryViewModel>
             {

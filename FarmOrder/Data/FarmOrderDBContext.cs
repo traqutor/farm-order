@@ -1,6 +1,8 @@
 ﻿using FarmOrder.Data.Entities;
 using FarmOrder.Data.Entities.Customers;
 using FarmOrder.Data.Entities.CustomerSites;
+using FarmOrder.Data.Entities.Farms;
+using FarmOrder.Data.Entities.Orders;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -31,5 +33,10 @@ namespace FarmOrder.Data
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<CustomerSite> CustomerSites { get; set; }
         public virtual DbSet<CustomerSiteUser> CustomerSiteUsers { get; set; }
+
+        public virtual DbSet<Farm> Farms { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
+        public virtual DbSet<OrderChangeReason> OrderChangeReasons { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace FarmOrder.Services
 {
     public class UserManagementService
     {
-        //private readonly int _pageSize = 20;
+        private readonly int _pageSize = 20;
         private readonly FarmOrderDBContext _context;
 
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -31,7 +31,6 @@ namespace FarmOrder.Services
             _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_context));
             _userManager = new UserManager<User>(new UserStore<User>(_context));
         }
-
 
         public SearchResults<UserListEntryViewModel> GetUsers(string userId, bool isAdmin, int? page, int? customerId, int? siteId)
         {
@@ -50,7 +49,9 @@ namespace FarmOrder.Services
 
             int totalCount = query.Count();
 
-            //query = query.Take(_pageSize).Skip(_pageSize * page);
+            if(page != null)
+                query = query.Take(_pageSize).Skip(_pageSize * page.Value);
+
             var possibleRoles = _roleManager.Roles.ToList();
             return new SearchResults<UserListEntryViewModel>{
                 ResultsCount = totalCount,
@@ -67,9 +68,8 @@ namespace FarmOrder.Services
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+                selectedCustomer = _context.Customers.Include(c => c.CustomerSites).SingleOrDefault(c => c.Id == loggedUser.CustomerId);
 
-                if (selectedCustomer.Id != loggedUser.CustomerId)
-                    errors.Add("User customerId and new user customerId can not be different.");
                 if (role.Name == UserSystemRoles.Admin)
                     errors.Add("Normal user can not assign Admin role.");
             }
@@ -79,6 +79,7 @@ namespace FarmOrder.Services
 
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
+
             var user = new User();
             user.UserName = model.UserName;
             user.EmailConfirmed = true;

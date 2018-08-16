@@ -18,13 +18,20 @@ namespace FarmOrder.Services
             _context = FarmOrderDBContext.Create();
         }
 
-        public SearchResults<RoleListEntryViewModel> GetRoles(int page)
+        public SearchResults<RoleListEntryViewModel> GetRoles(int? page)
         {
-            var query = _context.Roles.OrderByDescending(r => r.Id).Take(_pageSize).Skip(_pageSize * page).ToList();
+            
+            var query = _context.Roles.OrderByDescending(r => r.Id).AsQueryable();
+    
+            int totalCount = query.Count();
+
+            if (page != null)
+                query = query.Take(_pageSize).Skip(_pageSize * page.Value);
+
 
             return new SearchResults<RoleListEntryViewModel>
             {
-                ResultsCount = query.Count(),
+                ResultsCount = totalCount,
                 Results = query.ToList().Select(el => new RoleListEntryViewModel(el)).ToList()
             };
         }

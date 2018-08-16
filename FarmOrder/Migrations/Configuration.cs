@@ -3,6 +3,8 @@ namespace FarmOrder.Migrations
     using FarmOrder.Data.Entities;
     using FarmOrder.Data.Entities.Customers;
     using FarmOrder.Data.Entities.CustomerSites;
+    using FarmOrder.Data.Entities.Farms;
+    using FarmOrder.Data.Entities.Orders;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
@@ -236,6 +238,99 @@ namespace FarmOrder.Migrations
                 context.CustomerSiteUsers.AddOrUpdate(csu3);
             }
 
+            #endregion
+
+            #region order statuses, change reasons
+
+            if(context.OrderStatuses.Count() == 0)
+            {
+                OrderStatus status1 = new OrderStatus()
+                {
+                    Id = 1,
+                    Name = "Open"
+                };
+
+                OrderStatus status2 = new OrderStatus()
+                {
+                    Id = 2,
+                    Name = "Pending"
+                };
+
+                OrderStatus status3 = new OrderStatus()
+                {
+                    Id = 3,
+                    Name = "Confirmed"
+                };
+
+                OrderStatus status4 = new OrderStatus()
+                {
+                    Id = 4,
+                    Name = "Delivered"
+                };
+
+                context.OrderStatuses.Add(status1);
+                context.OrderStatuses.Add(status2);
+                context.OrderStatuses.Add(status3);
+                context.OrderStatuses.Add(status4);
+            }
+
+            if (context.OrderChangeReasons.Count() == 0)
+            {
+                OrderChangeReason changeReason1 = new OrderChangeReason()
+                {
+                    Id = 1,
+                    Name = "Over order"
+                };
+
+                OrderChangeReason changeReason2 = new OrderChangeReason()
+                {
+                    Id = 2,
+                    Name = "Late arrival"
+                };
+
+                context.OrderChangeReasons.Add(changeReason1);
+                context.OrderChangeReasons.Add(changeReason2);
+            }
+
+            #endregion
+
+
+            #region Farms
+            if (context.Farms.Count() == 0)
+            {
+                Farm farm1 = new Farm()
+                {
+                    Id = 1,
+                    Name = "Sunny meadow in Melbourne",
+                    CustomerSiteId = 1
+                };
+
+                Farm farm2 = new Farm()
+                {
+                    Id = 2,
+                    Name = "Kirbiln in Home",
+                    CustomerSiteId = 2
+                };
+
+                Farm farm3 = new Farm()
+                {
+                    Id = 3,
+                    Name = "MacClaggen in Home",
+                    CustomerSiteId = 3
+                };
+
+                Farm farm4 = new Farm()
+                {
+                    Id = 3,
+                    Name = "Kukurydza in Brisbane",
+                    CustomerSiteId = 4
+                };
+
+                context.Farms.Add(farm1);
+                context.Farms.Add(farm2);
+                context.Farms.Add(farm3);
+                context.Farms.Add(farm4);
+            }
             #endregion
 
             context.SaveChanges();
