@@ -120,5 +120,70 @@ namespace FarmOrder.Services
 
             return new UserListEntryViewModel(userToReturn);
         }
+
+        public UserListEntryViewModel Update(string userId, bool isAdmin, string id, UserCreateModel model, HttpRequestMessage request)
+        {
+            User userToUpdate = _context.Users.SingleOrDefault(u => u.Id == id);
+            Customer selectedCustomer = _context.Customers.Include(c => c.CustomerSites).SingleOrDefault(c => c.Id == model.Customer.Id);
+            IdentityRole role = _roleManager.FindById(model.RoleId);
+            List<string> errors = new List<string>();
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+
+                if (selectedCustomer.Id != loggedUser.CustomerId)
+                    errors.Add("User customerId and new user customerId can not be different.");
+                if (role.Name == UserSystemRoles.Admin)
+                    errors.Add("Normal user can not assign Admin role.");
+                if(userToUpdate?.CustomerId != loggedUser.CustomerId)
+                    errors.Add("Can not update user that belong to different customer.");
+            }
+
+            if (selectedCustomer == null)
+                errors.Add("Customer can not be empty.");
+            if (userToUpdate == null)
+                errors.Add("Invalid user.");
+
+
+            if (errors.Count > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
+
+
+
+            /*var chkUser = _userManager.Create(user, userPWD);
+
+            if (chkUser.Succeeded)
+            {
+                var result = _userManager.AddToRole(user.Id, role.Name);
+
+                if (model.Customer?.CustomerSites != null)
+                {
+                    int[] sitesIds = model.Customer.CustomerSites.Select(s => s.Id).ToArray();
+                    List<CustomerSite> sites = selectedCustomer.CustomerSites.Where(cs => sitesIds.Contains(cs.Id)).ToList();
+
+                    sites.ForEach(site =>
+                    {
+                        _context.CustomerSiteUsers.Add(new CustomerSiteUser { User = user, CustomerSiteId = site.Id });
+                    });
+                }
+            }
+            else
+            {
+                var error = new
+                {
+                    message = "Invalid request",
+                    errors = chkUser.Errors
+                };
+
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, error));
+            }
+
+            _context.SaveChanges();
+            */
+            var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
+
+            return new UserListEntryViewModel(userToReturn);
+        }
     }
 }
