@@ -1,0 +1,64 @@
+<div class="padding-content"
+     fxFlex
+     fxLayout="column"
+>
+  <div
+    fxLayout="row"
+  >
+    <div>
+      <h2 class="mat-title">New User</h2>
+      <p class="mat-subheading-2">Here you create new user.</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <form [formGroup]="user" (ngSubmit)="onSubmit(user)" fxLayout="column" class="half-width">
+      <mat-form-field>
+        <input
+          matInput
+          type="text"
+          placeholder="Your full name"
+          formControlName="userName">
+      </mat-form-field>
+      {{ user.get('userName').errors | json }}
+      <mat-form-field>
+        <input
+          matInput
+          type="password"
+          placeholder="Your password"
+          formControlName="password">
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          type="password"
+          placeholder="Confirm password"
+          formControlName="confirmPassword">
+      </mat-form-field>
+      <mat-form-field *ngIf="(customers$ | async) as customers">
+        <mat-select placeholder="Select Customer" formControlName="customer">
+          <mat-option *ngFor="let customer of customers.results" [value]="customer">
+            {{customer.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="(roles$ | async) as roles">
+        <mat-select placeholder="Select Role" formControlName="roleId">
+          <mat-option *ngFor="let role of roles.results" [value]="role.id">
+            {{role.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        mat-button
+        color="accent"
+      >
+        Create User
+      </button>
+      {{user.value | json}}
+    </form>
+  </div>
+
+</div>
