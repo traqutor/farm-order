@@ -20,14 +20,14 @@ namespace FarmOrder.Models.Users
         /// </summary>
         public CustomerListEntryViewModel Customer { get; set; }
 
-        public string RoleId { get; set; }
+        public RoleListEntryViewModel Role { get; set; }
     
         public UserListEntryViewModel()
         {
 
         }
 
-        public UserListEntryViewModel(User entity)
+        public UserListEntryViewModel(User entity, List<IdentityRole> roles)
         {
             Id = entity.Id;
             UserName = entity.UserName;
@@ -36,10 +36,7 @@ namespace FarmOrder.Models.Users
                 Customer = new CustomerListEntryViewModel(entity.Customer);
                 Customer.CustomerSites = entity.CustomerSiteUser.Select(el => new CustomerSiteListEntryViewModel(el.CustomerSite)).ToList();
             }
-
-            RoleId = entity.Roles.FirstOrDefault().RoleId;
-
-            
+            Role = new RoleListEntryViewModel(roles.SingleOrDefault(r => r.Id == entity.Roles.FirstOrDefault().RoleId));
         }
     }
 }
