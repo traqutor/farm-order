@@ -13,7 +13,7 @@ namespace FarmOrder.Tests.Controllers
     [TestClass]
     public class ValuesControllerTest
     {
-        [TestMethod]
+       /* [TestMethod]
         public void Get()
         {
             // Arrange
@@ -77,5 +77,6 @@ namespace FarmOrder.Tests.Controllers
 
             // Assert
         }
+        */
     }
 }

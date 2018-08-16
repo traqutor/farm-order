@@ -74,7 +74,10 @@ namespace FarmOrder.Services
                     errors.Add("Normal user can not assign Admin role.");
             }
 
-            if(selectedCustomer == null)
+            if(role == null)
+                errors.Add("Role can not be empty.");
+
+            if (selectedCustomer == null)
                 errors.Add("Customer can not be empty.");
 
             if (errors.Count > 0)
@@ -160,6 +163,8 @@ namespace FarmOrder.Services
                 errors.Add("Customer can not be empty.");
             if (userToUpdate == null)
                 errors.Add("Invalid user.");
+            if (role == null)
+                errors.Add("Role can not be empty.");
 
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
