@@ -14,7 +14,13 @@ export class UsersListComponent implements OnInit {
 
   customers$: Observable<{ results: Array<User>, resultCount: number }>;
   dataSource = new MatTableDataSource<User>([]);
-  displayedColumns = ['id', 'userName', 'customer', 'role'];
+  displayedColumns = [
+    {value: 'id', name: 'Id'},
+    {value: 'userName', name: 'UserName'},
+    {value: 'customer', name: 'Customer'},
+    {value: 'role', name: 'Role'},
+  ];
+  columnsToRender = ['id', 'userName', 'customer', 'role', 'settings'];
 
   constructor(private usersService: UsersService,
               private sharedService: SharedService) {

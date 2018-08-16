@@ -21,14 +21,29 @@
           type="text"
           placeholder="Your full name"
           formControlName="userName">
+        <mat-error
+          *ngIf="user.get('userName').hasError('required') && user.get('userName').touched">
+          UserName is required.
+        </mat-error>
+        <mat-error
+          *ngIf="user.get('userName').hasError('minlength') && user.get('userName').touched">
+          UserName must have minimum 6 characters.
+        </mat-error>
       </mat-form-field>
-      {{ user.get('userName').errors | json }}
       <mat-form-field>
         <input
           matInput
           type="password"
           placeholder="Your password"
           formControlName="password">
+        <mat-error
+          *ngIf="user.get('password').hasError('required') && user.get('password').touched">
+          Password is required.
+        </mat-error>
+        <mat-error
+          *ngIf="user.get('password').hasError('minlength') && user.get('password').touched">
+          Password must have minimum 6 characters.
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -36,6 +51,14 @@
           type="password"
           placeholder="Confirm password"
           formControlName="confirmPassword">
+        <mat-error
+          *ngIf="user.get('confirmPassword').hasError('required') && user.get('confirmPassword').touched">
+          Password is required.
+        </mat-error>
+        <mat-error
+          *ngIf="user.get('confirmPassword').hasError('minlength') && user.get('confirmPassword').touched">
+          Password must have minimum 6 characters.
+        </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(customers$ | async) as customers">
         <mat-select placeholder="Select Customer" formControlName="customer">
@@ -43,6 +66,10 @@
             {{customer.name}}
           </mat-option>
         </mat-select>
+        <mat-error
+          *ngIf="user.get('customer').hasError('required') && user.get('customer').touched">
+          Customer is required.
+        </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(roles$ | async) as roles">
         <mat-select placeholder="Select Role" formControlName="roleId">
@@ -50,14 +77,21 @@
             {{role.name}}
           </mat-option>
         </mat-select>
+        <mat-error
+          *ngIf="user.get('roleId').hasError('required') && user.get('roleId').touched">
+          Role is required.
+        </mat-error>
       </mat-form-field>
+      <mat-error *ngIf="user.get('confirmPassword').hasError('MatchPassword') && user.get('confirmPassword').touched">
+        Password not match
+      </mat-error>
       <button
         mat-button
         color="accent"
+        [disabled]="user.invalid"
       >
         Create User
       </button>
-      {{user.value | json}}
     </form>
   </div>
 

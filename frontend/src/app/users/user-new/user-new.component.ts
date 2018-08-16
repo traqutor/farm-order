@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Role } from '../../shared/models/role';
 import { User } from '../../shared/models/user';
 import { SharedService } from '../../shared/shared.service';
+import { PasswordValidation } from '../../shared/validators/match-password.validator';
+import { UsersService } from '../users.service';
+import { MatSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-new',
@@ -16,26 +20,52 @@ export class UserNewComponent implements OnInit {
   roles$: Observable<{ results: Array<Role>, resultCount: number }>;
   customers$: Observable<{ results: Array<User>, resultCount: number }>;
 
-  constructor(private sharedService: SharedService) {
+  constructor(private sharedService: SharedService,
+              private fb: FormBuilder,
+              private usersService: UsersService,
+              private snackBar: MatSnackBar,
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.roles$ = this.sharedService.getRoles();
     this.customers$ = this.sharedService.getCustomers();
-    this.user = new FormGroup({
-      userName: new FormControl('', [
+    this.user = this.fb.group({
+      userName: ['', [
         Validators.required,
         Validators.minLength(6),
-        Validators.pattern('/\d')]),
-      password: new FormControl(''),
-      confirmPassword: new FormControl(''),
-      customer: new FormControl(''),
-      roleId: new FormControl('')
-    });
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(6),
+      ]],
+      confirmPassword: ['', [
+        Validators.required,
+        Validators.minLength(6),
+      ]],
+      customer: ['', [
+        Validators.required,
+      ]],
+      roleId: ['', [
+        Validators.required,
+      ]]
+    }, { validator: PasswordValidation.MatchPassword });
   }
 
-  onSubmit({value, valid}) {
-    console.log(value);
+  onSubmit() {
+    const { value, valid } = this.user;
+    if (valid) {
+      this.usersService.postUser(value)
+        .subscribe(() => {
+          this.router.navigate(['../'], { relativeTo: this.route });
+          this.snackBar.open('User Created!', '', {
+            duration: 2000,
+          });
+        }, err => {
+          console.log(err);
+        });
+    }
   }
 
 }
