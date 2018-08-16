@@ -495,6 +495,11 @@
             Users customer that he belongs to, and inside the sides that user belongs to
             </summary>
         </member>
+        <member name="P:FarmOrder.Models.Users.UserEditModel.Customer">
+            <summary>
+            Users customer that he belongs to, and inside the sides that user belongs to
+            </summary>
+        </member>
         <member name="P:FarmOrder.Models.Users.UserListEntryViewModel.Customer">
             <summary>
             Users customer that he belongs to, and inside the sides that user belongs to

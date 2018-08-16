@@ -302,7 +302,9 @@
     <Compile Include="Models\SearchResults.cs" />
     <Compile Include="Models\Users\RoleListEntryViewModel.cs" />
     <Compile Include="Models\Users\UserCreateModel.cs" />
+    <Compile Include="Models\Users\UserEditModel.cs" />
     <Compile Include="Models\Users\UserListEntryViewModel.cs" />
+    <Compile Include="Models\Users\UserPasswordEditModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />

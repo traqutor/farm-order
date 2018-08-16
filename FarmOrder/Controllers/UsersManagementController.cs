@@ -56,7 +56,7 @@ namespace FarmOrder.Controllers
                 return _service.Add(User.Identity.GetUserId(), false, model, Request);
         }
 
-        public UserListEntryViewModel Put(string id, [FromBody]UserCreateModel model)
+        public UserListEntryViewModel Put(string id, [FromBody]UserEditModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -68,10 +68,32 @@ namespace FarmOrder.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, error));
             }
 
+
             if (User.IsInRole("Admin"))
                 return _service.Update(User.Identity.GetUserId(), true, id, model, Request);
             else
                 return _service.Update(User.Identity.GetUserId(), false, id, model, Request);
+        }
+
+        [Route("changePassword")]
+        [HttpPut]
+        public UserListEntryViewModel ChangePassword(string id, [FromBody]UserPasswordEditModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = new
+                {
+                    message = "Invalid request",
+                    errors = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, error));
+            }
+
+
+            if (User.IsInRole("Admin"))
+                return _service.UpdateUserPassword(User.Identity.GetUserId(), true, id, model, Request);
+            else
+                return _service.UpdateUserPassword(User.Identity.GetUserId(), false, id, model, Request);
         }
 
         public void Delete(string id)

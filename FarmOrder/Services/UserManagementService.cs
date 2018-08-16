@@ -125,6 +125,30 @@ namespace FarmOrder.Services
             return new UserListEntryViewModel(userToReturn, possibleRoles);
         }
 
+        public UserListEntryViewModel UpdateUserPassword(string userId, bool isAdmin, string id, UserPasswordEditModel model, HttpRequestMessage request)
+        {
+            User userToUpdate = _context.Users.Include(c => c.CustomerSiteUser).SingleOrDefault(u => u.Id == id);
+            List<string> errors = new List<string>();
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+
+                if (userToUpdate.CustomerId != userToUpdate.CustomerId)
+                    errors.Add("Can not update user that belong to different customer.");
+            }
+
+            if (errors.Count > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
+
+            var passwordToken = _userManager.GeneratePasswordResetToken(userToUpdate.Id);
+            _userManager.ResetPassword(userToUpdate.Id, passwordToken, model.Password);
+
+            var possibleRoles = _roleManager.Roles.ToList();
+            var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
+            return new UserListEntryViewModel(userToReturn, possibleRoles);
+        }
+
         public void Delete(string userId, bool isAdmin, string userToDeleteId, HttpRequestMessage request)
         {
             User userToDelete = _context.Users.SingleOrDefault(u => u.Id == userToDeleteId);
@@ -140,7 +164,7 @@ namespace FarmOrder.Services
             _context.SaveChanges();
         }
 
-        public UserListEntryViewModel Update(string userId, bool isAdmin, string id, UserCreateModel model, HttpRequestMessage request)
+        public UserListEntryViewModel Update(string userId, bool isAdmin, string id, UserEditModel model, HttpRequestMessage request)
         {
             User userToUpdate = _context.Users.Include(c => c.CustomerSiteUser).SingleOrDefault(u => u.Id == id);
             Customer selectedCustomer = _context.Customers.Include(c => c.CustomerSites).SingleOrDefault(c => c.Id == model.Customer.Id);

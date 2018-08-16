@@ -1,6 +1,5 @@
 ﻿using FarmOrder.Data.Entities;
 using FarmOrder.Models.Customers;
-using FarmOrder.Models.CustomerSites;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ using System.Web;
 
 namespace FarmOrder.Models.Users
 {
-    public class UserCreateModel : UserPasswordEditModel
+    public class UserEditModel
     {
         public string Id { get; set; }
 
@@ -25,26 +24,5 @@ namespace FarmOrder.Models.Users
 
         [Required]
         public string RoleId { get; set; }
-
-        public UserCreateModel()
-        {
-
-        }
-
-        public UserCreateModel(User entity)
-        {
-            Id = entity.Id;
-            UserName = entity.UserName;
-
-            if (entity.Customer != null)
-            {
-                Customer = new CustomerListEntryViewModel(entity.Customer);
-                Customer.CustomerSites = entity.CustomerSiteUser.Select(el => new CustomerSiteListEntryViewModel(el.CustomerSite)).ToList();
-            }
-
-            RoleId = entity.Roles.FirstOrDefault().RoleId;
-
-
-        }
     }
 }
