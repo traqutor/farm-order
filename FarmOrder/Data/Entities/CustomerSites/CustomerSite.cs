@@ -1,4 +1,5 @@
 ﻿using FarmOrder.Data.Entities.Customers;
+using FarmOrder.Data.Entities.Farms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,8 @@ namespace FarmOrder.Data.Entities.CustomerSites
         public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
+
+        public virtual List<Farm> Farms { get; set; } = new List<Farm>();
 
         public string SiteName { get; set; }
 

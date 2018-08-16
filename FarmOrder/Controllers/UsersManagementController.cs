@@ -30,7 +30,7 @@ namespace FarmOrder.Controllers
         /// <param name="customerId"></param>
         /// <param name="siteId"></param>
         /// <returns></returns>
-        public SearchResults<UserListEntryViewModel> Get(int? page, int? customerId, int? siteId)
+        public SearchResults<UserListEntryViewModel> Get(int? page = null, int? customerId = null, int? siteId = null)
         {
             if (User.IsInRole("Admin"))
                 return _service.GetUsers(User.Identity.GetUserId(), true, page, customerId, siteId);

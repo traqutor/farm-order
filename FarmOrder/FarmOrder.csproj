@@ -246,17 +246,20 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
-    <Compile Include="Controllers\CustomerSiteController.cs" />
     <Compile Include="Controllers\FarmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderChangeReasonController.cs" />
+    <Compile Include="Controllers\OrderStatusController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UsersManagementController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data\Entities\CustomerSites\CustomerSite.cs" />
     <Compile Include="Data\Entities\CustomerSites\CustomerSiteUser.cs" />
     <Compile Include="Data\Entities\Customers\Customer.cs" />
     <Compile Include="Data\Entities\EntityStatus.cs" />
     <Compile Include="Data\Entities\Farms\Farm.cs" />
+    <Compile Include="Data\Entities\Orders\Order.cs" />
+    <Compile Include="Data\Entities\Orders\OrderChangeReason.cs" />
+    <Compile Include="Data\Entities\Orders\OrderStatus.cs" />
     <Compile Include="Data\Entities\User.cs" />
     <Compile Include="Data\Entities\UserSystemRoles.cs" />
     <Compile Include="Data\FarmOrderDBContext.cs" />
@@ -271,11 +274,18 @@
     <Compile Include="Migrations\201808141109122_CustomerSitesToUsers.Designer.cs">
       <DependentUpon>201808141109122_CustomerSitesToUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808161148480_FarmOrderEtc.cs" />
+    <Compile Include="Migrations\201808161148480_FarmOrderEtc.Designer.cs">
+      <DependentUpon>201808161148480_FarmOrderEtc.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustomerSites\CustomerSiteListEntryViewModel.cs" />
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
+    <Compile Include="Models\Farms\FarmListEntryViewModel.cs" />
+    <Compile Include="Models\Orders\OrderChangeReasonListEntryViewModel.cs" />
+    <Compile Include="Models\Orders\OrderStatusListEntryViewModel.cs" />
     <Compile Include="Models\SearchResults.cs" />
     <Compile Include="Models\Users\RoleListEntryViewModel.cs" />
     <Compile Include="Models\Users\UserCreateModel.cs" />
@@ -284,6 +294,9 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Services\CustomerService.cs" />
+    <Compile Include="Services\FarmService.cs" />
+    <Compile Include="Services\OrderChangeReasonService.cs" />
+    <Compile Include="Services\OrderStatusService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="Startup.cs" />
@@ -367,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808141109122_CustomerSitesToUsers.resx">
       <DependentUpon>201808141109122_CustomerSitesToUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808161148480_FarmOrderEtc.resx">
+      <DependentUpon>201808161148480_FarmOrderEtc.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

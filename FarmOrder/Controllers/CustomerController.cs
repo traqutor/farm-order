@@ -21,7 +21,7 @@ namespace FarmOrder.Controllers
             _service = new CustomerService();
         }
 
-        public SearchResults<CustomerListEntryViewModel> Get(int page)
+        public SearchResults<CustomerListEntryViewModel> Get(int? page = null)
         {
             if (User.IsInRole("Admin"))
                 return _service.GetCustomers(User.Identity.GetUserId(), true, page);

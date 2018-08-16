@@ -21,7 +21,7 @@ namespace FarmOrder.Controllers
         }
 
 
-        public SearchResults<RoleListEntryViewModel> GetRoles(int page)
+        public SearchResults<RoleListEntryViewModel> GetRoles(int? page = null)
         {
             return _service.GetRoles(page);
         }
