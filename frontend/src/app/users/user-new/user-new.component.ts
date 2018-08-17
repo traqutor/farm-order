@@ -8,6 +8,7 @@ import { PasswordValidation } from '../../shared/validators/match-password.valid
 import { UsersService } from '../users.service';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Customer } from '../../shared/models/customer';
 
 @Component({
   selector: 'app-user-new',
@@ -18,7 +19,7 @@ export class UserNewComponent implements OnInit {
 
   user: FormGroup;
   roles$: Observable<{ results: Array<Role>, resultCount: number }>;
-  customers$: Observable<{ results: Array<User>, resultCount: number }>;
+  customers$: Observable<{ results: Array<Customer>, resultCount: number }>;
 
   constructor(private sharedService: SharedService,
               private fb: FormBuilder,
@@ -32,22 +33,25 @@ export class UserNewComponent implements OnInit {
     this.roles$ = this.sharedService.getRoles();
     this.customers$ = this.sharedService.getCustomers();
     this.user = this.fb.group({
-      userName: ['', [
+      userName: [null, [
         Validators.required,
         Validators.minLength(6),
       ]],
-      password: ['', [
+      password: [null, [
         Validators.required,
         Validators.minLength(6),
       ]],
-      confirmPassword: ['', [
+      confirmPassword: [null, [
         Validators.required,
         Validators.minLength(6),
       ]],
-      customer: ['', [
+      customer: [null, [
         Validators.required,
       ]],
-      roleId: ['', [
+      customerSite: [null, [
+        Validators.required,
+      ]],
+      roleId: [null, [
         Validators.required,
       ]]
     }, { validator: PasswordValidation.MatchPassword });
