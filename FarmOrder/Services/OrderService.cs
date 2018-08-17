@@ -112,5 +112,10 @@ namespace FarmOrder.Services
                 Results = query.ToList().Select(el => new OrderListEntryViewModel(el)).ToList()
             };
         }
+
+        public OrderListEntryViewModel Add(string v1, bool v2, OrderCreateModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

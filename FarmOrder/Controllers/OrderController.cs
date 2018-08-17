@@ -33,7 +33,10 @@ namespace FarmOrder.Controllers
 
         public OrderListEntryViewModel Post([FromBody]OrderCreateModel model)
         {
-            throw new NotImplementedException();
+            if (User.IsInRole("Admin"))
+                return _service.Add(User.Identity.GetUserId(), true, model);
+            else
+                return _service.Add(User.Identity.GetUserId(), false, model);
         }
     }
 }

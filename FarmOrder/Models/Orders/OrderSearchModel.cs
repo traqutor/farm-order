@@ -10,6 +10,7 @@ namespace FarmOrder.Models.Orders
     {
         public int? Page { get; set; }
         public List<CustomerListEntryViewModel> Customers { get; set; } = new List<CustomerListEntryViewModel>();
+
         public List<OrderStatusListEntryViewModel> Statuses { get; set; } = new List<OrderStatusListEntryViewModel>();
         public List<OrderChangeReasonListEntryViewModel> ChangeReasons { get; set; } = new List<OrderChangeReasonListEntryViewModel>();
 

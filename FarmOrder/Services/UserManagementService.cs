@@ -172,6 +172,8 @@ namespace FarmOrder.Services
                     throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new List<string> { "Can not delete User of a different customer." }));
             }
 
+            _context.FarmUsers.RemoveRange(userToDelete.FarmUsers);
+            _context.CustomerSiteUsers.RemoveRange(userToDelete.CustomerSiteUser);
             _context.Users.Remove(userToDelete);
             _context.SaveChanges();
         }
