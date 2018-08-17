@@ -1,6 +1,7 @@
 ﻿using FarmOrder.Data.Entities;
 using FarmOrder.Models.Customers;
 using FarmOrder.Models.CustomerSites;
+using FarmOrder.Models.Farms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,6 +23,8 @@ namespace FarmOrder.Models.Users
         /// </summary>
         [Required]
         public CustomerListEntryViewModel Customer { get; set; }
+
+        public List<FarmListEntryViewModel> Farms { get; set; } = new List<FarmListEntryViewModel>();
 
         [Required]
         public string RoleId { get; set; }

@@ -61,7 +61,7 @@ namespace FarmOrder.Services
 
         public UserListEntryViewModel Add(string userId, bool isAdmin, UserCreateModel model, HttpRequestMessage request)
         {
-            Customer selectedCustomer = _context.Customers.Include(c => c.CustomerSites).SingleOrDefault(c => c.Id == model.Customer.Id);
+            Customer selectedCustomer = _context.Customers.Include(c => c.CustomerSites).Include("CustomerSites.Farms").SingleOrDefault(c => c.Id == model.Customer.Id);
             IdentityRole role = _roleManager.FindById(model.RoleId);
             List<string> errors = new List<string>();
 

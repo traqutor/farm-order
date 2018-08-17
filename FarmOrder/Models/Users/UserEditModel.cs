@@ -1,5 +1,6 @@
 ﻿using FarmOrder.Data.Entities;
 using FarmOrder.Models.Customers;
+using FarmOrder.Models.Farms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,7 @@ namespace FarmOrder.Models.Users
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         public string UserName { get; set; }
 
+        public List<FarmListEntryViewModel> Farms { get; set; } = new List<FarmListEntryViewModel>();
         /// <summary>
         /// Users customer that he belongs to, and inside the sides that user belongs to
         /// </summary>

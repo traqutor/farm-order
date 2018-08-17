@@ -1,5 +1,6 @@
 ﻿using FarmOrder.Data.Entities.Customers;
 using FarmOrder.Data.Entities.CustomerSites;
+using FarmOrder.Data.Entities.Farms;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -19,6 +20,7 @@ namespace FarmOrder.Data.Entities
         public virtual Customer Customer { get; set; }
 
         public virtual List<CustomerSiteUser> CustomerSiteUser { get; set; } = new List<CustomerSiteUser>();
+        public virtual List<FarmUser> FarmUsers { get; set; } = new List<FarmUser>();
 
         public EntityStatus EntityStatus { get; set; }
 

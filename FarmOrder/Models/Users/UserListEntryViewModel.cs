@@ -1,6 +1,7 @@
 ﻿using FarmOrder.Data.Entities;
 using FarmOrder.Models.Customers;
 using FarmOrder.Models.CustomerSites;
+using FarmOrder.Models.Farms;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace FarmOrder.Models.Users
         /// </summary>
         public CustomerListEntryViewModel Customer { get; set; }
 
+        public List<FarmListEntryViewModel> Farms { get; set; }
+
         public RoleListEntryViewModel Role { get; set; }
     
         public UserListEntryViewModel()
@@ -36,6 +39,10 @@ namespace FarmOrder.Models.Users
                 Customer = new CustomerListEntryViewModel(entity.Customer);
                 Customer.CustomerSites = entity.CustomerSiteUser.Select(el => new CustomerSiteListEntryViewModel(el.CustomerSite)).ToList();
             }
+
+            if (entity.FarmUsers != null)
+                Farms = entity.FarmUsers.Select(fu => new FarmListEntryViewModel(fu.Farm)).ToList();
+
             Role = new RoleListEntryViewModel(roles.SingleOrDefault(r => r.Id == entity.Roles.FirstOrDefault().RoleId));
         }
     }

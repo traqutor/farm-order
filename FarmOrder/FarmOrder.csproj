@@ -270,6 +270,7 @@
     <Compile Include="Data\Entities\Customers\Customer.cs" />
     <Compile Include="Data\Entities\EntityStatus.cs" />
     <Compile Include="Data\Entities\Farms\Farm.cs" />
+    <Compile Include="Data\Entities\Farms\FarmUser.cs" />
     <Compile Include="Data\Entities\Orders\Order.cs" />
     <Compile Include="Data\Entities\Orders\OrderChangeReason.cs" />
     <Compile Include="Data\Entities\Orders\OrderStatus.cs" />
@@ -290,6 +291,10 @@
     <Compile Include="Migrations\201808161148480_FarmOrderEtc.cs" />
     <Compile Include="Migrations\201808161148480_FarmOrderEtc.Designer.cs">
       <DependentUpon>201808161148480_FarmOrderEtc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808171028207_userToFarmsTable.cs" />
+    <Compile Include="Migrations\201808171028207_userToFarmsTable.Designer.cs">
+      <DependentUpon>201808171028207_userToFarmsTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -403,6 +408,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808161148480_FarmOrderEtc.resx">
       <DependentUpon>201808161148480_FarmOrderEtc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808171028207_userToFarmsTable.resx">
+      <DependentUpon>201808171028207_userToFarmsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
