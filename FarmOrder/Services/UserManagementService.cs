@@ -240,6 +240,29 @@ namespace FarmOrder.Services
                 _context.CustomerSiteUsers.AddRange(bindingsToAdd);
             }
 
+            if (model.Farms != null)
+            {
+                int[] farmsIds = model.Farms.Select(f => f.Id).ToArray();
+                List<Farm> farms = selectedCustomer.CustomerSites.SelectMany(cs => cs.Farms.Where(f => farmsIds.Contains(f.Id))).ToList();
+
+                List<FarmUser> bindingsToRemove = new List<FarmUser>();
+                List<FarmUser> bindingsToAdd = new List<FarmUser>();
+
+                userToUpdate.FarmUsers.ForEach(el =>
+                {
+                    if (!farms.Any(s => s.Id == el.FarmId))
+                        bindingsToRemove.Add(el);
+                });
+
+                farms.ForEach(el =>
+                {
+                    if (!userToUpdate.FarmUsers.Any(fu => fu.FarmId == el.Id))
+                        bindingsToAdd.Add(new FarmUser { UserId = userToUpdate.Id, FarmId = el.Id });
+                });
+
+                _context.FarmUsers.RemoveRange(bindingsToRemove);
+                _context.FarmUsers.AddRange(bindingsToAdd);
+            }
 
             if (userToUpdate.UserName != model.UserName)
                 userToUpdate.UserName = model.UserName;
