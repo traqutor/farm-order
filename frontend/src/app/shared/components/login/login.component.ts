@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthResponse, AuthService } from '../../core/auth/auth.service';
+import { AuthResponse, AuthService } from '../../../core/auth/auth.service';
 import { tap } from 'rxjs/operators';
 import { Router } from "@angular/router";
 

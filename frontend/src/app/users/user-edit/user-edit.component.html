@@ -1,0 +1,61 @@
+<div class="padding-content"
+     fxFlex
+     fxLayout="column">
+  <div fxLayout="row">
+    <div>
+      <h2 class="mat-title">Edit User</h2>
+      <p class="mat-subheading-2">Here you can edit user.</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="user">
+    <form [formGroup]="user" (ngSubmit)="onSubmit(user)" fxLayout="column" class="half-width">
+      <mat-form-field>
+        <input
+          matInput
+          type="text"
+          placeholder="Your full name"
+          formControlName="userName">
+        <mat-error
+          *ngIf="user.get('userName').hasError('required') && user.get('userName').touched">
+          UserName is required.
+        </mat-error>
+        <mat-error
+          *ngIf="user.get('userName').hasError('minlength') && user.get('userName').touched">
+          UserName must have minimum 6 characters.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(customers$ | async) as customers">
+        <mat-select placeholder="Select Customer" formControlName="customer" [compareWith]="compare">
+          <mat-option *ngFor="let customer of customers.results" [value]="customer">
+            {{customer.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="user.get('customer').hasError('required') && user.get('customer').touched">
+          Customer is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(roles$ | async) as roles">
+        <mat-select placeholder="Select Role" formControlName="roleId">
+          <mat-option *ngFor="let role of roles.results" [value]="role.id">
+            {{role.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="user.get('roleId').hasError('required') && user.get('roleId').touched">
+          Role is required.
+        </mat-error>
+      </mat-form-field>
+      <button
+        mat-button
+        color="accent"
+        [disabled]="user.invalid"
+      >
+        Edit User
+      </button>
+    </form>
+  </div>
+</div>

@@ -44,6 +44,7 @@
             mat-icon-button
             color="primary"
             matTooltip="Edit User"
+            [routerLink]="element.id+'/edit'"
           >
             <mat-icon>
               edit
@@ -53,6 +54,7 @@
             mat-icon-button
             color="primary"
             matTooltip="Delete User"
+            (click)="deleteUser(element.id)"
           >
             <mat-icon>
               delete

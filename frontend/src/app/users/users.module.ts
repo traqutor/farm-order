@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { UserNewComponent } from './user-new/user-new.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     RouterModule,
     ReactiveFormsModule,
   ],
-  declarations: [UsersListComponent, UserNewComponent]
+  declarations: [UsersListComponent, UserNewComponent, UserEditComponent]
 })
 export class UsersModule {
 }

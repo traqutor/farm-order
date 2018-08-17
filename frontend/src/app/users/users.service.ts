@@ -16,11 +16,19 @@ export class UsersService {
   }
 
   getUsers() {
-    return this.http.get(`${this.apiUrl}/api/UsersManagement?page=0&customerId=0&siteId=0`);
+    return this.http.get(`${this.apiUrl}/api/UsersManagement`);
   }
 
   postUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}/api/UsersManagement`, JSON.stringify(user));
+  }
+
+  deleteUser(userId: string) {
+    return this.http.delete(`${this.apiUrl}/api/UsersManagement/${userId}`);
+  }
+
+  putUser(user: User, userId: string): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/api/UsersManagement/${userId}`, JSON.stringify(user));
   }
 
 }
