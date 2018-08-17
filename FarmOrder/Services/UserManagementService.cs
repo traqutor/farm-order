@@ -14,6 +14,7 @@ using FarmOrder.Data.Entities;
 using FarmOrder.Data.Entities.CustomerSites;
 using System.Net.Http;
 using System.Net;
+using FarmOrder.Data.Entities.Farms;
 
 namespace FarmOrder.Services
 {
@@ -104,6 +105,17 @@ namespace FarmOrder.Services
                     sites.ForEach(site =>
                     {
                         _context.CustomerSiteUsers.Add(new CustomerSiteUser { User = user, CustomerSiteId = site.Id });
+                    });
+                }
+
+                if (model.Farms != null)
+                {
+                    int[] farmsIds = model.Farms.Select(f => f.Id).ToArray();
+
+                    List<Farm> farms = selectedCustomer.CustomerSites.SelectMany(cs => cs.Farms.Where(f => farmsIds.Contains(f.Id))).ToList();
+                    farms.ForEach(farm =>
+                    {
+                        _context.FarmUsers.Add(new FarmUser { User = user, FarmId = farm.Id });
                     });
                 }
             }
