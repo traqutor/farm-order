@@ -71,6 +71,14 @@
           Customer is required.
         </mat-error>
       </mat-form-field>
+      {{this.user.value | json}}
+      <mat-form-field *ngIf="this.user.value.customer !== null">
+        <mat-select placeholder="Select CustomerSite" formControlName="customerSite">
+          <mat-option *ngFor="let site of this.user.value.customer.customerSites" [value]="site">
+            {{site.siteName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field *ngIf="(roles$ | async) as roles">
         <mat-select placeholder="Select Role" formControlName="roleId">
           <mat-option *ngFor="let role of roles.results" [value]="role.id">

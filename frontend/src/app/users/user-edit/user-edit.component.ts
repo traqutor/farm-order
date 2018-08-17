@@ -7,8 +7,6 @@ import { SharedService } from '../../shared/shared.service';
 import { UsersService } from '../users.service';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PasswordValidation } from '../../shared/validators/match-password.validator';
-import { filter } from 'rxjs/operators';
 import { Customer } from '../../shared/models/customer';
 
 @Component({
