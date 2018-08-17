@@ -18,20 +18,44 @@ namespace FarmOrder.Services
             _context = FarmOrderDBContext.Create();
         }
 
-        public SearchResults<FarmListEntryViewModel> GetFarms(string userId, bool isAdmin, int? page = null, int? customerId = null)
+        public SearchResults<FarmListEntryViewModel> GetFarms(string userId, bool isAdmin, FarmSearchModel model)
         {
             var query = _context.Farms.OrderByDescending(r => r.Id).AsQueryable();
+
+            List<int> sitesSubset = new List<int>();
+
+            foreach (var site in model.CustomerSites)
+            {
+                sitesSubset.Add(site.Id);
+            }
 
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
                 query = query.Where(u => u.CustomerSite.CustomerId == loggedUser.CustomerId);
+
+                List<int> userAvalibleSites = loggedUser.CustomerSiteUser.Select(csu => csu.CustomerSiteId).ToList();
+
+                var avalibleSites = userAvalibleSites;
+                if (sitesSubset.Count > 0)
+                    avalibleSites = avalibleSites.Intersect(sitesSubset).ToList();
+
+                var avalibleSitesArr = avalibleSites.ToArray();
+                query = query.Where(f => avalibleSitesArr.Contains(f.CustomerSiteId));
+            }
+            else
+            {
+                if (sitesSubset.Count > 0)
+                {
+                    var sitesSubsetArr = sitesSubset.ToArray();
+                    query = query.Where(f => sitesSubsetArr.Contains(f.CustomerSiteId));
+                }
             }
 
             int totalCount = query.Count();
 
-            if (page != null)
-                query = query.Take(_pageSize).Skip(_pageSize * page.Value);
+            if (model.Page != null)
+                query = query.Take(_pageSize).Skip(_pageSize * model.Page.Value);
 
             return new SearchResults<FarmListEntryViewModel>
             {

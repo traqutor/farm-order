@@ -21,12 +21,13 @@ namespace FarmOrder.Controllers
             _service = new FarmService();
         }
 
-        public SearchResults<FarmListEntryViewModel> GetOrderStatuses(int? page = null)
+        [HttpPost]
+        public SearchResults<FarmListEntryViewModel> GetOrderStatuses(FarmSearchModel model)
         {
             if (User.IsInRole("Admin"))
-                return _service.GetFarms(User.Identity.GetUserId(), true, page);
+                return _service.GetFarms(User.Identity.GetUserId(), true, model);
             else
-                return _service.GetFarms(User.Identity.GetUserId(), false, page);
+                return _service.GetFarms(User.Identity.GetUserId(), false, model);
         }
     }
 }

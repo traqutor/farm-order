@@ -220,6 +220,10 @@ namespace FarmOrder.Services
                 _context.CustomerSiteUsers.RemoveRange(bindingsToRemove);
                 _context.CustomerSiteUsers.AddRange(bindingsToAdd);
             }
+
+
+            if (userToUpdate.UserName != model.UserName)
+                userToUpdate.UserName = model.UserName;
           
             _context.SaveChanges();
          

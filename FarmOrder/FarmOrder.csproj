@@ -297,6 +297,7 @@
     <Compile Include="Models\CustomerSites\CustomerSiteListEntryViewModel.cs" />
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
     <Compile Include="Models\Farms\FarmListEntryViewModel.cs" />
+    <Compile Include="Models\Farms\FarmSearchModel.cs" />
     <Compile Include="Models\Orders\OrderChangeReasonListEntryViewModel.cs" />
     <Compile Include="Models\Orders\OrderCreateModel.cs" />
     <Compile Include="Models\Orders\OrderListEntryViewModel.cs" />
