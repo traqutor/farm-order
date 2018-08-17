@@ -190,6 +190,13 @@ namespace FarmOrder.Services
             if (role == null)
                 errors.Add("Role can not be empty.");
 
+            if (userToUpdate.UserName != model.UserName)
+            {
+                var existsUsername = _context.Users.Any(u => u.UserName == model.UserName);
+                if(existsUsername)
+                    errors.Add("Username is already in Use.");
+            }
+
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
