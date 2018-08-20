@@ -22,7 +22,7 @@ namespace FarmOrder.Controllers
         }
 
         [HttpPost]
-        public SearchResults<FarmListEntryViewModel> GetOrderStatuses(FarmSearchModel model)
+        public SearchResults<FarmListEntryViewModel> GetFarmsForUserCreation(FarmSearchModel model)
         {
             if (User.IsInRole("Admin"))
                 return _service.GetFarms(User.Identity.GetUserId(), true, model);

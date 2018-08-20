@@ -12,8 +12,14 @@ namespace FarmOrder.Models.Farms
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public FarmListEntryViewModel()
+        {
+
+        }
+
         public FarmListEntryViewModel(Farm entity)
         {
+    
             Id = entity.Id;
             Name = entity.Name;
         }

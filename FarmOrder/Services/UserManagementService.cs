@@ -132,7 +132,7 @@ namespace FarmOrder.Services
 
             _context.SaveChanges();
 
-            var userToReturn = _context.Users.SingleOrDefault(u => u.Id == user.Id);
+            var userToReturn = _context.Users.Include("FarmUsers.Farm").SingleOrDefault(u => u.Id == user.Id);
             var possibleRoles = _roleManager.Roles.ToList();
             return new UserListEntryViewModel(userToReturn, possibleRoles);
         }
