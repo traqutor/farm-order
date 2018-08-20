@@ -7,6 +7,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { AppMaterialModule } from '../app-material.module';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
+import {FooterComponent} from './components/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -17,8 +18,8 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
     AppMaterialModule
   ],
   providers: [],
-  exports: [HeaderComponent],
-  declarations: [HeaderComponent, LoginComponent, ConfirmDialogComponent],
+  exports: [HeaderComponent, FooterComponent],
+  declarations: [HeaderComponent, LoginComponent, ConfirmDialogComponent, FooterComponent],
 })
 export class SharedModule {
 }

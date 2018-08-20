@@ -23,10 +23,10 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>FarmOrder</span>
+      <span>Profisol Farm Order Module</span>
       <div class="spacer"></div>
       <p *ngIf="(user$ | async) as user">
-        {{user?.userName}}|{{user?.role?.name}}
+        {{user?.userName}} as {{user?.role?.name}}
       </p>
       <button mat-button routerLink="users">Users</button>
       <button mat-button (click)="authService.logout()">Logout</button>
