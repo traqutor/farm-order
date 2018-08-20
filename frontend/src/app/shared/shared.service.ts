@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { User } from './models/user';
 import { Role } from './models/role';
 import { Customer } from './models/customer';
+import { Farm } from './models/farm';
+import { CustomerSite } from './models/customer-site';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class SharedService {
 
   getRoles(): Observable<{results: Array<Role>, resultCount: number}> {
     return this.http.get<{results: Array<Role>, resultCount: number}>(`${this.apiUrl}/api/Role`);
+  }
+
+  getFarms(customerSites: {page: number, customerSites: [CustomerSite]}): Observable<{results: Array<Farm>, resultCount: number}> {
+    return this.http.post<{ results: Array<Farm>, resultCount: number }>(`${this.apiUrl}/api/Farm`, JSON.stringify(customerSites));
   }
 }

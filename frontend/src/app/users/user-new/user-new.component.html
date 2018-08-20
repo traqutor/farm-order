@@ -71,11 +71,17 @@
           Customer is required.
         </mat-error>
       </mat-form-field>
-      {{this.user.value | json}}
       <mat-form-field *ngIf="this.user.value.customer !== null">
-        <mat-select placeholder="Select CustomerSite" formControlName="customerSite">
+        <mat-select #option placeholder="Select CustomerSite" formControlName="customerSites" multiple (valueChange)="getFarms(option.value)">
           <mat-option *ngFor="let site of this.user.value.customer.customerSites" [value]="site">
             {{site.siteName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="this.user.value.customerSites !== null && (farms$ | async) as farms">
+        <mat-select #option placeholder="Select Farm" formControlName="customerSites" multiple>
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>

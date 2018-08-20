@@ -9,6 +9,8 @@ import { UsersService } from '../users.service';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from '../../shared/models/customer';
+import { CustomerSite } from '../../shared/models/customer-site';
+import { Farm } from '../../shared/models/farm';
 
 @Component({
   selector: 'app-user-new',
@@ -20,6 +22,7 @@ export class UserNewComponent implements OnInit {
   user: FormGroup;
   roles$: Observable<{ results: Array<Role>, resultCount: number }>;
   customers$: Observable<{ results: Array<Customer>, resultCount: number }>;
+  farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
 
   constructor(private sharedService: SharedService,
               private fb: FormBuilder,
@@ -48,8 +51,11 @@ export class UserNewComponent implements OnInit {
       customer: [null, [
         Validators.required,
       ]],
-      customerSite: [null, [
+      customerSites: [null, [
         Validators.required,
+      ]],
+      farms: [null, [
+        Validators.required
       ]],
       roleId: [null, [
         Validators.required,
@@ -57,8 +63,14 @@ export class UserNewComponent implements OnInit {
     }, { validator: PasswordValidation.MatchPassword });
   }
 
+  getFarms(customerSites: [CustomerSite]) {
+    this.farms$ = this.sharedService.getFarms({ page: null, customerSites });
+  }
+
   onSubmit() {
     const { value, valid } = this.user;
+    value.customer.customerSites = value.customerSites;
+    delete value.customerSites;
     if (valid) {
       this.usersService.postUser(value)
         .subscribe(() => {
