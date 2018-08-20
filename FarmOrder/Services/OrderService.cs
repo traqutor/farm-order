@@ -133,17 +133,21 @@ namespace FarmOrder.Services
             if (orderStatus == null)
                 errors.Add("Invalid order status.");
 
+            Order oldOrder = _context.Orders.SingleOrDefault(o => o.Id == id);
+
+            if(oldOrder.Status?.Name == "Delivered")
+                errors.Add("Can not modify delivered order.");
+
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
-            Order oldOrder = _context.Orders.SingleOrDefault(o => o.Id == id);
 
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
 
                 if(!loggedUser.FarmUsers.Any(fu => fu.FarmId == oldOrder.FarmId)) {
-                    errors.Add("User does not posses this farm access.");
+                    errors.Add("User does not posses access this farm.");
                     throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Unauthorized, errors));
                 }
             }
@@ -154,7 +158,9 @@ namespace FarmOrder.Services
             oldOrder.DeliveryDate = model.DeliveryDate;
             oldOrder.TonsOrdered = model.TonsOrdered;
 
-            throw new NotImplementedException();
+            _context.SaveChanges();
+
+            return new OrderListEntryViewModel(oldOrder);
         }
 
         public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)
