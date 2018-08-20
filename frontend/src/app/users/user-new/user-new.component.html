@@ -72,14 +72,15 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="this.user.value.customer !== null">
-        <mat-select #option placeholder="Select CustomerSite" formControlName="customerSites" multiple (valueChange)="getFarms(option.value)">
+        <mat-select #option placeholder="Select CustomerSite" formControlName="customerSites" multiple
+                    (valueChange)="getFarms(option.value)">
           <mat-option *ngFor="let site of this.user.value.customer.customerSites" [value]="site">
             {{site.siteName}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field *ngIf="this.user.value.customerSites !== null && (farms$ | async) as farms">
-        <mat-select #option placeholder="Select Farm" formControlName="customerSites" multiple>
+        <mat-select #option placeholder="Select Farm" formControlName="farms" multiple>
           <mat-option *ngFor="let farm of farms.results" [value]="farm">
             {{farm.name}}
           </mat-option>
@@ -99,6 +100,7 @@
       <mat-error *ngIf="user.get('confirmPassword').hasError('MatchPassword') && user.get('confirmPassword').touched">
         Password not match
       </mat-error>
+      {{user.status | json }}
       <button
         mat-button
         color="accent"
