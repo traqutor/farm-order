@@ -3,7 +3,7 @@ import { UsersService } from '../users.service';
 import { SharedService } from '../../shared/shared.service';
 import { Observable } from 'rxjs';
 import { User } from '../../shared/models/user';
-import { MatSnackBar, MatTableDataSource } from '@angular/material';
+import { MatSelect, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { DialogService } from '../../shared/dialogs/dialog.service';
 import { Customer } from '../../shared/models/customer';
 
@@ -34,7 +34,11 @@ export class UsersListComponent implements OnInit {
     this.usersService.getUsers()
       .subscribe((users: { results: [User], resultCount: number }) => {
         this.dataSource = new MatTableDataSource<User>(users.results);
-        console.log(this.dataSource);
+        this.dataSource.filterPredicate = (data: User, filter: string) => {
+          if (data.customer) {
+            return data.customer.name.indexOf(filter) !== -1;
+          }
+        };
       });
     this.customers$ = this.sharedService.getCustomers();
   }
@@ -46,6 +50,10 @@ export class UsersListComponent implements OnInit {
     return row;
   }
 
+  filterTableByCustomer(selectOption: MatSelect) {
+    this.dataSource.filter = selectOption.value.name;
+  }
+
   deleteUser(userId: string) {
     this.dialogService
       .confirm('Confirm Action', 'Are you sure you wanna delete User')
@@ -54,7 +62,6 @@ export class UsersListComponent implements OnInit {
           this.usersService.deleteUser(userId)
             .subscribe(() => {
               const newUsers = this.dataSource.data.filter(user => user.id !== userId);
-              console.log(newUsers);
               this.dataSource = new MatTableDataSource<User>(newUsers);
               this.snackBar.open('User Deleted!', '', {
                 duration: 2000,

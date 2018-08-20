@@ -21,9 +21,12 @@
   <mat-divider></mat-divider>
 
   <div *ngIf="(customers$ | async) as customers">
-    <mat-form-field>
-      <mat-select placeholder="Select customer to filter">
-        <mat-option *ngFor="let customer of customers.results" [value]="customer.id">
+    <mat-form-field class="half-width">
+      <mat-select #option (valueChange)="filterTableByCustomer(option)" placeholder="Select customer to filter">
+        <mat-option value="">
+          ALL
+        </mat-option>
+        <mat-option *ngFor="let customer of customers.results" [value]="customer">
           {{customer.name}}
         </mat-option>
       </mat-select>

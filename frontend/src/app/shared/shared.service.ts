@@ -6,6 +6,7 @@ import { Role } from './models/role';
 import { Customer } from './models/customer';
 import { Farm } from './models/farm';
 import { CustomerSite } from './models/customer-site';
+import { User } from './models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +19,19 @@ export class SharedService {
     this.apiUrl = environment.url;
   }
 
-  getCustomers(): Observable<{results: Array<Customer>, resultCount: number}> {
-    return this.http.get<{results: Array<Customer>, resultCount: number}>(`${this.apiUrl}/api/Customer`);
+  getCustomers(): Observable<{ results: Array<Customer>, resultCount: number }> {
+    return this.http.get<{ results: Array<Customer>, resultCount: number }>(`${this.apiUrl}/api/Customer`);
   }
 
-  getRoles(): Observable<{results: Array<Role>, resultCount: number}> {
-    return this.http.get<{results: Array<Role>, resultCount: number}>(`${this.apiUrl}/api/Role`);
+  getRoles(): Observable<{ results: Array<Role>, resultCount: number }> {
+    return this.http.get<{ results: Array<Role>, resultCount: number }>(`${this.apiUrl}/api/Role`);
   }
 
-  getFarms(customerSites: {page: number, customerSites: [CustomerSite]}): Observable<{results: Array<Farm>, resultCount: number}> {
+  getFarms(customerSites: { page: number, customerSites: [CustomerSite] }): Observable<{ results: Array<Farm>, resultCount: number }> {
     return this.http.post<{ results: Array<Farm>, resultCount: number }>(`${this.apiUrl}/api/Farm`, JSON.stringify(customerSites));
+  }
+
+  getUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/api/Account/UserInfo`);
   }
 }

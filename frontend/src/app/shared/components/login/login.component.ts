@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthResponse, AuthService } from '../../../core/auth/auth.service';
 import { tap } from 'rxjs/operators';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
+import { SharedService } from '../../shared.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +18,8 @@ export class LoginComponent implements OnInit {
   public isLogging = false;
 
   constructor(private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private sharedService: SharedService) {
   }
 
   onSignIn(form: NgForm) {
@@ -27,11 +30,16 @@ export class LoginComponent implements OnInit {
       .pipe(
         tap((authResponse: AuthResponse) => {
           this.isLogging = false;
-          this.authService.saveCredentialsToStorage(authResponse.userName, authResponse.access_token)
+          this.authService.saveCredentialsToStorage(authResponse.userName, authResponse.access_token);
+          this.authService.setAuth(true);
         })
       )
       .subscribe(() => {
-        this.router.navigateByUrl('orders');
+        this.sharedService.getUser()
+          .subscribe((user: User) => {
+            this.authService.setUser(user);
+            this.router.navigateByUrl('orders');
+          });
       }, err => {
         this.isLogging = false;
         this.err = true;
