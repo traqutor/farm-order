@@ -12,7 +12,7 @@ namespace FarmOrder.Models.Orders
         [Required]
         public DateTime DeliveryDate { get; set; }
         [Required]
-        public int TonesOrdered { get; set; }
+        public int TonsOrdered { get; set; }
         [Required]
         public FarmListEntryViewModel Farm { get; set; }
     }

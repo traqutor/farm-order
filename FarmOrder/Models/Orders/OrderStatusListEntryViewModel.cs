@@ -12,6 +12,11 @@ namespace FarmOrder.Models.Orders
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public OrderStatusListEntryViewModel()
+        {
+
+        }
+
         public OrderStatusListEntryViewModel(OrderStatus el)
         {
             Id = el.Id;
