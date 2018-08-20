@@ -7,7 +7,7 @@ export interface Order {
   status: Status;
   orderChangeReason: OrderChangeReason;
   deliveryDate: string;
-  tonesOrdered: number;
+  tonsOrdered: number;
   farm: Farm;
 }
 
