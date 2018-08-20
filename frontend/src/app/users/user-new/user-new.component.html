@@ -61,7 +61,8 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(customers$ | async) as customers">
-        <mat-select placeholder="Select Customer" formControlName="customer">
+        <mat-select placeholder="Select Customer" formControlName="customer"
+                    (valueChange)="resetFarms()">
           <mat-option *ngFor="let customer of customers.results" [value]="customer">
             {{customer.name}}
           </mat-option>
@@ -78,6 +79,10 @@
             {{site.siteName}}
           </mat-option>
         </mat-select>
+        <mat-error
+          *ngIf="user.get('customerSites').hasError('required') && user.get('customerSites').touched">
+          Customer Site is required.
+        </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="this.user.value.customerSites !== null && (farms$ | async) as farms">
         <mat-select #option placeholder="Select Farm" formControlName="farms" multiple>
@@ -85,6 +90,10 @@
             {{farm.name}}
           </mat-option>
         </mat-select>
+        <mat-error
+          *ngIf="user.get('farms').hasError('required') && user.get('farms').touched">
+          Farm is required.
+        </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(roles$ | async) as roles">
         <mat-select placeholder="Select Role" formControlName="roleId">
@@ -100,7 +109,6 @@
       <mat-error *ngIf="user.get('confirmPassword').hasError('MatchPassword') && user.get('confirmPassword').touched">
         Password not match
       </mat-error>
-      {{user.status | json }}
       <button
         mat-button
         color="accent"

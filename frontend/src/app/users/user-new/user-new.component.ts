@@ -64,7 +64,12 @@ export class UserNewComponent implements OnInit {
   }
 
   getFarms(customerSites: [CustomerSite]) {
+    this.user.controls.farms.setValue(null);
     this.farms$ = this.sharedService.getFarms({ page: null, customerSites });
+  }
+
+  resetFarms() {
+    this.user.controls.farms.setValue(null);
   }
 
   onSubmit() {
