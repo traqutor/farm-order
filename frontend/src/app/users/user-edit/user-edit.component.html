@@ -28,7 +28,8 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(customers$ | async) as customers">
-        <mat-select placeholder="Select Customer" formControlName="customer" [compareWith]="compare">
+        <mat-select placeholder="Select Customer" formControlName="customer" [compareWith]="compare"
+                    (valueChange)="resetFarms()">
           <mat-option *ngFor="let customer of customers.results" [value]="customer">
             {{customer.name}}
           </mat-option>

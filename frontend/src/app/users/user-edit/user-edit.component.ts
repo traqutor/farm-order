@@ -42,6 +42,7 @@ export class UserEditComponent implements OnInit {
         this.usersService.getUsers()
           .subscribe((res: { results: [User], resultsCount: number }) => {
             const oneUser = res.results.find((user: User) => user.id === this.userId);
+            this.getFarms(oneUser.customer.customerSites);
             this.user = this.fb.group({
               id: [oneUser.id],
               userName: [oneUser.userName, [
@@ -66,8 +67,15 @@ export class UserEditComponent implements OnInit {
   }
 
   getFarms(customerSites: [CustomerSite]) {
-    this.user.controls.farms.setValue(null);
+    console.log(this.user);
+    if (this.user) {
+      this.user.controls.farms.setValue(null);
+    }
     this.farms$ = this.sharedService.getFarms({ page: null, customerSites });
+  }
+
+  resetFarms() {
+    this.user.controls.farms.setValue(null);
   }
 
   compare(val1, val2) {

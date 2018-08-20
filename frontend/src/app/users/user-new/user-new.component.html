@@ -61,7 +61,8 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(customers$ | async) as customers">
-        <mat-select placeholder="Select Customer" formControlName="customer">
+        <mat-select placeholder="Select Customer" formControlName="customer"
+                    (valueChange)="resetFarms()">
           <mat-option *ngFor="let customer of customers.results" [value]="customer">
             {{customer.name}}
           </mat-option>
@@ -108,7 +109,6 @@
       <mat-error *ngIf="user.get('confirmPassword').hasError('MatchPassword') && user.get('confirmPassword').touched">
         Password not match
       </mat-error>
-      {{user.status | json }}
       <button
         mat-button
         color="accent"
