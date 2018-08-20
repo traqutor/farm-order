@@ -296,6 +296,10 @@
     <Compile Include="Migrations\201808171028207_userToFarmsTable.Designer.cs">
       <DependentUpon>201808171028207_userToFarmsTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808200956212_OrderPropertyNamingTypoFix.cs" />
+    <Compile Include="Migrations\201808200956212_OrderPropertyNamingTypoFix.Designer.cs">
+      <DependentUpon>201808200956212_OrderPropertyNamingTypoFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -305,6 +309,7 @@
     <Compile Include="Models\Farms\FarmSearchModel.cs" />
     <Compile Include="Models\Orders\OrderChangeReasonListEntryViewModel.cs" />
     <Compile Include="Models\Orders\OrderCreateModel.cs" />
+    <Compile Include="Models\Orders\OrderEditModel.cs" />
     <Compile Include="Models\Orders\OrderListEntryViewModel.cs" />
     <Compile Include="Models\Orders\OrderSearchModel.cs" />
     <Compile Include="Models\Orders\OrderStatusListEntryViewModel.cs" />
@@ -411,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808171028207_userToFarmsTable.resx">
       <DependentUpon>201808171028207_userToFarmsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808200956212_OrderPropertyNamingTypoFix.resx">
+      <DependentUpon>201808200956212_OrderPropertyNamingTypoFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

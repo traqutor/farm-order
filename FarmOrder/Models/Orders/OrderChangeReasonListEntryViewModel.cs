@@ -11,6 +11,11 @@ namespace FarmOrder.Models.Orders
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public OrderChangeReasonListEntryViewModel()
+        {
+
+        }
+
         public OrderChangeReasonListEntryViewModel(OrderChangeReason el)
         {
             Id = el.Id;

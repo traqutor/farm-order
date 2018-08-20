@@ -43,10 +43,10 @@ namespace FarmOrder.Services
                     switch (searchModel.SortOrder)
                     {
                         case SortOrder.ASCENDING:
-                            query = query.OrderBy(o => o.TonesOrdered);
+                            query = query.OrderBy(o => o.TonsOrdered);
                             break;
                         default:
-                            query = query.OrderByDescending(o => o.TonesOrdered);
+                            query = query.OrderByDescending(o => o.TonsOrdered);
                             break;
                     }
                     break;
@@ -117,6 +117,52 @@ namespace FarmOrder.Services
             };
         }
 
+        public OrderListEntryViewModel Update(string userId, bool isAdmin, int id, OrderEditModel model, HttpRequestMessage request)
+        {
+            var changeReason = _context.OrderChangeReasons.SingleOrDefault(ocr => ocr.Id == model.OrderChangeReason.Id);
+            var orderStatus = _context.OrderStatuses.SingleOrDefault(os => os.Id == model.Status.Id);
+
+            List<string> errors = new List<string>();
+
+            if (model.TonsOrdered <= 0)
+                errors.Add("Can not order less than 1 tone.");
+
+            if(changeReason == null)
+                errors.Add("Order change reason must be provided.");
+
+            if (orderStatus == null)
+                errors.Add("Invalid order status.");
+
+            Order oldOrder = _context.Orders.SingleOrDefault(o => o.Id == id);
+
+            if(oldOrder.Status?.Name == "Delivered")
+                errors.Add("Can not modify delivered order.");
+
+            if (errors.Count > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
+
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+
+                if(!loggedUser.FarmUsers.Any(fu => fu.FarmId == oldOrder.FarmId)) {
+                    errors.Add("User does not posses access this farm.");
+                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Unauthorized, errors));
+                }
+            }
+
+            oldOrder.ModificationDate = DateTime.UtcNow;
+            oldOrder.StatusId = orderStatus.Id;
+            oldOrder.ChangeReasonId = changeReason.Id;
+            oldOrder.DeliveryDate = model.DeliveryDate;
+            oldOrder.TonsOrdered = model.TonsOrdered;
+
+            _context.SaveChanges();
+
+            return new OrderListEntryViewModel(oldOrder);
+        }
+
         public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)
         {
             var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
@@ -136,7 +182,7 @@ namespace FarmOrder.Services
             if(model.DeliveryDate < DateTime.UtcNow)
                 errors.Add("Can not set the past date.");
 
-            if (model.TonesOrdered <= 0)
+            if (model.TonsOrdered <= 0)
                 errors.Add("Can not order less than 1 tone.");
 
             if (selectedFarm == null)
@@ -152,7 +198,7 @@ namespace FarmOrder.Services
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 StatusId = defaultStatus.Id,
-                TonesOrdered = model.TonesOrdered,
+                TonsOrdered = model.TonsOrdered,
                 DeliveryDate = model.DeliveryDate,
                 FarmId = selectedFarm.Id
             };

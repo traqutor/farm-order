@@ -12,7 +12,7 @@ namespace FarmOrder.Models.Orders
         public OrderListEntryViewModel(Order el)
         {
             Id = el.Id;
-            TonesOrdered = el.TonesOrdered;
+            TonsOrdered = el.TonsOrdered;
             Farm = new FarmListEntryViewModel(el.Farm);
             CreationDate = el.CreationDate;
             ModificationDate = el.ModificationDate;
@@ -20,6 +20,11 @@ namespace FarmOrder.Models.Orders
             Status = new OrderStatusListEntryViewModel(el.Status);
             if(el.ChangeReason != null)
                 OrderChangeReason = new OrderChangeReasonListEntryViewModel(el.ChangeReason);
+        }
+
+        public OrderListEntryViewModel()
+        {
+
         }
 
         public int Id { get; set; }

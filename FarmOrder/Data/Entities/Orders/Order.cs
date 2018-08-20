@@ -15,7 +15,7 @@ namespace FarmOrder.Data.Entities.Orders
         public DateTime ModificationDate { get; set; }
         public DateTime DeliveryDate { get; set; }
 
-        public int TonesOrdered { get; set; }
+        public int TonsOrdered { get; set; }
 
         public int FarmId { get; set; }
         [ForeignKey("FarmId")]
