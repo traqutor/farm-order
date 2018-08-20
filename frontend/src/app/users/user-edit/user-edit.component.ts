@@ -8,6 +8,8 @@ import { UsersService } from '../users.service';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from '../../shared/models/customer';
+import { Farm } from '../../shared/models/farm';
+import { CustomerSite } from '../../shared/models/customer-site';
 
 @Component({
   selector: 'app-user-edit',
@@ -20,6 +22,7 @@ export class UserEditComponent implements OnInit {
   roles$: Observable<{ results: Array<Role>, resultCount: number }>;
   userId: string;
   customers$: Observable<{ results: Array<Customer>, resultCount: number }>;
+  farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
 
   constructor(private sharedService: SharedService,
               private fb: FormBuilder,
@@ -48,12 +51,23 @@ export class UserEditComponent implements OnInit {
               customer: [oneUser.customer, [
                 Validators.required,
               ]],
+              customerSites: [oneUser.customer.customerSites, [
+                Validators.required,
+              ]],
+              farms: [oneUser.farms, [
+                Validators.required
+              ]],
               roleId: [oneUser.role.id, [
                 Validators.required,
               ]]
             });
           });
       });
+  }
+
+  getFarms(customerSites: [CustomerSite]) {
+    this.user.controls.farms.setValue(null);
+    this.farms$ = this.sharedService.getFarms({ page: null, customerSites });
   }
 
   compare(val1, val2) {
