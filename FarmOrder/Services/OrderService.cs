@@ -5,6 +5,10 @@ using System.Linq;
 using System.Web;
 using FarmOrder.Models;
 using FarmOrder.Models.Orders;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using FarmOrder.Data.Entities.Orders;
 
 namespace FarmOrder.Services
 {
@@ -113,9 +117,50 @@ namespace FarmOrder.Services
             };
         }
 
-        public OrderListEntryViewModel Add(string v1, bool v2, OrderCreateModel model)
+        public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)
         {
-            throw new NotImplementedException();
+            var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
+
+            List<string> errors = new List<string>();
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+
+                bool farmAvalibleForUser = loggedUser.FarmUsers.Any(f => selectedFarm.Id == f.Id);
+
+                if (farmAvalibleForUser)
+                    selectedFarm = null;
+            }
+
+            if(model.DeliveryDate < DateTime.UtcNow)
+                errors.Add("Can not set the past date.");
+
+            if (model.TonesOrdered <= 0)
+                errors.Add("Can not order less than 1 tone.");
+
+            if (selectedFarm == null)
+                errors.Add("Farm unavalibe select correct farm.");
+
+            if (errors.Count > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
+
+            var defaultStatus = _context.OrderStatuses.SingleOrDefault(s => s.Name == "Open");
+
+            Order order = new Order()
+            {
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow,
+                StatusId = defaultStatus.Id,
+                TonesOrdered = model.TonesOrdered,
+                DeliveryDate = model.DeliveryDate,
+                FarmId = selectedFarm.Id
+            };
+
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+
+            return new OrderListEntryViewModel(order);
         }
     }
 }
