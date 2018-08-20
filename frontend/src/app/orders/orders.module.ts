@@ -1,12 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrdersListComponent } from './orders-list/orders-list.component';
+import { AppMaterialModule } from '../app-material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { OrderNewComponent } from './order-new/order-new.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    AppMaterialModule,
+    FlexLayoutModule,
+    RouterModule,
+    ReactiveFormsModule,
   ],
   exports: [OrdersListComponent],
-  declarations: [OrdersListComponent]
+  declarations: [OrdersListComponent, OrderNewComponent]
 })
-export class OrdersModule { }
+export class OrdersModule {
+}

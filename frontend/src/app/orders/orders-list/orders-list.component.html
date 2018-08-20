@@ -1,3 +1,60 @@
-<p>
-  orders-list works!
-</p>
+<div class="padding-content"
+     fxFlex
+     fxLayout="column">
+  <div fxLayout="row">
+    <div>
+      <h2 class="mat-title">Users List</h2>
+      <p class="mat-subheading-2">List of users define in system.</p>
+    </div>
+    <div class="spacer"></div>
+    <div>
+      <button
+        mat-button
+        color="accent"
+        [routerLink]="'new'"
+      >
+        ADD ORDER
+      </button>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
+      <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column.value">
+        <th mat-header-cell *matHeaderCellDef> {{column.name}}</th>
+        <td mat-cell *matCellDef="let element"> {{displayRow(element[column.value])}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="settings">
+        <th mat-header-cell *matHeaderCellDef> Settings</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            color="primary"
+            matTooltip="Edit User"
+            [routerLink]="element.id+'/edit'"
+          >
+            <mat-icon>
+              edit
+            </mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="primary"
+            matTooltip="Delete User"
+            (click)="deleteUser(element.id)"
+          >
+            <mat-icon>
+              delete
+            </mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToRender"></tr>
+      <tr class="mat-row-gray" mat-row *matRowDef="let row; columns: columnsToRender;"></tr>
+    </table>
+  </div>
+</div>
