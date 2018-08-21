@@ -36,7 +36,7 @@ export class UsersListComponent implements OnInit {
         this.dataSource = new MatTableDataSource<User>(users.results);
         this.dataSource.filterPredicate = (data: User, filter: string) => {
           if (data.customer) {
-            return data.customer.name.indexOf(filter) !== -1;
+            return data.customer.id.indexOf(filter) !== -1;
           }
         };
       });
@@ -51,7 +51,7 @@ export class UsersListComponent implements OnInit {
   }
 
   filterTableByCustomer(selectOption: MatSelect) {
-    this.dataSource.filter = selectOption.value.name;
+    this.dataSource.filter = selectOption.value.id;
   }
 
   deleteUser(userId: string) {
