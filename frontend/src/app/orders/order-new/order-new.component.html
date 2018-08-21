@@ -1,3 +1,50 @@
-<p>
-  order-new works!
-</p>
+<div class="padding-content"
+     fxFlex
+     fxLayout="column"
+>
+  <div
+    fxLayout="row"
+  >
+    <div>
+      <h2 class="mat-title">New User</h2>
+      <p class="mat-subheading-2">Here you create new user.</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <form [formGroup]="order" (ngSubmit)="onSubmit(order)" fxLayout="column" class="half-width">
+      <mat-form-field>
+        <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('required') && order.get('tonsOrdered').touched">
+          Tons ordered is required.
+        </mat-error>
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('min') && order.get('tonsOrdered').touched">
+          Minimum tons ordered is 1.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(farms$ | async) as farms">
+        <mat-select placeholder="Select Farm" formControlName="farm">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <button
+        mat-button
+        color="accent"
+        [disabled]="order.invalid"
+      >
+        Create Order
+      </button>
+    </form>
+  </div>
+
+</div>

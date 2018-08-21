@@ -42,7 +42,8 @@ export class UserEditComponent implements OnInit {
         this.usersService.getUsers()
           .subscribe((res: { results: [User], resultsCount: number }) => {
             const oneUser = res.results.find((user: User) => user.id === this.userId);
-            this.getFarms(oneUser.customer.customerSites);
+            const customerSitesNullable = oneUser.customer === null ? [] as [CustomerSite] : oneUser.customer.customerSites;
+            this.getFarms(customerSitesNullable);
             this.user = this.fb.group({
               id: [oneUser.id],
               userName: [oneUser.userName, [
@@ -52,7 +53,7 @@ export class UserEditComponent implements OnInit {
               customer: [oneUser.customer, [
                 Validators.required,
               ]],
-              customerSites: [oneUser.customer.customerSites, [
+              customerSites: [customerSitesNullable, [
                 Validators.required,
               ]],
               farms: [oneUser.farms, [
@@ -67,7 +68,6 @@ export class UserEditComponent implements OnInit {
   }
 
   getFarms(customerSites: [CustomerSite]) {
-    console.log(this.user);
     if (this.user) {
       this.user.controls.farms.setValue(null);
     }
@@ -79,7 +79,9 @@ export class UserEditComponent implements OnInit {
   }
 
   compare(val1, val2) {
-    return val1.id === val2.id;
+    if (val1 && val2) {
+      return val1.id === val2.id;
+    }
   }
 
   onSubmit() {
