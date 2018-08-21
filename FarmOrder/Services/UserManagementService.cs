@@ -268,7 +268,11 @@ namespace FarmOrder.Services
 
             if (userToUpdate.UserName != model.UserName)
                 userToUpdate.UserName = model.UserName;
-          
+
+            if (userToUpdate.CustomerId != selectedCustomer.Id)
+                userToUpdate.CustomerId = selectedCustomer.Id;
+
+
             _context.SaveChanges();
          
             var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
