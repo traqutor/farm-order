@@ -31,6 +31,15 @@ namespace FarmOrder.Controllers
                 return _service.GetOrders(User.Identity.GetUserId(), false, searchModel);
         }
 
+ 
+        public OrderListEntryViewModel Get(int id)
+        {
+            if (User.IsInRole("Admin"))
+                return _service.Get(User.Identity.GetUserId(), true, id);
+            else
+                return _service.Get(User.Identity.GetUserId(), false, id);
+        }
+
         public OrderListEntryViewModel Post([FromBody]OrderCreateModel model)
         {
             if (!ModelState.IsValid)

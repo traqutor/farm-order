@@ -26,6 +26,21 @@ namespace FarmOrder.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
 
+        public UserListEntryViewModel Get(string userId, bool isAdmin, string searchedUserId)
+        {
+            var searchedUser = _context.Users.SingleOrDefault(u => u.Id == searchedUserId);
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+                if(loggedUser.CustomerId != searchedUser.CustomerId)
+                        throw new HttpResponseException(HttpStatusCode.Unauthorized);
+            }
+
+            var possibleRoles = _roleManager.Roles.ToList();
+            return new UserListEntryViewModel(searchedUser, possibleRoles);
+        }
+
         public UserManagementService()
         {
             _context = FarmOrderDBContext.Create();
@@ -164,6 +179,12 @@ namespace FarmOrder.Services
         public void Delete(string userId, bool isAdmin, string userToDeleteId, HttpRequestMessage request)
         {
             User userToDelete = _context.Users.SingleOrDefault(u => u.Id == userToDeleteId);
+            List<string> errors = new List<string>();
+
+            if(_userManager.IsInRole(userToDelete.Id, UserSystemRoles.Admin))
+            {
+                errors.Add("Cant remove administrator.");
+            }
 
             if (!isAdmin)
             {
@@ -171,6 +192,9 @@ namespace FarmOrder.Services
                 if (userToDelete.CustomerId != loggedUser.CustomerId)
                     throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new List<string> { "Can not delete User of a different customer." }));
             }
+
+            if (errors.Count > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
             _context.FarmUsers.RemoveRange(userToDelete.FarmUsers);
             _context.CustomerSiteUsers.RemoveRange(userToDelete.CustomerSiteUser);

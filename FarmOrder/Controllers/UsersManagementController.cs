@@ -23,6 +23,15 @@ namespace FarmOrder.Controllers
             _service = new UserManagementService();
         }
 
+        [Route("api/UserManagement/GetSingleUser")]
+        public UserListEntryViewModel Get(string userId)
+        {
+            if (User.IsInRole("Admin"))
+                return _service.Get(User.Identity.GetUserId(), true, userId);
+            else
+                return _service.Get(User.Identity.GetUserId(), false, userId);
+        }
+
         /// <summary>
         /// page ignored, pagination done in front end
         /// </summary>
