@@ -21,7 +21,7 @@ export class OrdersService {
   }
 
   postOrder(order: Order) {
-
+    return this.http.post(`${this.apiUrl}/api/Order`, JSON.stringify(order));
   }
 
 }

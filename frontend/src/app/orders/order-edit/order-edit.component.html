@@ -6,14 +6,14 @@
     fxLayout="row"
   >
     <div>
-      <h2 class="mat-title">New User</h2>
-      <p class="mat-subheading-2">Here you create new user.</p>
+      <h2 class="mat-title">Edit Order</h2>
+      <p class="mat-subheading-2">Here you edit existing order.</p>
     </div>
   </div>
 
   <mat-divider></mat-divider>
 
-  <div>
+  <div *ngIf="order">
     <form [formGroup]="order" (ngSubmit)="onSubmit(order)" fxLayout="column" class="half-width">
       <mat-form-field>
         <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
@@ -27,7 +27,18 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(farms$ | async) as farms">
-        <mat-select placeholder="Select Farm" formControlName="farm">
+        <mat-select placeholder="Select Farm" formControlName="farm" [compareWith]="compare">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(farms$ | async) as farms">
+        <mat-select placeholder="Select Farm" formControlName="farm" [compareWith]="compare">
           <mat-option *ngFor="let farm of farms.results" [value]="farm">
             {{farm.name}}
           </mat-option>

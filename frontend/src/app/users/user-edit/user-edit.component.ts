@@ -86,6 +86,8 @@ export class UserEditComponent implements OnInit {
 
   onSubmit() {
     const { value, valid } = this.user;
+    value.customer.customerSites = value.customerSites;
+    delete value.customerSites;
     if (valid) {
       this.usersService.putUser(value, this.userId)
         .subscribe(() => {

@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OrderNewComponent } from './order-new/order-new.component';
+import { OrderEditComponent } from './order-edit/order-edit.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { OrderNewComponent } from './order-new/order-new.component';
     ReactiveFormsModule,
   ],
   exports: [OrdersListComponent],
-  declarations: [OrdersListComponent, OrderNewComponent]
+  declarations: [OrdersListComponent, OrderNewComponent, OrderEditComponent]
 })
 export class OrdersModule {
 }

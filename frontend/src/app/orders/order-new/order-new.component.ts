@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
+import { OrdersService } from '../orders.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-order-new',
@@ -12,7 +15,11 @@ import { SharedService } from '../../shared/shared.service';
 export class OrderNewComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private ordersService: OrdersService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private snackBar: MatSnackBar ) {
   }
 
   order: FormGroup;
@@ -36,7 +43,19 @@ export class OrderNewComponent implements OnInit {
 
   onSubmit() {
     const { value, valid } = this.order;
-    console.log(value);
+    value.deliveryDate.toISOString();
+    if (valid) {
+      this.ordersService.postOrder(value)
+        .subscribe(() => {
+          this.router.navigate(['../'], { relativeTo: this.route });
+          this.snackBar.open('User Created!', '', {
+            duration: 2000,
+          });
+        }, err => {
+          console.log(err);
+        });
+    }
+
   }
 
 }

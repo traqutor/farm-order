@@ -38,4 +38,5 @@ export class SharedService {
   getUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/api/Account/UserInfo`);
   }
+
 }
