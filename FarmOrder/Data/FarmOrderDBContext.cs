@@ -3,6 +3,7 @@ using FarmOrder.Data.Entities.Customers;
 using FarmOrder.Data.Entities.CustomerSites;
 using FarmOrder.Data.Entities.Farms;
 using FarmOrder.Data.Entities.Orders;
+using FarmOrder.Data.Initializers;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace FarmOrder.Data
         public FarmOrderDBContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.SetInitializer(new CreateDatabaseIfNotExists<FarmOrderDBContext>());
+            Database.SetInitializer(new FarmOrderDBContextInitializer());
         }
 
         public static FarmOrderDBContext Create()
