@@ -24,3 +24,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 .half-width {
   width: 50%;
 }
+
+.push{
+  height: 50px;
+}

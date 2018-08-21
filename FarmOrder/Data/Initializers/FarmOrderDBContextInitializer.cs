@@ -18,8 +18,6 @@ namespace FarmOrder.Data.Initializers
     {
         protected override void Seed(FarmOrderDBContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<User>(new UserStore<User>(context));
 

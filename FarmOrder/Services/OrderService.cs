@@ -117,6 +117,20 @@ namespace FarmOrder.Services
             };
         }
 
+        public OrderListEntryViewModel Get(string userId, bool isAdmin, int id)
+        {
+            Order order = _context.Orders.SingleOrDefault(o => o.Id == id);
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+                if (!loggedUser.FarmUsers.Any(fu => fu.FarmId == order.FarmId))
+                    throw new HttpResponseException(HttpStatusCode.Unauthorized);
+            }
+
+            return new OrderListEntryViewModel(order);
+        }
+
         public OrderListEntryViewModel Update(string userId, bool isAdmin, int id, OrderEditModel model, HttpRequestMessage request)
         {
             var changeReason = _context.OrderChangeReasons.SingleOrDefault(ocr => ocr.Id == model.OrderChangeReason.Id);

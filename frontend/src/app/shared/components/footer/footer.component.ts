@@ -11,6 +11,8 @@ import { AuthService } from '../../../core/auth/auth.service';
 })
 export class FooterComponent implements OnInit {
 
+  currentDate: Date = new Date();
+
   constructor() {
   }
 
