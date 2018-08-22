@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using FarmOrder.Data.Entities.Orders;
+using System.Data.Entity;
 
 namespace FarmOrder.Services
 {
@@ -75,17 +76,16 @@ namespace FarmOrder.Services
 
             if (!isAdmin)
             {
-                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
-                var customerFarms = _context.Farms.Where(f => f.CustomerSite.CustomerId == loggedUser.CustomerId);
+                var loggedUser = _context.Users.Include(u => u.FarmUsers).SingleOrDefault(u => u.Id == userId);
+                var userFarms = loggedUser.FarmUsers.Select(fu => fu.FarmId).ToArray();
 
-                List<int> userAvalibleSites = loggedUser.CustomerSiteUser.Select(csu => csu.CustomerSiteId).ToList();
+                //List<int> userAvalibleSites = loggedUser.CustomerSiteUser.Select(csu => csu.CustomerSiteId).ToList();
 
-                var avalibleSites = userAvalibleSites;
-                if (sitesSubset.Count > 0)
-                    avalibleSites = avalibleSites.Intersect(sitesSubset).ToList();
+                //var avalibleSites = userAvalibleSites;
+                //if (sitesSubset.Count > 0)
+                    //avalibleSites = avalibleSites.Intersect(sitesSubset).ToList();
 
-                var avalibleSitesArr = avalibleSites.ToArray();
-                query = query.Where(o => avalibleSitesArr.Contains(o.Farm.CustomerSiteId));
+                query = query.Where(o => userFarms.Contains(o.Farm.Id));
             }
             else
             {
@@ -185,11 +185,11 @@ namespace FarmOrder.Services
 
             if (!isAdmin)
             {
-                var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+                var loggedUser = _context.Users.Include(u => u.FarmUsers).SingleOrDefault(u => u.Id == userId);
 
                 bool farmAvalibleForUser = loggedUser.FarmUsers.Any(f => selectedFarm.Id == f.Id);
 
-                if (farmAvalibleForUser)
+                if (!farmAvalibleForUser)
                     selectedFarm = null;
             }
 
