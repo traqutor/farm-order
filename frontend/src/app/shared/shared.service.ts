@@ -7,6 +7,7 @@ import { Customer } from './models/customer';
 import { Farm } from './models/farm';
 import { CustomerSite } from './models/customer-site';
 import { User } from './models/user';
+import { OrderChangeReason, Status } from './models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,14 @@ export class SharedService {
 
   getUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/api/Account/UserInfo`);
+  }
+
+  getStatus(): Observable<{ results: [Status], resultCount: number }> {
+    return this.http.get<{ results: [Status], resultCount: number }>(`${this.apiUrl}/api/OrderStatus`);
+  }
+
+  getOrderChangeReason(): Observable<{ results: [OrderChangeReason], resultCount: number }> {
+    return this.http.get<{ results: [OrderChangeReason], resultCount: number }>(`${this.apiUrl}/api/OrderChangeReason`);
   }
 
 }

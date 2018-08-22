@@ -37,10 +37,21 @@
           Farm is required.
         </mat-error>
       </mat-form-field>
-      <mat-form-field *ngIf="(farms$ | async) as farms">
-        <mat-select placeholder="Select Farm" formControlName="farm" [compareWith]="compare">
-          <mat-option *ngFor="let farm of farms.results" [value]="farm">
-            {{farm.name}}
+      <mat-form-field *ngIf="(status$ | async) as status">
+        <mat-select placeholder="Select Status" formControlName="status" [compareWith]="compare">
+          <mat-option *ngFor="let status of status.results" [value]="status">
+            {{status.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(orderChangeReason$ | async) as orderChangeReasons">
+        <mat-select placeholder="Select order change reason" formControlName="orderChangeReason" [compareWith]="compare">
+          <mat-option *ngFor="let orderChangeReason of orderChangeReasons.results" [value]="orderChangeReason">
+            {{orderChangeReason.name}}
           </mat-option>
         </mat-select>
         <mat-error
@@ -58,7 +69,7 @@
         color="accent"
         [disabled]="order.invalid"
       >
-        Create Order
+        Edit Order
       </button>
     </form>
   </div>

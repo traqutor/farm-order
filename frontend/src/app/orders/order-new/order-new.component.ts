@@ -48,7 +48,7 @@ export class OrderNewComponent implements OnInit {
       this.ordersService.postOrder(value)
         .subscribe(() => {
           this.router.navigate(['../'], { relativeTo: this.route });
-          this.snackBar.open('User Created!', '', {
+          this.snackBar.open('Order Created!', '', {
             duration: 2000,
           });
         }, err => {

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
+import { OrderChangeReason, Status } from '../../shared/models/order';
 
 @Component({
   selector: 'app-order-edit',
@@ -24,6 +25,8 @@ export class OrderEditComponent implements OnInit {
 
   order: FormGroup;
   farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
+  status$: Observable<{ results: Array<Status>, resultCount: number }>;
+  orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultCount: number }>;
   orderId;
 
   ngOnInit() {
@@ -31,32 +34,31 @@ export class OrderEditComponent implements OnInit {
       .params
       .subscribe(params => {
         this.orderId = +params['id'];
-        this.ordersService.getOrders({
-          page: 0,
-          customers: [],
-          statuses: [],
-          changeReasons: [],
-          startDate: null,
-          endDate: null,
-          orderByAttribute: 0,
-          sortOrder: 0
-        }).subscribe(orders => {
-          const oneOrder = orders.results.find(order => order.id === this.orderId);
-          this.order = this.fb.group({
-            tonsOrdered: [oneOrder.tonsOrdered, [
-              Validators.required,
-              Validators.min(1),
-            ]],
-            deliveryDate: [oneOrder.deliveryDate, [
-              Validators.required
-            ]],
-            farm: [oneOrder.farm, [
-              Validators.required
-            ]]
+        this.ordersService.getOrderById(this.orderId)
+          .subscribe(order => {
+            this.order = this.fb.group({
+              tonsOrdered: [order.tonsOrdered, [
+                Validators.required,
+                Validators.min(1),
+              ]],
+              deliveryDate: [order.deliveryDate, [
+                Validators.required
+              ]],
+              farm: [order.farm, [
+                Validators.required
+              ]],
+              status: [order.status, [
+                Validators.required
+              ]],
+              orderChangeReason: [order.orderChangeReason, [
+                Validators.required
+              ]]
+            });
           });
-        });
       });
     this.farms$ = this.sharedService.getUserAssignedFarms();
+    this.status$ = this.sharedService.getStatus();
+    this.orderChangeReason$ = this.sharedService.getOrderChangeReason();
 
   }
 
@@ -68,12 +70,11 @@ export class OrderEditComponent implements OnInit {
 
   onSubmit() {
     const { value, valid } = this.order;
-    value.deliveryDate.toISOString();
+    console.log(value);
     if (valid) {
-      this.ordersService.postOrder(value)
+      this.ordersService.putOrder(this.orderId, value)
         .subscribe(() => {
-          this.router.navigate(['../'], { relativeTo: this.route });
-          this.snackBar.open('User Created!', '', {
+          this.snackBar.open('Order Edited!', '', {
             duration: 2000,
           });
         }, err => {

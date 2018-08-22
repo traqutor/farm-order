@@ -24,4 +24,12 @@ export class OrdersService {
     return this.http.post(`${this.apiUrl}/api/Order`, JSON.stringify(order));
   }
 
+  getOrderById(orderId: number): Observable<Order> {
+    return this.http.get<Order>(`${this.apiUrl}/api/Order/${orderId}`);
+  }
+
+  putOrder(orderId: number, order: Order): Observable<Order> {
+    return this.http.put<Order>(`${this.apiUrl}/api/Order/${orderId}`, JSON.stringify(order));
+  }
+
 }
