@@ -27,31 +27,34 @@
           UserName must have minimum 6 characters.
         </mat-error>
       </mat-form-field>
-      <mat-form-field *ngIf="(customers$ | async) as customers">
-        <mat-select placeholder="Select Customer" formControlName="customer" [compareWith]="compare"
-                    (valueChange)="resetFarms()">
-          <mat-option *ngFor="let customer of customers.results" [value]="customer">
-            {{customer.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error
-          *ngIf="user.get('customer').hasError('required') && user.get('customer').touched">
-          Customer is required.
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field *ngIf="this.user.value.customer !== null">
-        <mat-select #option placeholder="Select CustomerSite" formControlName="customerSites" [compareWith]="compare"
-                    multiple
-                    (valueChange)="getFarms(option.value)">
-          <mat-option *ngFor="let site of this.user.value.customer.customerSites" [value]="site">
-            {{site.siteName}}
-          </mat-option>
-        </mat-select>
-        <mat-error
-          *ngIf="user.get('customerSites').hasError('required') && user.get('customerSites').touched">
-          Customer Site is required.
-        </mat-error>
-      </mat-form-field>
+      <div *ngIf="(customers$ | async) as customers" fxLayout="column">
+        <mat-form-field>
+          <mat-select #currentCustomer placeholder="Select Customer" formControlName="customer" [compareWith]="compare"
+                      (valueChange)="resetFarms()">
+            <mat-option *ngFor="let customer of customers.results" [value]="customer">
+              {{customer.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="user.get('customer').hasError('required') && user.get('customer').touched">
+            Customer is required.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="this.user.value.customer !== null">
+          <mat-select #option placeholder="Select CustomerSite" formControlName="customerSites" [compareWith]="compare"
+                      multiple
+                      (valueChange)="getFarms(option.value)">
+            <mat-option *ngFor="let site of findCustomerSite(customers.results, this.user.value.customer.id)"
+                        [value]="site">
+              {{site.siteName}}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="user.get('customerSites').hasError('required') && user.get('customerSites').touched">
+            Customer Site is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
       <mat-form-field *ngIf="(farms$ | async) as farms">
         <mat-select #option placeholder="Select Farm" formControlName="farms" multiple [compareWith]="compare">
           <mat-option *ngFor="let farm of farms.results" [value]="farm">

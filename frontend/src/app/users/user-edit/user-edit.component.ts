@@ -84,6 +84,11 @@ export class UserEditComponent implements OnInit {
     }
   }
 
+  findCustomerSite(arr, val) {
+    const item = arr.find(el => el.id === val);
+    return item.customerSites;
+  }
+
   onSubmit() {
     const { value, valid } = this.user;
     value.customer.customerSites = value.customerSites;
