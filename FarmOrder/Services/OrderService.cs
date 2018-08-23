@@ -110,9 +110,26 @@ namespace FarmOrder.Services
             }
             */
 
+            if(searchModel.StartDate != null)
+            {
+                query = query.Where(o => o.CreationDate >= searchModel.StartDate);
+            }
+
+            if (searchModel.EndDate != null)
+            {
+                query = query.Where(o => o.CreationDate <= searchModel.EndDate);
+            }
+
+            int count = query.Count();
+
+            if (searchModel.Page.HasValue)
+            {
+                query = query.Skip(_pageSize * searchModel.Page.Value).Take(_pageSize);
+            }
+
             return new SearchResults<OrderListEntryViewModel>
             {
-                ResultsCount = query.Count(),
+                ResultsCount = count,
                 Results = query.ToList().Select(el => new OrderListEntryViewModel(el)).ToList()
             };
         }
