@@ -20,6 +20,39 @@
 
   <mat-divider></mat-divider>
 
+  <div *ngIf="(farms$ | async) as farms">
+    <mat-form-field class="half-width">
+      <mat-select #option (valueChange)="filterTableByFarm(option)" placeholder="Select farm to filter">
+        <mat-option value="">
+          ALL
+        </mat-option>
+        <mat-option *ngFor="let farm of farms.results" [value]="farm">
+          {{farm.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="filter-date">
+    <mat-form-field class="full-width">
+      <input matInput #dateFrom [matDatepicker]="dp1" placeholder="Filter from date">
+      <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+      <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput #dateTo [matDatepicker]="dp2" placeholder="Filter to date">
+      <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+      <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+    </mat-form-field>
+    <button
+      class="full-width"
+      mat-button
+      (click)="filterByDate(dateFrom.value, dateTo.value)"
+    >
+      Filter
+    </button>
+  </div>
+
   <div>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
       <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column.value">

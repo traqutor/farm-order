@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
-import { User } from '../../shared/models/user';
+import { MatSelect, MatTableDataSource } from '@angular/material';
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
 import { DatePipe } from '@angular/common';
+import { Observable } from 'rxjs';
+import { Farm } from '../../shared/models/farm';
+import { SharedService } from '../../shared/shared.service';
+import { User } from '../../shared/models/user';
 
 @Component({
   selector: 'app-orders-list',
@@ -20,24 +23,54 @@ export class OrdersListComponent implements OnInit {
     { value: 'tonsOrdered', name: 'Tons ordered' },
     { value: 'farm', name: 'Farm' },
   ];
+  farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
   columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
 
   constructor(private ordersService: OrdersService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              private sharedService: SharedService) {
   }
 
   ngOnInit() {
-    this.ordersService.getOrders({
+    this.farms$ = this.sharedService.getUserAssignedFarms();
+    this.searchOrders();
+  }
+
+  filterTableByFarm(option: MatSelect) {
+    this.dataSource.filter = option.value.name;
+  }
+
+  filterByDate(dp1, dp2) {
+    console.log(dp2);
+    this.searchOrders({
       page: 0,
       customers: [],
       statuses: [],
       changeReasons: [],
-      startDate: null,
-      endDate: null,
+      startDate: dp1 !== '' ? new Date(dp1).toISOString() : null,
+      endDate: dp2 !== '' ? new Date(dp2).toISOString() : null,
       orderByAttribute: 0,
       sortOrder: 0
-    }).subscribe((res: { results: Array<Order>, resultCount: number }) => {
+    });
+  }
+
+  searchOrders(searchParams = {
+    page: 0,
+    customers: [],
+    statuses: [],
+    changeReasons: [],
+    startDate: null,
+    endDate: null,
+    orderByAttribute: 0,
+    sortOrder: 0
+  }) {
+    this.ordersService.getOrders(searchParams).subscribe((res: { results: Array<Order>, resultCount: number }) => {
       this.dataSource = new MatTableDataSource<Order>(res.results);
+      this.dataSource.filterPredicate = (data: Order, filter: string) => {
+        if (data.farm) {
+          return data.farm.name.indexOf(filter) !== -1;
+        }
+      };
     });
   }
 
