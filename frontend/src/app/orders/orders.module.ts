@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { OrdersListComponent } from './orders-list/orders-list.component';
 import { AppMaterialModule } from '../app-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -16,6 +16,7 @@ import { OrderEditComponent } from './order-edit/order-edit.component';
     RouterModule,
     ReactiveFormsModule,
   ],
+  providers: [DatePipe],
   exports: [OrdersListComponent],
   declarations: [OrdersListComponent, OrderNewComponent, OrderEditComponent]
 })

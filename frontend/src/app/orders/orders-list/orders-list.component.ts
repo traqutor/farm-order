@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { User } from '../../shared/models/user';
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-orders-list',
@@ -13,16 +14,16 @@ export class OrdersListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Order>([]);
   displayedColumns = [
-    { value: 'id', name: 'Id' },
     { value: 'status', name: 'Status' },
     { value: 'orderChangeReason', name: 'Order change reason' },
     { value: 'deliveryDate', name: 'Delivery Date' },
     { value: 'tonsOrdered', name: 'Tons ordered' },
     { value: 'farm', name: 'Farm' },
   ];
-  columnsToRender = ['id', 'status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
+  columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
 
-  constructor(private ordersService: OrdersService) {
+  constructor(private ordersService: OrdersService,
+              private datePipe: DatePipe) {
   }
 
   ngOnInit() {
@@ -40,9 +41,11 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  displayRow(row) {
+  displayRow(row, column) {
     if (typeof row === 'object' && row !== null && row.name !== null) {
       return row.name;
+    } else if (column.value === 'deliveryDate') {
+      return this.datePipe.transform(row, 'yyyy-MM-dd');
     }
     return row;
   }

@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         this.sharedService.getUser()
           .subscribe((user: User) => {
             this.authService.setUser(user);
-            this.router.navigateByUrl('orders');
+            this.router.navigateByUrl('main/orders');
           });
       }, err => {
         this.isLogging = false;

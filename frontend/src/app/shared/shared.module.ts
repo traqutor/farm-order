@@ -8,6 +8,8 @@ import { LoginComponent } from './components/login/login.component';
 import { AppMaterialModule } from '../app-material.module';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import {FooterComponent} from './components/footer/footer.component';
+import { LoginLayoutComponent } from './components/loginlayout/login-layout.component';
+import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 
 @NgModule({
   imports: [
@@ -19,7 +21,7 @@ import {FooterComponent} from './components/footer/footer.component';
   ],
   providers: [],
   exports: [HeaderComponent, FooterComponent],
-  declarations: [HeaderComponent, LoginComponent, ConfirmDialogComponent, FooterComponent],
+  declarations: [HeaderComponent, LoginComponent, ConfirmDialogComponent, FooterComponent, LoginLayoutComponent, HomeLayoutComponent],
 })
 export class SharedModule {
 }

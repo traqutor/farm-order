@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,6 +13,8 @@ export class HeaderComponent implements OnInit {
 
   user$;
   auth$;
+  @ViewChild('drawer') sidenav: any;
+
 
   constructor(private breakpointObserver: BreakpointObserver,
               public authService: AuthService) {

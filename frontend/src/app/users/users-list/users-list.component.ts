@@ -6,6 +6,7 @@ import { User } from '../../shared/models/user';
 import { MatSelect, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { DialogService } from '../../shared/dialogs/dialog.service';
 import { Customer } from '../../shared/models/customer';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-users-list',
@@ -17,20 +18,28 @@ export class UsersListComponent implements OnInit {
   customers$: Observable<{ results: Array<Customer>, resultCount: number }>;
   dataSource = new MatTableDataSource<User>([]);
   displayedColumns = [
-    { value: 'id', name: 'Id' },
     { value: 'userName', name: 'UserName' },
     { value: 'customer', name: 'Customer' },
     { value: 'role', name: 'Role' },
   ];
-  columnsToRender = ['id', 'userName', 'customer', 'role', 'settings'];
+  columnsToRender = ['userName', 'customer', 'role', 'settings'];
+  user;
 
   constructor(private usersService: UsersService,
+              private authService: AuthService,
               private sharedService: SharedService,
               private dialogService: DialogService,
               private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
+    const user = this.authService.getUser();
+    if (user.role.name !== 'Admin') {
+      const newDisplayedColumns = this.displayedColumns.filter(column => column.value !== 'customer');
+      const newColumnsToRender = this.columnsToRender.filter(column => column !== 'customer');
+      this.displayedColumns = newDisplayedColumns;
+      this.columnsToRender = newColumnsToRender;
+    }
     this.usersService.getUsers()
       .subscribe((users: { results: [User], resultCount: number }) => {
         this.dataSource = new MatTableDataSource<User>(users.results);
