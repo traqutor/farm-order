@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatSelect, MatTableDataSource } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
 import { DatePipe } from '@angular/common';
@@ -25,6 +25,9 @@ export class OrdersListComponent implements OnInit {
   ];
   farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
   columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  orderLength;
 
   constructor(private ordersService: OrdersService,
               private datePipe: DatePipe,
@@ -54,6 +57,10 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
+  changePage(event) {
+    console.log(event);
+  }
+
   searchOrders(searchParams = {
     page: 0,
     customers: [],
@@ -65,7 +72,9 @@ export class OrdersListComponent implements OnInit {
     sortOrder: 0
   }) {
     this.ordersService.getOrders(searchParams).subscribe((res: { results: Array<Order>, resultCount: number }) => {
+      this.orderLength = res.resultCount;
       this.dataSource = new MatTableDataSource<Order>(res.results);
+      this.dataSource.paginator = this.paginator;
       this.dataSource.filterPredicate = (data: Order, filter: string) => {
         if (data.farm) {
           return data.farm.name.indexOf(filter) !== -1;
