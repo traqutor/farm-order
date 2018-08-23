@@ -79,7 +79,10 @@
       <tr mat-header-row *matHeaderRowDef="columnsToRender"></tr>
       <tr class="mat-row-gray" mat-row *matRowDef="let row; columns: columnsToRender;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5]"
+    <mat-paginator
+      [length]="orderLength"
+      [pageSizeOptions]="[5]"
+      [pageIndex]="pageIndex"
       (page)="changePage($event)"
     ></mat-paginator>
   </div>

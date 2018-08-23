@@ -3,7 +3,7 @@ import { MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
 import { DatePipe } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
 import { User } from '../../shared/models/user';
@@ -15,7 +15,7 @@ import { User } from '../../shared/models/user';
 })
 export class OrdersListComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<Order>([]);
+  dataSource = new OrderDataSource([]);
   displayedColumns = [
     { value: 'status', name: 'Status' },
     { value: 'orderChangeReason', name: 'Order change reason' },
@@ -23,11 +23,12 @@ export class OrdersListComponent implements OnInit {
     { value: 'tonsOrdered', name: 'Tons ordered' },
     { value: 'farm', name: 'Farm' },
   ];
-  farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
+  farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  orderLength;
+  orderLength = 0;
+  pageIndex = 0;
 
   constructor(private ordersService: OrdersService,
               private datePipe: DatePipe,
@@ -57,8 +58,18 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  changePage(event) {
-    console.log(event);
+  changePage(event: MatPaginator) {
+    this.pageIndex = event.pageIndex;
+    this.searchOrders({
+      page: event.pageIndex,
+      customers: [],
+      statuses: [],
+      changeReasons: [],
+      startDate: null,
+      endDate: null,
+      orderByAttribute: 0,
+      sortOrder: 0
+    });
   }
 
   searchOrders(searchParams = {
@@ -71,10 +82,9 @@ export class OrdersListComponent implements OnInit {
     orderByAttribute: 0,
     sortOrder: 0
   }) {
-    this.ordersService.getOrders(searchParams).subscribe((res: { results: Array<Order>, resultCount: number }) => {
-      this.orderLength = res.resultCount;
-      this.dataSource = new MatTableDataSource<Order>(res.results);
-      this.dataSource.paginator = this.paginator;
+    this.ordersService.getOrders(searchParams).subscribe((res: { results: Array<Order>, resultsCount: number }) => {
+      this.orderLength = res.resultsCount;
+      this.dataSource = new OrderDataSource(res.results);
       this.dataSource.filterPredicate = (data: Order, filter: string) => {
         if (data.farm) {
           return data.farm.name.indexOf(filter) !== -1;
@@ -92,4 +102,24 @@ export class OrdersListComponent implements OnInit {
     return row;
   }
 
+}
+
+
+import { DataSource } from '@angular/cdk/collections';
+
+// import 'rxjs/add/observable/of';
+
+export class OrderDataSource extends DataSource<any> {
+  filterPredicate: (data: Order, filter: string) => boolean;
+  filter: any;
+  constructor(private _orders: Order[]) {
+    super();
+  }
+
+  connect(): Observable<Order[]> {
+    return of(this._orders);
+  }
+
+  disconnect() {
+  }
 }

@@ -16,7 +16,7 @@ export class OrdersService {
     this.apiUrl = environment.url;
   }
 
-  getOrders(searchParams): Observable<{ results: Array<Order>, resultCount: number }> {
+  getOrders(searchParams): Observable<{ results: Array<Order>, resultsCount: number }> {
     return this.http.post<{results: Array<Order>, resultCount: number}>(`${this.apiUrl}/api/Order/Search`, JSON.stringify(searchParams));
   }
 

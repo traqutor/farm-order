@@ -32,7 +32,7 @@ export class SharedService {
     return this.http.post<{ results: Array<Farm>, resultCount: number }>(`${this.apiUrl}/api/Farm`, JSON.stringify(customerSites));
   }
 
-  getUserAssignedFarms(): Observable<{ results: Array<Farm>, resultCount: number }> {
+  getUserAssignedFarms(): Observable<{ results: Array<Farm>, resultsCount: number }> {
     return this.http.get<{ results: Array<Farm>, resultCount: number }>(`${this.apiUrl}/api/Farm/GetUserAssignedFarms`);
   }
 
