@@ -29,6 +29,7 @@ export class OrdersListComponent implements OnInit {
 
   dateFromValue;
   dateToValue;
+  farmOption;
   orderLength = 0;
 
   constructor(private ordersService: OrdersService,
@@ -47,7 +48,7 @@ export class OrdersListComponent implements OnInit {
           return this.ordersService!.getOrders({
             page: this.paginator.pageIndex,
             customers: [],
-            farm: [],
+            farm: this.farmOption,
             statuses: [],
             changeReasons: [],
             startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
@@ -66,11 +67,11 @@ export class OrdersListComponent implements OnInit {
       ).subscribe(data => this.dataSource = data);
   }
 
-  filterByDate(dp1, dp2) {
+  filterByDate() {
     this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
-      farm: [],
+      farm: this.farmOption,
       statuses: [],
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
@@ -92,13 +93,13 @@ export class OrdersListComponent implements OnInit {
     this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
+      farm: option.value,
       statuses: [],
-      farm: [option.value],
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
       endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
       orderByAttribute: 0,
-      sortOrder: 0
+      sortOrder: 0,
     }).pipe(
       map(data => {
         this.orderLength = data.resultsCount;
