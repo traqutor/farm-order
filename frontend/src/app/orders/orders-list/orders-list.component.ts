@@ -67,11 +67,11 @@ export class OrdersListComponent implements OnInit {
       ).subscribe(data => this.dataSource = data);
   }
 
-  filterByDate(dp1, dp2) {
+  filterByDate() {
     this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
-      farm: [],
+      farm: this.farmOption,
       statuses: [],
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
@@ -93,13 +93,13 @@ export class OrdersListComponent implements OnInit {
     this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
-      statuses: [],
       farm: option.value,
+      statuses: [],
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
       endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
       orderByAttribute: 0,
-      sortOrder: 0
+      sortOrder: 0,
     }).pipe(
       map(data => {
         this.orderLength = data.resultsCount;
