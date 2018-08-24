@@ -22,7 +22,7 @@
 
   <div *ngIf="(farms$ | async) as farms">
     <mat-form-field class="half-width">
-      <mat-select #option (valueChange)="filterByFarm(option)" placeholder="Select farm to filter">
+      <mat-select #option (valueChange)="filterByFarm(option)" [(ngModel)]="farmOption" placeholder="Select farm to filter">
         <mat-option value="">
           ALL
         </mat-option>

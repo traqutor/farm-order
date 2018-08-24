@@ -29,6 +29,7 @@ export class OrdersListComponent implements OnInit {
 
   dateFromValue;
   dateToValue;
+  farmOption;
   orderLength = 0;
 
   constructor(private ordersService: OrdersService,
@@ -47,7 +48,7 @@ export class OrdersListComponent implements OnInit {
           return this.ordersService!.getOrders({
             page: this.paginator.pageIndex,
             customers: [],
-            farm: [],
+            farm: this.farmOption,
             statuses: [],
             changeReasons: [],
             startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
@@ -93,7 +94,7 @@ export class OrdersListComponent implements OnInit {
       page: this.paginator.pageIndex,
       customers: [],
       statuses: [],
-      farm: [option.value],
+      farm: option.value,
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
       endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
