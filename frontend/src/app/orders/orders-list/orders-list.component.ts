@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatInput, MatOption, MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
 import { DatePipe } from '@angular/common';
-import { Observable } from 'rxjs';
+import { merge, Observable, of } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
-import { OrderDataSource } from '../../shared/helpers/order-data-source.service';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-orders-list',
@@ -15,7 +15,7 @@ import { OrderDataSource } from '../../shared/helpers/order-data-source.service'
 })
 export class OrdersListComponent implements OnInit {
 
-  dataSource = new OrderDataSource([]);
+  dataSource: Order[] = [];
   displayedColumns = [
     { value: 'status', name: 'Status' },
     { value: 'orderChangeReason', name: 'Order change reason' },
@@ -27,8 +27,9 @@ export class OrdersListComponent implements OnInit {
   columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  dateFromValue;
+  dateToValue;
   orderLength = 0;
-  pageIndex = 0;
 
   constructor(private ordersService: OrdersService,
               private datePipe: DatePipe,
@@ -37,55 +38,73 @@ export class OrdersListComponent implements OnInit {
 
   ngOnInit() {
     this.farms$ = this.sharedService.getUserAssignedFarms();
-    this.searchOrders();
-  }
-
-  filterTableByFarm(option: MatSelect) {
-    // this.dataSource.filter = option.value.name;
+    console.log(this.dateToValue);
+    merge(this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          console.log(this.dateToValue);
+          return this.ordersService!.getOrders({
+            page: this.paginator.pageIndex,
+            customers: [],
+            statuses: [],
+            changeReasons: [],
+            startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
+            endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
+            orderByAttribute: 0,
+            sortOrder: 0
+          });
+        }),
+        map(data => {
+          this.orderLength = data.resultsCount;
+          return data.results;
+        }),
+        catchError(() => {
+          return of([]);
+        })
+      ).subscribe(data => this.dataSource = data);
   }
 
   filterByDate(dp1, dp2) {
-    console.log(dp2);
-    this.searchOrders({
-      page: 0,
+    this.ordersService.getOrders({
+      page: this.paginator.pageIndex,
       customers: [],
       statuses: [],
       changeReasons: [],
-      startDate: dp1 !== '' ? new Date(dp1).toISOString() : null,
-      endDate: dp2 !== '' ? new Date(dp2).toISOString() : null,
+      startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
+      endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
       orderByAttribute: 0,
       sortOrder: 0
-    });
+    }).pipe(
+      map(data => {
+        this.orderLength = data.resultsCount;
+        return data.results;
+      }),
+      catchError(() => {
+        return of([]);
+      })
+    ).subscribe(data => this.dataSource = data);
   }
 
-  changePage(event: MatPaginator) {
-    this.pageIndex = event.pageIndex;
-    this.searchOrders({
-      page: event.pageIndex,
+  filterByFarm(option: MatOption) {
+    this.ordersService.getOrders({
+      page: this.paginator.pageIndex,
       customers: [],
       statuses: [],
       changeReasons: [],
-      startDate: null,
-      endDate: null,
+      startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
+      endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
       orderByAttribute: 0,
       sortOrder: 0
-    });
-  }
-
-  searchOrders(searchParams = {
-    page: 0,
-    customers: [],
-    statuses: [],
-    changeReasons: [],
-    startDate: null,
-    endDate: null,
-    orderByAttribute: 0,
-    sortOrder: 0
-  }) {
-    this.ordersService.getOrders(searchParams).subscribe((res: { results: Array<Order>, resultsCount: number }) => {
-      this.orderLength = res.resultsCount;
-      this.dataSource = new OrderDataSource(res.results);
-    });
+    }).pipe(
+      map(data => {
+        this.orderLength = data.resultsCount;
+        return data.results;
+      }),
+      catchError(() => {
+        return of([]);
+      })
+    ).subscribe(data => this.dataSource = data);
   }
 
   displayRow(row, column) {

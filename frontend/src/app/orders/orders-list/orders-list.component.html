@@ -35,12 +35,12 @@
 
   <div class="filter-date">
     <mat-form-field class="full-width">
-      <input matInput #dateFrom [matDatepicker]="dp1" placeholder="Filter from date">
+      <input matInput #dateFrom [(ngModel)]="dateFromValue" [matDatepicker]="dp1" placeholder="Filter from date">
       <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
       <mat-datepicker #dp1 disabled="false"></mat-datepicker>
     </mat-form-field>
     <mat-form-field class="full-width">
-      <input matInput #dateTo [matDatepicker]="dp2" placeholder="Filter to date">
+      <input matInput #dateTo [(ngModel)]="dateToValue" [matDatepicker]="dp2" placeholder="Filter to date">
       <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
       <mat-datepicker #dp2 disabled="false"></mat-datepicker>
     </mat-form-field>
@@ -81,9 +81,7 @@
     </table>
     <mat-paginator
       [length]="orderLength"
-      [pageSizeOptions]="[5]"
-      [pageIndex]="pageIndex"
-      (page)="changePage($event)"
+      [pageSize]="5"
     ></mat-paginator>
   </div>
 </div>
