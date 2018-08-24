@@ -51,11 +51,13 @@ namespace FarmOrder.Services
         public SearchResults<UserListEntryViewModel> GetUsers(string userId, bool isAdmin, int? page, int? customerId, int? siteId)
         {
             var query = _context.Users.OrderBy(u => u.UserName).AsQueryable();
+            var possibleRoles = _roleManager.Roles.ToList();
+            var adminRole = possibleRoles.SingleOrDefault(r => r.Name == UserSystemRoles.Admin);
 
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
-                query = query.Where(u => u.CustomerId == loggedUser.CustomerId);
+                query = query.Where(u => u.CustomerId == loggedUser.CustomerId && !u.Roles.Any(r => r.RoleId == adminRole.Id)); //removing the administrator from here
             }
             else
             {
@@ -68,7 +70,7 @@ namespace FarmOrder.Services
             if(page != null)
                 query = query.Take(_pageSize).Skip(_pageSize * page.Value);
 
-            var possibleRoles = _roleManager.Roles.ToList();
+            
             return new SearchResults<UserListEntryViewModel>{
                 ResultsCount = totalCount,
                 Results = query.ToList().Select(el => new UserListEntryViewModel(el, possibleRoles)).ToList()
