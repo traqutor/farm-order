@@ -10,12 +10,14 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
 import {FooterComponent} from './components/footer/footer.component';
 import { LoginLayoutComponent } from './components/loginlayout/login-layout.component';
 import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     AppRoutingModule,
+    FlexLayoutModule,
     LayoutModule,
     AppMaterialModule
   ],

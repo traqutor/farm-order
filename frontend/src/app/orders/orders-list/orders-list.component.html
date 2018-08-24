@@ -1,10 +1,10 @@
 <div class="padding-content"
      fxFlex
      fxLayout="column">
-  <div fxLayout="row">
+  <div fxLayout="row" fxLayout.xs="column">
     <div>
-      <h2 class="mat-title">Users List</h2>
-      <p class="mat-subheading-2">List of users define in system.</p>
+      <h2 class="mat-title">Orders List</h2>
+      <p class="mat-subheading-2">List of orders define in system.</p>
     </div>
     <div class="spacer"></div>
     <div>
@@ -21,7 +21,7 @@
   <mat-divider></mat-divider>
 
   <div *ngIf="(farms$ | async) as farms">
-    <mat-form-field class="half-width">
+    <mat-form-field class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
       <mat-select #option (valueChange)="filterByFarm(option)" [(ngModel)]="farmOption" placeholder="Select farm to filter">
         <mat-option value="">
           ALL
@@ -33,7 +33,7 @@
     </mat-form-field>
   </div>
 
-  <div class="filter-date">
+  <div class="filter-date" [ngClass.xs]="{'filter-date':false, 'filter-date-full':true}" fxLayout.xs="column">
     <mat-form-field class="full-width">
       <input matInput #dateFrom [(ngModel)]="dateFromValue" [matDatepicker]="dp1" placeholder="Filter from date">
       <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>

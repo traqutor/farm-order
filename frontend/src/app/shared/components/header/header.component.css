@@ -35,3 +35,9 @@ main {
   flex: 1;
   display: block;
 }
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+}

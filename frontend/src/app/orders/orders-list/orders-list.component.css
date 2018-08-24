@@ -4,6 +4,12 @@
   justify-content: space-between;
 }
 
+.filter-date-full {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
 /* Structure */
 .example-container {
   position: relative;
