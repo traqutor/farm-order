@@ -47,6 +47,7 @@ export class OrdersListComponent implements OnInit {
           return this.ordersService!.getOrders({
             page: this.paginator.pageIndex,
             customers: [],
+            farm: [],
             statuses: [],
             changeReasons: [],
             startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
@@ -69,6 +70,7 @@ export class OrdersListComponent implements OnInit {
     this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
+      farm: [],
       statuses: [],
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
@@ -91,6 +93,7 @@ export class OrdersListComponent implements OnInit {
       page: this.paginator.pageIndex,
       customers: [],
       statuses: [],
+      farm: [option.value],
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
       endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
