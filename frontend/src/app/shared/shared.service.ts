@@ -33,7 +33,7 @@ export class SharedService {
   }
 
   getUserAssignedFarms(): Observable<{ results: Array<Farm>, resultsCount: number }> {
-    return this.http.get<{ results: Array<Farm>, resultCount: number }>(`${this.apiUrl}/api/Farm/GetUserAssignedFarms`);
+    return this.http.get<{ results: Array<Farm>, resultsCount: number }>(`${this.apiUrl}/api/Farm/GetUserAssignedFarms`);
   }
 
   getUser(): Observable<User> {

@@ -17,7 +17,7 @@ export class OrdersService {
   }
 
   getOrders(searchParams): Observable<{ results: Array<Order>, resultsCount: number }> {
-    return this.http.post<{results: Array<Order>, resultCount: number}>(`${this.apiUrl}/api/Order/Search`, JSON.stringify(searchParams));
+    return this.http.post<{results: Array<Order>, resultsCount: number}>(`${this.apiUrl}/api/Order/Search`, JSON.stringify(searchParams));
   }
 
   postOrder(order: Order) {

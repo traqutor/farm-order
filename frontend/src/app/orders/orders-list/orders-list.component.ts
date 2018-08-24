@@ -3,10 +3,10 @@ import { MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
 import { DatePipe } from '@angular/common';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
-import { User } from '../../shared/models/user';
+import { OrderDataSource } from '../../shared/helpers/order-data-source.service';
 
 @Component({
   selector: 'app-orders-list',
@@ -41,7 +41,7 @@ export class OrdersListComponent implements OnInit {
   }
 
   filterTableByFarm(option: MatSelect) {
-    this.dataSource.filter = option.value.name;
+    // this.dataSource.filter = option.value.name;
   }
 
   filterByDate(dp1, dp2) {
@@ -85,11 +85,6 @@ export class OrdersListComponent implements OnInit {
     this.ordersService.getOrders(searchParams).subscribe((res: { results: Array<Order>, resultsCount: number }) => {
       this.orderLength = res.resultsCount;
       this.dataSource = new OrderDataSource(res.results);
-      this.dataSource.filterPredicate = (data: Order, filter: string) => {
-        if (data.farm) {
-          return data.farm.name.indexOf(filter) !== -1;
-        }
-      };
     });
   }
 
@@ -102,24 +97,4 @@ export class OrdersListComponent implements OnInit {
     return row;
   }
 
-}
-
-
-import { DataSource } from '@angular/cdk/collections';
-
-// import 'rxjs/add/observable/of';
-
-export class OrderDataSource extends DataSource<any> {
-  filterPredicate: (data: Order, filter: string) => boolean;
-  filter: any;
-  constructor(private _orders: Order[]) {
-    super();
-  }
-
-  connect(): Observable<Order[]> {
-    return of(this._orders);
-  }
-
-  disconnect() {
-  }
 }

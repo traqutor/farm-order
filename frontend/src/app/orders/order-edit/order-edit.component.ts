@@ -24,7 +24,7 @@ export class OrderEditComponent implements OnInit {
   }
 
   order: FormGroup;
-  farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
+  farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   status$: Observable<{ results: Array<Status>, resultCount: number }>;
   orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultCount: number }>;
   orderId;

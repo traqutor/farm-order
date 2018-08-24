@@ -23,7 +23,7 @@ export class OrderNewComponent implements OnInit {
   }
 
   order: FormGroup;
-  farms$: Observable<{ results: Array<Farm>, resultCount: number }>;
+  farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
 
   ngOnInit() {
     this.farms$ = this.sharedService.getUserAssignedFarms();
