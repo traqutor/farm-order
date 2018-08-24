@@ -26,7 +26,7 @@ namespace FarmOrder.Services
         public SearchResults<OrderListEntryViewModel> GetOrders(string userId, bool isAdmin, OrderSearchModel searchModel)
         {
             var query = _context.Orders.AsQueryable();
-
+          
             switch (searchModel.OrderByAttribute)
             {
                 case OrderByAttribute.DELIVERY_DATE:
@@ -66,24 +66,19 @@ namespace FarmOrder.Services
 
             List<int> sitesSubset = new List<int>();
 
-            foreach (var customer in searchModel.Customers)
+            /*foreach (var customer in searchModel.Customers)
             {
                 foreach (var site in customer.CustomerSites)
                 {
                     sitesSubset.Add(site.Id);
                 }
-            }
+            }*/
 
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.Include(u => u.FarmUsers).SingleOrDefault(u => u.Id == userId);
                 var userFarms = loggedUser.FarmUsers.Select(fu => fu.FarmId).ToArray();
 
-                //List<int> userAvalibleSites = loggedUser.CustomerSiteUser.Select(csu => csu.CustomerSiteId).ToList();
-
-                //var avalibleSites = userAvalibleSites;
-                //if (sitesSubset.Count > 0)
-                    //avalibleSites = avalibleSites.Intersect(sitesSubset).ToList();
 
                 query = query.Where(o => userFarms.Contains(o.Farm.Id));
             }
@@ -100,6 +95,12 @@ namespace FarmOrder.Services
             {
                 int[] statsuesIds = searchModel.Statuses.Select(s => s.Id).ToArray();
                 query = query.Where(o => statsuesIds.Contains(o.StatusId));
+            }
+
+            if(searchModel.Farm?.Id != null)
+            {
+                var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == searchModel.Farm.Id);
+                query = query.Where(o => o.FarmId == selectedFarm.Id);
             }
 
             /*
