@@ -20,8 +20,8 @@
 
   <mat-divider></mat-divider>
 
-  <div *ngIf="(farms$ | async) as farms">
-    <mat-form-field class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
+  <div *ngIf="user.role.name === 'Admin'">
+    <mat-form-field class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}" *ngIf="(farms$ | async) as farms">
       <mat-select #option (valueChange)="filterByFarm(option)" [(ngModel)]="farmOption" placeholder="Select farm to filter">
         <mat-option value="">
           ALL
@@ -53,8 +53,8 @@
     </button>
   </div>
 
-  <div>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="full-width">
       <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column.value">
         <th mat-header-cell *matHeaderCellDef> {{column.name}}</th>
         <td mat-cell *matCellDef="let element"> {{displayRow(element[column.value], column)}}</td>

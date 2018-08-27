@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatInput, MatOption, MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
@@ -7,13 +7,14 @@ import { interval, merge, Observable, of } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-orders-list',
   templateUrl: './orders-list.component.html',
   styleUrls: ['./orders-list.component.css']
 })
-export class OrdersListComponent implements OnInit {
+export class OrdersListComponent implements OnInit, OnDestroy {
 
   dataSource: Order[] = [];
   displayedColumns = [
@@ -31,20 +32,22 @@ export class OrdersListComponent implements OnInit {
   dateToValue;
   farmOption;
   orderLength = 0;
+  user;
+  subscribe;
 
   constructor(private ordersService: OrdersService,
               private datePipe: DatePipe,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private authService: AuthService) {
   }
 
   ngOnInit() {
     this.farms$ = this.sharedService.getUserAssignedFarms();
-    console.log(this.dateToValue);
-    merge(this.paginator.page, interval(5000))
+    this.user = this.authService.getUser();
+    this.subscribe = merge(this.paginator.page, interval(5000))
       .pipe(
         startWith({}),
         switchMap(() => {
-          console.log(this.dateToValue);
           return this.ordersService.getOrders({
             page: this.paginator.pageIndex,
             customers: [],
@@ -58,7 +61,6 @@ export class OrdersListComponent implements OnInit {
           });
         }),
         map(data => {
-          console.log('timeeeee');
           this.orderLength = data.resultsCount;
           return data.results;
         }),
@@ -119,6 +121,10 @@ export class OrdersListComponent implements OnInit {
       return this.datePipe.transform(row, 'yyyy-MM-dd');
     }
     return row;
+  }
+
+  ngOnDestroy() {
+    this.subscribe.unsubscribe();
   }
 
 }
