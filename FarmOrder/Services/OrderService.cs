@@ -205,7 +205,7 @@ namespace FarmOrder.Services
             {
                 var loggedUser = _context.Users.Include(u => u.FarmUsers).SingleOrDefault(u => u.Id == userId);
 
-                bool farmAvalibleForUser = loggedUser.FarmUsers.Any(f => selectedFarm.Id == f.Id);
+                bool farmAvalibleForUser = loggedUser.FarmUsers.Any(f => selectedFarm.Id == f.FarmId);
 
                 if (!farmAvalibleForUser)
                     selectedFarm = null;
