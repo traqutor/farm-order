@@ -3,7 +3,7 @@ import { MatInput, MatOption, MatPaginator, MatSelect, MatTableDataSource } from
 import { OrdersService } from '../orders.service';
 import { Order } from '../../shared/models/order';
 import { DatePipe } from '@angular/common';
-import { merge, Observable, of } from 'rxjs';
+import { interval, merge, Observable, of } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
@@ -40,12 +40,12 @@ export class OrdersListComponent implements OnInit {
   ngOnInit() {
     this.farms$ = this.sharedService.getUserAssignedFarms();
     console.log(this.dateToValue);
-    merge(this.paginator.page)
+    merge(this.paginator.page, interval(5000))
       .pipe(
         startWith({}),
         switchMap(() => {
           console.log(this.dateToValue);
-          return this.ordersService!.getOrders({
+          return this.ordersService.getOrders({
             page: this.paginator.pageIndex,
             customers: [],
             farm: this.farmOption,
@@ -58,6 +58,7 @@ export class OrdersListComponent implements OnInit {
           });
         }),
         map(data => {
+          console.log('timeeeee');
           this.orderLength = data.resultsCount;
           return data.results;
         }),

@@ -7,9 +7,9 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="!(isHandset$ | async)">
     <mat-toolbar color="primary">Menu</mat-toolbar>
-    <mat-nav-list>
+    <mat-nav-list *ngIf="(user$ | async) as user">
       <a mat-list-item routerLink="orders">Orders</a>
-      <a mat-list-item routerLink="users">Users</a>
+      <a mat-list-item routerLink="users" *ngIf="user?.role?.name !== 'Customer'">Users</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content class="page-wrap">
