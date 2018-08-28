@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { ConfirmDialogComponent } from './shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { ChangePasswordDialogComponent } from './shared/dialogs/change-password-dialog/change-password-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,10 @@ import { ConfirmDialogComponent } from './shared/dialogs/confirm-dialog/confirm-
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  entryComponents: [ConfirmDialogComponent],
+  entryComponents: [
+    ConfirmDialogComponent,
+    ChangePasswordDialogComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

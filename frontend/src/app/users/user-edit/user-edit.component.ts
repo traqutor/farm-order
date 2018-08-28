@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from '../../shared/models/customer';
 import { Farm } from '../../shared/models/farm';
 import { CustomerSite } from '../../shared/models/customer-site';
+import { DialogService } from '../../shared/dialogs/dialog.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -29,7 +30,8 @@ export class UserEditComponent implements OnInit {
               private usersService: UsersService,
               private snackBar: MatSnackBar,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -87,6 +89,22 @@ export class UserEditComponent implements OnInit {
   findCustomerSite(arr, val) {
     const item = arr.find(el => el.id === val);
     return item.customerSites;
+  }
+
+  resetPassword() {
+    this.dialogService.changePassword('reset')
+      .subscribe(dialogRes => {
+        if (dialogRes) {
+          this.usersService.changePassword(dialogRes, this.userId)
+            .subscribe(() => {
+              this.snackBar.open('Password have been reset!', '', {
+                duration: 2000,
+              });
+            }, err => {
+              console.log(err);
+            });
+        }
+      });
   }
 
   onSubmit() {

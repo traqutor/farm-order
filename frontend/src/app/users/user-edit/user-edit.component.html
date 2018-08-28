@@ -78,6 +78,14 @@
         </mat-error>
       </mat-form-field>
       <button
+        mat-raised-button
+        type="button"
+        color="primary"
+        (click)="resetPassword()"
+      >
+        Reset Password
+      </button>
+      <button
         mat-button
         color="accent"
         [disabled]="user.invalid"

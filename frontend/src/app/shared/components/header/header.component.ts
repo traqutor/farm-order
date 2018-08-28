@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../../../core/auth/auth.service';
+import { DialogService } from '../../dialogs/dialog.service';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,8 @@ export class HeaderComponent implements OnInit {
 
 
   constructor(private breakpointObserver: BreakpointObserver,
-              public authService: AuthService) {
+              public authService: AuthService,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -33,4 +35,10 @@ export class HeaderComponent implements OnInit {
     .pipe(
       map(result => result.matches)
     );
+
+  changePassword() {
+    this.dialogService.changePassword('change').subscribe(res => {
+      console.log(res);
+    });
+  }
 }
