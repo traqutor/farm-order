@@ -166,6 +166,8 @@ namespace FarmOrder.Services
                 if (userToUpdate.CustomerId != userToUpdate.CustomerId)
                     errors.Add("Can not update user that belong to different customer.");
             }
+            if(userToUpdate == null)
+                errors.Add("User not found.");
 
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));

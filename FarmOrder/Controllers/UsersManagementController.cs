@@ -84,7 +84,7 @@ namespace FarmOrder.Controllers
                 return _service.Update(User.Identity.GetUserId(), false, id, model, Request);
         }
 
-        [Route("api/UserManagement/ChangePassword")]
+        [Route("api/UserManagement/ChangePassword/{id}")]
         [HttpPut]
         public UserListEntryViewModel ChangePassword(string id, [FromBody]UserPasswordEditModel model)
         {
