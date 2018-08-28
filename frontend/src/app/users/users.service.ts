@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   changePassword(credentials, id): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/api/UsersManagement/ChangePassword?id=${id}`, JSON.stringify(credentials));
+    return this.http.put<User>(`${this.apiUrl}/api/UserManagement/ChangePassword/${id}`, JSON.stringify(credentials));
   }
 
 }
