@@ -85,3 +85,11 @@
     ></mat-paginator>
   </div>
 </div>
+<div *ngIf="loading" class="overlay">
+  <mat-progress-spinner
+    class="spinner"
+    color="accent"
+    mode="indeterminate"
+  >
+  </mat-progress-spinner>
+</div>

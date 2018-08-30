@@ -1,0 +1,6 @@
+<mat-form-field class="full-width">
+  <input type="hidden" [matDatepicker]="picker" [(ngModel)]='value'>
+  <input matInput [textMask]="mask" [ngModel]="value | date:'dd/MM/yyyy'" (blur)="onBlur()" (change)='todate($event.target.value)'>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker (selectedChanged)="onChange($event)" #picker></mat-datepicker>
+</mat-form-field>

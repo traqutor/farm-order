@@ -73,5 +73,12 @@
       <mat-row class="mat-row-gray" mat-row *matRowDef="let row; columns: columnsToRender;"></mat-row>
     </mat-table>
   </div>
-
+</div>
+<div *ngIf="loading" class="overlay">
+  <mat-progress-spinner
+    class="spinner"
+    color="accent"
+    mode="indeterminate"
+  >
+  </mat-progress-spinner>
 </div>

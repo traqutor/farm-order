@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Customer } from '../../shared/models/customer';
 import { CustomerSite } from '../../shared/models/customer-site';
 import { Farm } from '../../shared/models/farm';
+import { DialogService } from '../../shared/dialogs/dialog.service';
 
 @Component({
   selector: 'app-user-new',
@@ -29,7 +30,8 @@ export class UserNewComponent implements OnInit {
               private usersService: UsersService,
               private snackBar: MatSnackBar,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -84,7 +86,7 @@ export class UserNewComponent implements OnInit {
             duration: 2000,
           });
         }, err => {
-          console.log(err);
+          this.dialogService.alert(err.error);
         });
     }
   }

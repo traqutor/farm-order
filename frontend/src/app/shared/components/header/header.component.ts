@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../../../core/auth/auth.service';
 import { DialogService } from '../../dialogs/dialog.service';
+import { SharedService } from '../../shared.service';
+import { MatSnackBar } from '@angular/material';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-header',
@@ -19,7 +22,9 @@ export class HeaderComponent implements OnInit {
 
   constructor(private breakpointObserver: BreakpointObserver,
               public authService: AuthService,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private sharedService: SharedService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -37,8 +42,21 @@ export class HeaderComponent implements OnInit {
     );
 
   changePassword() {
-    this.dialogService.changePassword('change').subscribe(res => {
-      console.log(res);
-    });
+    this.dialogService.changePassword('change')
+      .subscribe(dialogRes => {
+        if (dialogRes) {
+          const credentials = Object.assign({}, dialogRes);
+          credentials.newPassword = credentials.password;
+          delete credentials.password;
+          this.sharedService.resetPassword(credentials)
+            .subscribe(() => {
+              this.snackBar.open('Password have been changed!', '', {
+                duration: 2000,
+              });
+            }, (err) => {
+              this.dialogService.alert(JSON.stringify(err.modelState));
+            });
+        }
+      });
   }
 }

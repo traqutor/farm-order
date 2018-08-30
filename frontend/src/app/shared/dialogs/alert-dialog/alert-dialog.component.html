@@ -1,0 +1,6 @@
+<h1 mat-dialog-title>Error!</h1>
+<div mat-dialog-content>{{dialogMessage}}</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close(false)">Cancel</button>
+  <button mat-button color="accent" (click)="dialogRef.close(true)">Confirm</button>
+</div>

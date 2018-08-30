@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderNewComponent } from './order-new/order-new.component';
 import { OrderEditComponent } from './order-edit/order-edit.component';
+import { TextMaskModule } from 'angular2-text-mask';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +17,9 @@ import { OrderEditComponent } from './order-edit/order-edit.component';
     FlexLayoutModule,
     RouterModule,
     FormsModule,
+    TextMaskModule,
     ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [DatePipe],
   exports: [OrdersListComponent],
