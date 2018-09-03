@@ -13,6 +13,7 @@ namespace FarmOrder.Controllers
     public class HomeController : ApiController
     {
         [Route("")]
+        [HttpGet]
         public HttpResponseMessage Index()
         {
             var response = Request.CreateResponse(HttpStatusCode.Moved);
