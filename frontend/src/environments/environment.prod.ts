@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: false,
+  url: 'http://localhost:12292'
 };
+

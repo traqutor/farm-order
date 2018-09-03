@@ -14,7 +14,7 @@
   <mat-divider></mat-divider>
 
   <div>
-    <form [formGroup]="order" (ngSubmit)="onSubmit(order)" fxLayout="column" class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
+    <form [formGroup]="order" (ngSubmit)="onSubmit()" fxLayout="column" class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
       <mat-form-field>
         <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
         <mat-error
