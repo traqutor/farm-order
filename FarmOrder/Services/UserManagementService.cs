@@ -172,8 +172,8 @@ namespace FarmOrder.Services
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
-            var passwordToken = _userManager.GeneratePasswordResetToken(userToUpdate.Id);
-            _userManager.ResetPassword(userToUpdate.Id, passwordToken, model.Password);
+            _userManager.RemovePassword(userToUpdate.Id);
+            _userManager.AddPassword(userToUpdate.Id, model.Password);
 
             var possibleRoles = _roleManager.Roles.ToList();
             var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
