@@ -3,13 +3,15 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog.component';
+import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DialogService {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {
+  }
 
   public confirm(title: string, dialogMessage: string): Observable<boolean> {
 
@@ -32,6 +34,17 @@ export class DialogService {
 
     dialogRef.componentInstance.type = type;
 
+
+    return dialogRef.afterClosed();
+  }
+
+  public alert(dialogMessage: string): Observable<boolean> {
+
+    let dialogRef: MatDialogRef<AlertDialogComponent>;
+
+    dialogRef = this.dialog.open(AlertDialogComponent);
+
+    dialogRef.componentInstance.dialogMessage = dialogMessage;
 
     return dialogRef.afterClosed();
   }

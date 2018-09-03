@@ -47,7 +47,7 @@
     <button
       class="full-width"
       mat-button
-      (click)="filterByDate(dateFrom.value, dateTo.value)"
+      (click)="filterByDate()"
     >
       Filter
     </button>
@@ -84,4 +84,12 @@
       [pageSize]="20"
     ></mat-paginator>
   </div>
+</div>
+<div *ngIf="loading" class="overlay">
+  <mat-progress-spinner
+    class="spinner"
+    color="accent"
+    mode="indeterminate"
+  >
+  </mat-progress-spinner>
 </div>

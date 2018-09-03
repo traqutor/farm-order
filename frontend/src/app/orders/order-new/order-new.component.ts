@@ -6,6 +6,7 @@ import { SharedService } from '../../shared/shared.service';
 import { OrdersService } from '../orders.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { DialogService } from '../../shared/dialogs/dialog.service';
 
 @Component({
   selector: 'app-order-new',
@@ -19,11 +20,13 @@ export class OrderNewComponent implements OnInit {
               private ordersService: OrdersService,
               private router: Router,
               private route: ActivatedRoute,
-              private snackBar: MatSnackBar ) {
+              private snackBar: MatSnackBar,
+              private dialogService: DialogService) {
   }
 
   order: FormGroup;
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
+
 
   ngOnInit() {
     this.farms$ = this.sharedService.getUserAssignedFarms();
@@ -52,10 +55,9 @@ export class OrderNewComponent implements OnInit {
             duration: 2000,
           });
         }, err => {
-          console.log(err);
+          this.dialogService.alert(err.error);
         });
     }
 
   }
-
 }

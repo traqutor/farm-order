@@ -48,4 +48,8 @@ export class SharedService {
     return this.http.get<{ results: [OrderChangeReason], resultCount: number }>(`${this.apiUrl}/api/OrderChangeReason`);
   }
 
+  resetPassword(credentials) {
+    return this.http.post(`${this.apiUrl}/api/Account/ChangePassword`, JSON.stringify(credentials));
+  }
+
 }

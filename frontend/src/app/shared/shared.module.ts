@@ -12,11 +12,15 @@ import { LoginLayoutComponent } from './components/loginlayout/login-layout.comp
 import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChangePasswordDialogComponent } from './dialogs/change-password-dialog/change-password-dialog.component';
+import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
+import { DatepickerComponent } from './components/datepicker/datepicker.component';
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    TextMaskModule,
     AppRoutingModule,
     ReactiveFormsModule,
     FlexLayoutModule,
@@ -24,7 +28,7 @@ import { ChangePasswordDialogComponent } from './dialogs/change-password-dialog/
     AppMaterialModule
   ],
   providers: [],
-  exports: [HeaderComponent, FooterComponent],
+  exports: [HeaderComponent, FooterComponent, DatepickerComponent],
   declarations: [
     HeaderComponent,
     LoginComponent,
@@ -32,7 +36,9 @@ import { ChangePasswordDialogComponent } from './dialogs/change-password-dialog/
     FooterComponent,
     LoginLayoutComponent,
     HomeLayoutComponent,
-    ChangePasswordDialogComponent
+    ChangePasswordDialogComponent,
+    AlertDialogComponent,
+    DatepickerComponent
   ],
 })
 export class SharedModule {

@@ -65,6 +65,8 @@ export class UserEditComponent implements OnInit {
                 Validators.required,
               ]]
             });
+          }, err => {
+            this.dialogService.alert(err.error);
           });
       });
   }
@@ -101,7 +103,7 @@ export class UserEditComponent implements OnInit {
                 duration: 2000,
               });
             }, err => {
-              console.log(err);
+              this.dialogService.alert(err.error);
             });
         }
       });
@@ -118,7 +120,7 @@ export class UserEditComponent implements OnInit {
             duration: 2000,
           });
         }, err => {
-          console.log(err);
+          this.dialogService.alert(err.error);
         });
     }
   }

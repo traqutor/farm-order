@@ -8,6 +8,8 @@ import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../core/auth/auth.service';
+import { DialogService } from '../../shared/dialogs/dialog.service';
+import { User } from '../../shared/models/user';
 
 @Component({
   selector: 'app-orders-list',
@@ -28,20 +30,23 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  dateFromValue;
-  dateToValue;
+  dateFromValue: string;
+  dateToValue: string;
   farmOption;
   orderLength = 0;
-  user;
+  user: User;
   subscribe;
+  loading = false;
 
   constructor(private ordersService: OrdersService,
               private datePipe: DatePipe,
               private sharedService: SharedService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.farms$ = this.sharedService.getUserAssignedFarms();
     this.user = this.authService.getUser();
     this.subscribe = merge(this.paginator.page, interval(5000))
@@ -65,9 +70,17 @@ export class OrdersListComponent implements OnInit, OnDestroy {
           return data.results;
         }),
         catchError(() => {
+          this.loading = false;
           return of([]);
         })
-      ).subscribe(data => this.dataSource = data);
+      ).subscribe(data => {
+          this.loading = false;
+          return this.dataSource = data;
+        },
+        err => {
+          this.loading = false;
+          this.dialogService.alert(err.error);
+        });
   }
 
   filterByDate() {
@@ -87,12 +100,21 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         return data.results;
       }),
       catchError(() => {
+        this.loading = false;
         return of([]);
       })
-    ).subscribe(data => this.dataSource = data);
+    ).subscribe(data => {
+        this.loading = false;
+        return this.dataSource = data;
+      },
+      err => {
+        this.loading = false;
+        this.dialogService.alert(err.error);
+      });
   }
 
   filterByFarm(option: MatOption) {
+    this.paginator.pageIndex = 0;
     this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
@@ -109,9 +131,17 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         return data.results;
       }),
       catchError(() => {
+        this.loading = false;
         return of([]);
       })
-    ).subscribe(data => this.dataSource = data);
+    ).subscribe(data => {
+        this.loading = false;
+        return this.dataSource = data;
+      },
+      err => {
+        this.loading = false;
+        this.dialogService.alert(err.error);
+      });
   }
 
   displayRow(row, column) {

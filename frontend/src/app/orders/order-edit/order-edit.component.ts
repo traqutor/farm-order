@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { OrderChangeReason, Status } from '../../shared/models/order';
+import { DialogService } from '../../shared/dialogs/dialog.service';
 
 @Component({
   selector: 'app-order-edit',
@@ -20,7 +21,8 @@ export class OrderEditComponent implements OnInit {
               private ordersService: OrdersService,
               private router: Router,
               private route: ActivatedRoute,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dialogService: DialogService) {
   }
 
   order: FormGroup;
@@ -54,6 +56,8 @@ export class OrderEditComponent implements OnInit {
                 Validators.required
               ]]
             });
+          }, err => {
+            this.dialogService.alert(err.error);
           });
       });
     this.farms$ = this.sharedService.getUserAssignedFarms();
@@ -78,7 +82,7 @@ export class OrderEditComponent implements OnInit {
             duration: 2000,
           });
         }, err => {
-          console.log(err);
+          this.dialogService.alert(err.error);
         });
     }
   }

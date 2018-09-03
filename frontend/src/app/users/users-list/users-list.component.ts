@@ -24,6 +24,7 @@ export class UsersListComponent implements OnInit {
   ];
   columnsToRender = ['userName', 'customer', 'role', 'settings'];
   user;
+  loading = false;
 
   constructor(private usersService: UsersService,
               private authService: AuthService,
@@ -33,6 +34,7 @@ export class UsersListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     const user = this.authService.getUser();
     if (user.role.name !== 'Admin') {
       const newDisplayedColumns = this.displayedColumns.filter(column => column.value !== 'customer');
@@ -42,12 +44,15 @@ export class UsersListComponent implements OnInit {
     }
     this.usersService.getUsers()
       .subscribe((users: { results: [User], resultCount: number }) => {
+        this.loading = false;
         this.dataSource = new MatTableDataSource<User>(users.results);
         this.dataSource.filterPredicate = (data: User, filter: string) => {
           if (data.customer) {
             return data.customer.name.indexOf(filter) !== -1;
           }
         };
+      }, err => {
+        this.dialogService.alert(err.error);
       });
     this.customers$ = this.sharedService.getCustomers();
   }
@@ -76,7 +81,7 @@ export class UsersListComponent implements OnInit {
                 duration: 2000,
               });
             }, err => {
-              console.log(err);
+              this.dialogService.alert(err.error);
             });
         }
       });
