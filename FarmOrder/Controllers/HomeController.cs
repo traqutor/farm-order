@@ -1,18 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
+
 
 namespace FarmOrder.Controllers
 {
-    public class HomeController : Controller
+    [RoutePrefix("")]
+    public class HomeController : ApiController
     {
-        public ActionResult Index()
+        [Route("")]
+        public HttpResponseMessage Index()
         {
-            ViewBag.Title = "Home Page";
+            var response = Request.CreateResponse(HttpStatusCode.Moved);
+        #if DEBUG
 
-            return View();
+            response.Headers.Location = new Uri(Request.RequestUri + "/swagger");
+            return response;
+
+        #else
+
+            response.Headers.Location = new Uri(Request.RequestUri + "/app");
+            return response;
+    
+        #endif
         }
     }
 }
