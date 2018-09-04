@@ -12,7 +12,7 @@ import { LoginLayoutComponent } from './shared/components/loginlayout/login-layo
 import { HomeLayoutComponent } from './shared/components/home-layout/home-layout.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', data: { title: 'First Component' }, pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login', component: LoginLayoutComponent,
     children: [

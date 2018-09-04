@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule,
   MatDialogModule, MatAutocompleteModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatChipsModule,
@@ -8,7 +8,7 @@ import {
   MatSliderModule, MatSlideToggleModule, MatSortModule, MatSnackBarModule, MatTableModule, MatTabsModule,
   MatTooltipModule, MatStepperModule
 } from '@angular/material';
-import {CdkTableModule} from "@angular/cdk/table";
+import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
   imports: [
