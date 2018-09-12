@@ -1,0 +1,43 @@
+.sidenav-container {
+  /*height: 100%; */
+  min-height: 100vh;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+}
+
+.logo {
+  height: 64px;
+}
+
+.content {
+  flex: 1;
+}
+
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+> *:not(router-outlet) {
+  flex: 1;
+  display: block;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+}

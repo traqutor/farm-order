@@ -1,0 +1,55 @@
+<div class="padding-content"
+     fxFlex
+     fxLayout="column"
+>
+  <div
+    fxLayout="row"
+  >
+    <div>
+      <h2 class="mat-title">New Order</h2>
+      <p class="mat-subheading-2">Here you create new order.</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <form [formGroup]="order" (ngSubmit)="onSubmit()" fxLayout="column" class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
+      <mat-form-field>
+        <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('required') && order.get('tonsOrdered').touched">
+          Tons ordered is required.
+        </mat-error>
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('min') && order.get('tonsOrdered').touched">
+          Minimum tons ordered is 1.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(farms$ | async) as farms">
+        <mat-select placeholder="Select Farm" formControlName="farm">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="dp3" placeholder="Delivery Date" formControlName="deliveryDate">
+        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+      <button
+        mat-button
+        color="accent"
+        [disabled]="order.invalid"
+      >
+        Create Order
+      </button>
+    </form>
+  </div>
+
+</div>

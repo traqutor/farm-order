@@ -1,0 +1,77 @@
+<div class="padding-content"
+     fxFlex
+     fxLayout="column"
+>
+  <div
+    fxLayout="row"
+  >
+    <div>
+      <h2 class="mat-title">Edit Order</h2>
+      <p class="mat-subheading-2">Here you edit existing order.</p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="order">
+    <form [formGroup]="order" (ngSubmit)="onSubmit(order)" fxLayout="column" class="half-width">
+      <mat-form-field>
+        <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('required') && order.get('tonsOrdered').touched">
+          Tons ordered is required.
+        </mat-error>
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('min') && order.get('tonsOrdered').touched">
+          Minimum tons ordered is 1.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(farms$ | async) as farms">
+        <mat-select placeholder="Select Farm" formControlName="farm" [compareWith]="compare">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(status$ | async) as status">
+        <mat-select placeholder="Select Status" formControlName="status" [compareWith]="compare">
+          <mat-option *ngFor="let status of status.results" [value]="status">
+            {{status.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="(orderChangeReason$ | async) as orderChangeReasons">
+        <mat-select placeholder="Select order change reason" formControlName="orderChangeReason" [compareWith]="compare">
+          <mat-option *ngFor="let orderChangeReason of orderChangeReasons.results" [value]="orderChangeReason">
+            {{orderChangeReason.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="dp3" placeholder="Delivery Date" formControlName="deliveryDate">
+        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+      <button
+        mat-button
+        color="accent"
+        [disabled]="order.invalid"
+      >
+        Edit Order
+      </button>
+    </form>
+  </div>
+
+</div>

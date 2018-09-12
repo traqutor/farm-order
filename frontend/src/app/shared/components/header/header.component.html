@@ -1,0 +1,60 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)">
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list *ngIf="(user$ | async) as user">
+      <a mat-list-item routerLink="orders">Orders</a>
+      <a mat-list-item routerLink="users" *ngIf="user?.role?.name !== 'Customer'">Users</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="page-wrap">
+    <mat-toolbar color="primary" [ngClass.xs]="{'toolbar':true}">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        [ngStyle]="{'display':(auth$ | async) ? 'block' : 'none' }"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Profisol Farm Order Module</span>
+      <div class="spacer"></div>
+      <p *ngIf="(user$ | async) as user">
+        {{user?.userName}} as {{user?.role?.name}}
+      </p>
+      <button mat-icon-button
+              [ngStyle]="{'display':(auth$ | async) ? 'block' : 'none' }"
+              [matMenuTriggerFor]="menu">
+        <mat-icon>face</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+
+        <button mat-menu-item
+                (click)="authService.logout()">
+          <mat-icon>dialpad</mat-icon>
+          <span>Logout</span>
+        </button>
+
+        <button mat-menu-item
+                (click)="changePassword()">
+          <mat-icon>lock</mat-icon>
+          <span>Change password</span>
+        </button>
+
+      </mat-menu>
+
+    </mat-toolbar>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+
+
+</mat-sidenav-container>
