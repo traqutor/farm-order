@@ -54,7 +54,7 @@ namespace FarmOrder.Data.Initializers
             Customer customer1 = new Customer()
             {
                 Id = 1,
-                CompanyName = "Profisol",
+                CompanyName = "Password",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
@@ -129,7 +129,7 @@ namespace FarmOrder.Data.Initializers
             //user.Email = "sysadmin@gmail.com";
             user.EmailConfirmed = true;
 
-            string userPWD = "Profisol";
+            string userPWD = "Password";
 
             var chkUser = UserManager.Create(user, userPWD);
 

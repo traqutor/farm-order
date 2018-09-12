@@ -1,10 +1,12 @@
 <mat-toolbar color="primary">
-  <span>Profisol Farm Order Module</span>
+  <span>Genius Farm Order Module</span>
 </mat-toolbar>
 <div class="container">
   <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
     <mat-card style="justify-content: center;">
-      <img src="./assets/profisol-logo.jpg" style="width: 200px;" class="logo">
+      <img src="./assets/genius_order_module_logo_large.png" style="width: 300px;" class="logo">
+	  
+	  
 
       <form class="singInForm" (ngSubmit)="onSignIn(f)" #f="ngForm">
         <mat-form-field>
@@ -21,7 +23,7 @@
                  name="password" ngModel>
         </mat-form-field>
         <div class="error-message" *ngIf="err">{{errMessage}}</div>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!f.valid">SignIn</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!f.valid">Sign In</button>
       </form>
 
       <mat-progress-bar
