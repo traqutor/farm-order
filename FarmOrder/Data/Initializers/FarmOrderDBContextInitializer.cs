@@ -100,7 +100,7 @@ namespace FarmOrder.Data.Initializers
             CustomerSite site3 = new CustomerSite()
             {
                 Id = 3,
-                SiteName = "Home",
+                SiteName = "Home2",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 CustomerId = customer3.Id
@@ -126,21 +126,21 @@ namespace FarmOrder.Data.Initializers
 
             Ration cs1ration1 = new Ration()
             {
-                Name = "Wheat",
+                Name = "Wheat Melbourne",
                 Description = "100% wheat ration",
                 CustomerSite = site1
             };
 
             Ration cs1ration2 = new Ration()
             {
-                Name = "Flour",
+                Name = "Flour Melbourne",
                 Description = "100% flour ration",
                 CustomerSite = site1
             };
 
             Ration cs1ration3 = new Ration()
             {
-                Name = "Wheat/Flour",
+                Name = "Wheat/Flour Melbourne",
                 Description = "50% wheat 50% flour ration",
                 CustomerSite = site1
             };
@@ -151,21 +151,21 @@ namespace FarmOrder.Data.Initializers
 
             Ration cs2ration1 = new Ration()
             {
-                Name = "Wheat",
+                Name = "Wheat Home",
                 Description = "100% wheat ration",
                 CustomerSite = site2
             };
 
             Ration cs2ration2 = new Ration()
             {
-                Name = "Flour",
+                Name = "Flour Home",
                 Description = "100% flour ration",
                 CustomerSite = site2
             };
 
             Ration cs2ration3 = new Ration()
             {
-                Name = "Wheat/Flour",
+                Name = "Wheat/Flour Home",
                 Description = "30% wheat 70% flour ration",
                 CustomerSite = site2
             };
@@ -176,21 +176,21 @@ namespace FarmOrder.Data.Initializers
 
             Ration cs3ration1 = new Ration()
             {
-                Name = "Wheat",
+                Name = "Wheat Home2",
                 Description = "100% wheat ration",
                 CustomerSite = site3
             };
 
             Ration cs3ration2 = new Ration()
             {
-                Name = "Flour",
+                Name = "Flour Home2",
                 Description = "100% flour ration",
                 CustomerSite = site3
             };
 
             Ration cs3ration3 = new Ration()
             {
-                Name = "Wheat/Flour",
+                Name = "Wheat/Flour Home2",
                 Description = "10% wheat 90% flour ration",
                 CustomerSite = site3
             };
@@ -201,21 +201,21 @@ namespace FarmOrder.Data.Initializers
 
             Ration cs4ration1 = new Ration()
             {
-                Name = "Wheat",
+                Name = "Wheat Brissbane",
                 Description = "100% wheat ration",
                 CustomerSite = site4
             };
 
             Ration cs4ration2 = new Ration()
             {
-                Name = "Flour",
+                Name = "Flour Brissbane",
                 Description = "100% flour ration",
                 CustomerSite = site4
             };
 
             Ration cs4ration3 = new Ration()
             {
-                Name = "Wheat/Flour",
+                Name = "Wheat/Flour Brissbane",
                 Description = "60% wheat 40% flour ration",
                 CustomerSite = site4
             };
