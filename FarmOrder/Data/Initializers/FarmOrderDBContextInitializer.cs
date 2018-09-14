@@ -46,9 +46,6 @@ namespace FarmOrder.Data.Initializers
 
             #endregion
 
-
-
-
             #region customers and sites creation
 
             Customer customer1 = new Customer()
