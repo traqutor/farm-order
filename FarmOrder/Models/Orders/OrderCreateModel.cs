@@ -1,4 +1,5 @@
-﻿using FarmOrder.Models.Farms;
+﻿using FarmOrder.Models.CustomerSites;
+using FarmOrder.Models.Farms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,6 +14,8 @@ namespace FarmOrder.Models.Orders
         public DateTime DeliveryDate { get; set; }
         [Required]
         public int TonsOrdered { get; set; }
+        [Required]
+        public RationListEntryViewModel Ration { get; set; }
         [Required]
         public FarmListEntryViewModel Farm { get; set; }
     }
