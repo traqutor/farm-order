@@ -12,6 +12,11 @@ namespace FarmOrder.Models.CustomerSites
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public RationListEntryViewModel()
+        {
+
+        }
+
         public RationListEntryViewModel(Ration el)
         {
             Id = el.Id;
