@@ -24,10 +24,11 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     { value: 'orderChangeReason', name: 'Order change reason' },
     { value: 'deliveryDate', name: 'Delivery Date' },
     { value: 'tonsOrdered', name: 'Tons ordered' },
+    { value: 'ration', name: 'Ration' },
     { value: 'farm', name: 'Farm' },
   ];
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
-  columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'farm', 'settings'];
+  columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'ration', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
 

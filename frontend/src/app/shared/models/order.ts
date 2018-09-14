@@ -1,4 +1,5 @@
 import { Farm } from './farm';
+import { Ration } from './ration';
 
 export interface Order {
   id?: number;
@@ -9,6 +10,7 @@ export interface Order {
   deliveryDate: string;
   tonsOrdered: number;
   farm: Farm;
+  ration: Ration;
 }
 
 export interface Status {

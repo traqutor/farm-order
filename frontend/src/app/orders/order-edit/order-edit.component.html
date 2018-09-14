@@ -27,7 +27,8 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(farms$ | async) as farms">
-        <mat-select placeholder="Select Farm" formControlName="farm" [compareWith]="compare">
+        <mat-select #option placeholder="Select Farm" formControlName="farm" [compareWith]="compare"
+                    (valueChange)="getRations(option.value)">
           <mat-option *ngFor="let farm of farms.results" [value]="farm">
             {{farm.name}}
           </mat-option>
@@ -35,6 +36,17 @@
         <mat-error
           *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
           Farm is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="this.order.value.farm !== null && (rations$ | async) as rations">
+        <mat-select placeholder="Select Ration" formControlName="ration" [compareWith]="compare">
+          <mat-option *ngFor="let ration of rations.results" [value]="ration">
+            {{ration.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('ration').hasError('required') && order.get('ration').touched">
+          Ration is required.
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(status$ | async) as status">
@@ -49,7 +61,8 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="(orderChangeReason$ | async) as orderChangeReasons">
-        <mat-select placeholder="Select order change reason" formControlName="orderChangeReason" [compareWith]="compare">
+        <mat-select placeholder="Select order change reason" formControlName="orderChangeReason"
+                    [compareWith]="compare">
           <mat-option *ngFor="let orderChangeReason of orderChangeReasons.results" [value]="orderChangeReason">
             {{orderChangeReason.name}}
           </mat-option>
