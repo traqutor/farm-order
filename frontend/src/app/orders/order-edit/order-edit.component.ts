@@ -27,8 +27,8 @@ export class OrderEditComponent implements OnInit {
 
   order: FormGroup;
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
-  status$: Observable<{ results: Array<Status>, resultCount: number }>;
-  orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultCount: number }>;
+  status$: Observable<{ results: Array<Status>, resultsCount: number }>;
+  orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultsCount: number }>;
   orderId;
 
   ngOnInit() {
