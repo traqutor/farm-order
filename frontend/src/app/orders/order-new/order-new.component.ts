@@ -5,8 +5,9 @@ import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
 import { OrdersService } from '../orders.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSelect, MatSnackBar } from '@angular/material';
 import { DialogService } from '../../shared/dialogs/dialog.service';
+import { Ration } from '../../shared/models/ration';
 
 @Component({
   selector: 'app-order-new',
@@ -26,6 +27,7 @@ export class OrderNewComponent implements OnInit {
 
   order: FormGroup;
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
+  rations$: Observable<{results: [Ration], resultsCount: number}>;
 
 
   ngOnInit() {
@@ -40,8 +42,15 @@ export class OrderNewComponent implements OnInit {
       ]],
       farm: [null, [
         Validators.required
+      ]],
+      ration: [null, [
+        Validators.required
       ]]
     });
+  }
+
+  getRations(farm: Farm) {
+    this.rations$ = this.sharedService.getRations(farm.id);
   }
 
   onSubmit() {

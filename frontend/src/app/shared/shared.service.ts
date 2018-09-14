@@ -8,6 +8,7 @@ import { Farm } from './models/farm';
 import { CustomerSite } from './models/customer-site';
 import { User } from './models/user';
 import { OrderChangeReason, Status } from './models/order';
+import { Ration } from './models/ration';
 
 @Injectable({
   providedIn: 'root'
@@ -40,16 +41,20 @@ export class SharedService {
     return this.http.get<User>(`${this.apiUrl}/api/Account/UserInfo`);
   }
 
-  getStatus(): Observable<{ results: [Status], resultCount: number }> {
-    return this.http.get<{ results: [Status], resultCount: number }>(`${this.apiUrl}/api/OrderStatus`);
+  getStatus(): Observable<{ results: [Status], resultsCount: number }> {
+    return this.http.get<{ results: [Status], resultsCount: number }>(`${this.apiUrl}/api/OrderStatus`);
   }
 
-  getOrderChangeReason(): Observable<{ results: [OrderChangeReason], resultCount: number }> {
-    return this.http.get<{ results: [OrderChangeReason], resultCount: number }>(`${this.apiUrl}/api/OrderChangeReason`);
+  getOrderChangeReason(): Observable<{ results: [OrderChangeReason], resultsCount: number }> {
+    return this.http.get<{ results: [OrderChangeReason], resultsCount: number }>(`${this.apiUrl}/api/OrderChangeReason`);
   }
 
   resetPassword(credentials) {
     return this.http.post(`${this.apiUrl}/api/Account/ChangePassword`, JSON.stringify(credentials));
+  }
+
+  getRations(farmId: number): Observable<{ results: [Ration], resultsCount: number }> {
+    return this.http.get<{results: [Ration], resultsCount: number}>(`${this.apiUrl}/api/Ration?farmId=${farmId}`);
   }
 
 }
