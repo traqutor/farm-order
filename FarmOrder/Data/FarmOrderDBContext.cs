@@ -34,6 +34,7 @@ namespace FarmOrder.Data
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<CustomerSite> CustomerSites { get; set; }
         public virtual DbSet<CustomerSiteUser> CustomerSiteUsers { get; set; }
+        public virtual DbSet<Ration> Rations { get; set; }
 
         public virtual DbSet<Farm> Farms { get; set; }
         public virtual DbSet<FarmUser> FarmUsers { get; set; }

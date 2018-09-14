@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using FarmOrder.Data.Entities.Orders;
+using FarmOrder.Models.CustomerSites;
 
 namespace FarmOrder.Models.Orders
 {
@@ -13,6 +14,7 @@ namespace FarmOrder.Models.Orders
         {
             Id = el.Id;
             TonsOrdered = el.TonsOrdered;
+            Ration = new RationListEntryViewModel(el.Ration);
             Farm = new FarmListEntryViewModel(el.Farm);
             CreationDate = el.CreationDate;
             ModificationDate = el.ModificationDate;

@@ -263,10 +263,12 @@
     <Compile Include="Controllers\OrderChangeReasonController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrderStatusController.cs" />
+    <Compile Include="Controllers\RationController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UsersManagementController.cs" />
     <Compile Include="Data\Entities\CustomerSites\CustomerSite.cs" />
     <Compile Include="Data\Entities\CustomerSites\CustomerSiteUser.cs" />
+    <Compile Include="Data\Entities\CustomerSites\Ration.cs" />
     <Compile Include="Data\Entities\Customers\Customer.cs" />
     <Compile Include="Data\Entities\EntityStatus.cs" />
     <Compile Include="Data\Entities\Farms\Farm.cs" />
@@ -301,10 +303,15 @@
     <Compile Include="Migrations\201808200956212_OrderPropertyNamingTypoFix.Designer.cs">
       <DependentUpon>201808200956212_OrderPropertyNamingTypoFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809140920084_OrderRation.cs" />
+    <Compile Include="Migrations\201809140920084_OrderRation.Designer.cs">
+      <DependentUpon>201809140920084_OrderRation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CustomerSites\CustomerSiteListEntryViewModel.cs" />
+    <Compile Include="Models\CustomerSites\RationListEntryViewModel.cs" />
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
     <Compile Include="Models\Farms\FarmListEntryViewModel.cs" />
     <Compile Include="Models\Farms\FarmSearchModel.cs" />
@@ -328,6 +335,7 @@
     <Compile Include="Services\OrderChangeReasonService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\OrderStatusService.cs" />
+    <Compile Include="Services\RationService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="Startup.cs" />
@@ -420,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808200956212_OrderPropertyNamingTypoFix.resx">
       <DependentUpon>201808200956212_OrderPropertyNamingTypoFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809140920084_OrderRation.resx">
+      <DependentUpon>201809140920084_OrderRation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
