@@ -203,21 +203,21 @@ namespace FarmOrder.Data.Initializers
             {
                 Name = "Wheat",
                 Description = "100% wheat ration",
-                CustomerSite = site3
+                CustomerSite = site4
             };
 
             Ration cs4ration2 = new Ration()
             {
                 Name = "Flour",
                 Description = "100% flour ration",
-                CustomerSite = site3
+                CustomerSite = site4
             };
 
             Ration cs4ration3 = new Ration()
             {
                 Name = "Wheat/Flour",
                 Description = "60% wheat 40% flour ration",
-                CustomerSite = site3
+                CustomerSite = site4
             };
 
             context.Rations.AddOrUpdate(cs4ration1);
