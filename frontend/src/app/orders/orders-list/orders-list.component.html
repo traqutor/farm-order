@@ -20,15 +20,18 @@
 
   <mat-divider></mat-divider>
 
-  <div *ngIf="user.role.name === 'Admin'">
-    <mat-form-field class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}" *ngIf="(farms$ | async) as farms">
-      <mat-select #option (valueChange)="filterByFarm(option)" [(ngModel)]="farmOption" placeholder="Select farm to filter">
+  <div [ngClass]="{'hidden':user.role.name !== 'Admin'}">
+    <mat-form-field class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
+      <mat-select #matSelect placeholder="Select farm to filter">
         <mat-option value="">
           ALL
         </mat-option>
-        <mat-option *ngFor="let farm of farms.results" [value]="farm">
-          {{farm.name}}
-        </mat-option>
+        <span *ngIf="(farms$ | async) as farms">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </span>
+
       </mat-select>
     </mat-form-field>
   </div>

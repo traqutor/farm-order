@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { Farm } from '../../shared/models/farm';
 import { OrderChangeReason, Status } from '../../shared/models/order';
 import { DialogService } from '../../shared/dialogs/dialog.service';
+import { Ration } from '../../shared/models/ration';
 
 @Component({
   selector: 'app-order-edit',
@@ -27,8 +28,9 @@ export class OrderEditComponent implements OnInit {
 
   order: FormGroup;
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
-  status$: Observable<{ results: Array<Status>, resultCount: number }>;
-  orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultCount: number }>;
+  rations$: Observable<{ results: Array<Ration>, resultsCount: number }>;
+  status$: Observable<{ results: Array<Status>, resultsCount: number }>;
+  orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultsCount: number }>;
   orderId;
 
   ngOnInit() {
@@ -49,6 +51,9 @@ export class OrderEditComponent implements OnInit {
               farm: [order.farm, [
                 Validators.required
               ]],
+              ration: [order.ration, [
+                Validators.required
+              ]],
               status: [order.status, [
                 Validators.required
               ]],
@@ -56,6 +61,7 @@ export class OrderEditComponent implements OnInit {
                 Validators.required
               ]]
             });
+            this.getRations(order.farm);
           }, err => {
             this.dialogService.alert(err.error);
           });
@@ -63,13 +69,16 @@ export class OrderEditComponent implements OnInit {
     this.farms$ = this.sharedService.getUserAssignedFarms();
     this.status$ = this.sharedService.getStatus();
     this.orderChangeReason$ = this.sharedService.getOrderChangeReason();
-
   }
 
   compare(val1, val2) {
     if (val1 && val2) {
       return val1.id === val2.id;
     }
+  }
+
+  getRations(farm: Farm) {
+    this.rations$ = this.sharedService.getRations(farm.id);
   }
 
   onSubmit() {

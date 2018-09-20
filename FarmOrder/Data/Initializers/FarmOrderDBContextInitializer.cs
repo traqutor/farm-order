@@ -46,15 +46,12 @@ namespace FarmOrder.Data.Initializers
 
             #endregion
 
-
-
-
             #region customers and sites creation
 
             Customer customer1 = new Customer()
             {
                 Id = 1,
-                CompanyName = "Password",
+                CompanyName = "Profisol",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
@@ -100,7 +97,7 @@ namespace FarmOrder.Data.Initializers
             CustomerSite site3 = new CustomerSite()
             {
                 Id = 3,
-                SiteName = "Home",
+                SiteName = "Home2",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 CustomerId = customer3.Id
@@ -122,6 +119,111 @@ namespace FarmOrder.Data.Initializers
 
             #endregion
 
+            #region rations creation
+
+            Ration cs1ration1 = new Ration()
+            {
+                Name = "Wheat Melbourne",
+                Description = "100% wheat ration",
+                CustomerSite = site1
+            };
+
+            Ration cs1ration2 = new Ration()
+            {
+                Name = "Flour Melbourne",
+                Description = "100% flour ration",
+                CustomerSite = site1
+            };
+
+            Ration cs1ration3 = new Ration()
+            {
+                Name = "Wheat/Flour Melbourne",
+                Description = "50% wheat 50% flour ration",
+                CustomerSite = site1
+            };
+
+            context.Rations.AddOrUpdate(cs1ration1);
+            context.Rations.AddOrUpdate(cs1ration2);
+            context.Rations.AddOrUpdate(cs1ration3);
+
+            Ration cs2ration1 = new Ration()
+            {
+                Name = "Wheat Home",
+                Description = "100% wheat ration",
+                CustomerSite = site2
+            };
+
+            Ration cs2ration2 = new Ration()
+            {
+                Name = "Flour Home",
+                Description = "100% flour ration",
+                CustomerSite = site2
+            };
+
+            Ration cs2ration3 = new Ration()
+            {
+                Name = "Wheat/Flour Home",
+                Description = "30% wheat 70% flour ration",
+                CustomerSite = site2
+            };
+
+            context.Rations.AddOrUpdate(cs2ration1);
+            context.Rations.AddOrUpdate(cs2ration2);
+            context.Rations.AddOrUpdate(cs2ration3);
+
+            Ration cs3ration1 = new Ration()
+            {
+                Name = "Wheat Home2",
+                Description = "100% wheat ration",
+                CustomerSite = site3
+            };
+
+            Ration cs3ration2 = new Ration()
+            {
+                Name = "Flour Home2",
+                Description = "100% flour ration",
+                CustomerSite = site3
+            };
+
+            Ration cs3ration3 = new Ration()
+            {
+                Name = "Wheat/Flour Home2",
+                Description = "10% wheat 90% flour ration",
+                CustomerSite = site3
+            };
+
+            context.Rations.AddOrUpdate(cs3ration1);
+            context.Rations.AddOrUpdate(cs3ration2);
+            context.Rations.AddOrUpdate(cs3ration3);
+
+            Ration cs4ration1 = new Ration()
+            {
+                Name = "Wheat Brissbane",
+                Description = "100% wheat ration",
+                CustomerSite = site4
+            };
+
+            Ration cs4ration2 = new Ration()
+            {
+                Name = "Flour Brissbane",
+                Description = "100% flour ration",
+                CustomerSite = site4
+            };
+
+            Ration cs4ration3 = new Ration()
+            {
+                Name = "Wheat/Flour Brissbane",
+                Description = "60% wheat 40% flour ration",
+                CustomerSite = site4
+            };
+
+            context.Rations.AddOrUpdate(cs4ration1);
+            context.Rations.AddOrUpdate(cs4ration2);
+            context.Rations.AddOrUpdate(cs4ration3);
+
+
+            #endregion
+
             #region SystemAdmin creation
 
             var user = new User();
@@ -129,7 +231,7 @@ namespace FarmOrder.Data.Initializers
             //user.Email = "sysadmin@gmail.com";
             user.EmailConfirmed = true;
 
-            string userPWD = "Password";
+            string userPWD = "Profisol";
 
             var chkUser = UserManager.Create(user, userPWD);
 

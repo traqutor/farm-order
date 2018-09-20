@@ -1,4 +1,5 @@
-﻿using FarmOrder.Data.Entities.Farms;
+﻿using FarmOrder.Data.Entities.CustomerSites;
+using FarmOrder.Data.Entities.Farms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,6 +17,10 @@ namespace FarmOrder.Data.Entities.Orders
         public DateTime DeliveryDate { get; set; }
 
         public int TonsOrdered { get; set; }
+
+        public int RationId { get; set; }
+        [ForeignKey("RationId")]
+        public virtual Ration Ration { get; set; }
 
         public int FarmId { get; set; }
         [ForeignKey("FarmId")]

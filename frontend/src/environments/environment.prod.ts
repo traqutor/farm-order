@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   url: 'http://geniusfom.azurewebsites.net'
 };
 

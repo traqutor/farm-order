@@ -153,6 +153,7 @@ namespace FarmOrder.Services
         {
             var changeReason = _context.OrderChangeReasons.SingleOrDefault(ocr => ocr.Id == model.OrderChangeReason.Id);
             var orderStatus = _context.OrderStatuses.SingleOrDefault(os => os.Id == model.Status.Id);
+            var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
 
             List<string> errors = new List<string>();
 
@@ -167,8 +168,11 @@ namespace FarmOrder.Services
 
             Order oldOrder = _context.Orders.SingleOrDefault(o => o.Id == id);
 
-            if(oldOrder.Status?.Name == "Delivered")
+            if (oldOrder.Status?.Name == "Delivered")
                 errors.Add("Can not modify delivered order.");
+
+            if (selectedRation == null)
+                errors.Add("Ration unavalibe select correct ration.");
 
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
@@ -189,6 +193,7 @@ namespace FarmOrder.Services
             oldOrder.ChangeReasonId = changeReason.Id;
             oldOrder.DeliveryDate = model.DeliveryDate;
             oldOrder.TonsOrdered = model.TonsOrdered;
+            oldOrder.RationId = selectedRation.Id;
 
             _context.SaveChanges();
 
@@ -198,6 +203,7 @@ namespace FarmOrder.Services
         public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)
         {
             var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
+            var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
 
             List<string> errors = new List<string>();
 
@@ -220,6 +226,9 @@ namespace FarmOrder.Services
             if (selectedFarm == null)
                 errors.Add("Farm unavalibe select correct farm.");
 
+            if(selectedRation == null)
+                errors.Add("Ration unavalibe select correct ration.");
+
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
@@ -232,7 +241,8 @@ namespace FarmOrder.Services
                 StatusId = defaultStatus.Id,
                 TonsOrdered = model.TonsOrdered,
                 DeliveryDate = model.DeliveryDate,
-                FarmId = selectedFarm.Id
+                FarmId = selectedFarm.Id,
+                RationId = selectedRation.Id
             };
 
             _context.Orders.Add(order);
