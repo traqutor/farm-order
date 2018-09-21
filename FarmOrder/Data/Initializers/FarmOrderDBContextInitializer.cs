@@ -2,6 +2,7 @@
 using FarmOrder.Data.Entities.Customers;
 using FarmOrder.Data.Entities.CustomerSites;
 using FarmOrder.Data.Entities.Farms;
+using FarmOrder.Data.Entities.Farms.Sheds;
 using FarmOrder.Data.Entities.Orders;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -391,7 +392,6 @@ namespace FarmOrder.Data.Initializers
 
             #endregion
 
-
             #region Farms
             if (context.Farms.Count() == 0)
             {
@@ -401,7 +401,7 @@ namespace FarmOrder.Data.Initializers
                     Name = "Sunny meadow in Melbourne",
                     CustomerSiteId = 1
                 };
-
+                
                 Farm farm2 = new Farm()
                 {
                     Id = 2,
@@ -423,10 +423,104 @@ namespace FarmOrder.Data.Initializers
                     CustomerSiteId = 4
                 };
 
+                List<Farm> farms = new List<Farm>();
+
+                farms.Add(farm1);
+                farms.Add(farm2);
+                farms.Add(farm3);
+                farms.Add(farm4);
+
+                foreach (var farm in farms)
+                {
+                    #region sheds and siloses
+
+                    Shed shed1Farm1 = new Shed()
+                    {
+                        Name = $"Shed1 in {farm.Name}",
+                        FarmId = farm.Id,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo1Shed1 = new Silo()
+                    {
+                        Name = $"Silo1 in {shed1Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed1Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo2Shed1 = new Silo()
+                    {
+                        Name = $"Silo2 in {shed1Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed1Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Shed shed2Farm1 = new Shed()
+                    {
+                        Name = $"Shed2 in {farm1.Name}",
+                        FarmId = farm.Id,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo1Shed2 = new Silo()
+                    {
+                        Name = $"Silo1 in {shed2Farm1.Name}",
+                        Capacity = 20,
+                        Occupancy = 0,
+                        Shed = shed2Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo2Shed2 = new Silo()
+                    {
+                        Name = $"Silo2 in {shed2Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed2Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo3Shed2 = new Silo()
+                    {
+                        Name = $"Silo3 in {shed2Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed2Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+
+                    shed1Farm1.Siloses.Add(silo1Shed1);
+                    shed1Farm1.Siloses.Add(silo2Shed1);
+
+                    shed2Farm1.Siloses.Add(silo1Shed2);
+                    shed2Farm1.Siloses.Add(silo2Shed2);
+                    shed2Farm1.Siloses.Add(silo3Shed2);
+
+
+                    farm.Sheds.Add(shed1Farm1);
+                    farm.Sheds.Add(shed2Farm1);
+                    #endregion
+                }
+
                 context.Farms.Add(farm1);
                 context.Farms.Add(farm2);
                 context.Farms.Add(farm3);
                 context.Farms.Add(farm4);
+
+
+
             }
             #endregion
 

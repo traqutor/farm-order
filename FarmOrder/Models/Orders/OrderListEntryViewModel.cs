@@ -22,6 +22,15 @@ namespace FarmOrder.Models.Orders
             Status = new OrderStatusListEntryViewModel(el.Status);
             if(el.ChangeReason != null)
                 OrderChangeReason = new OrderChangeReasonListEntryViewModel(el.ChangeReason);
+            if (el.Siloses != null)
+            {
+                Siloses = new List<SiloListEntryViewModel>();
+
+                foreach (var os in el.Siloses)
+                {
+                    Siloses.Add(new SiloListEntryViewModel(os.Silo));
+                }
+            }
         }
 
         public OrderListEntryViewModel()

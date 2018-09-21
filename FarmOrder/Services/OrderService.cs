@@ -131,13 +131,13 @@ namespace FarmOrder.Services
             return new SearchResults<OrderListEntryViewModel>
             {
                 ResultsCount = count,
-                Results = query.ToList().Select(el => new OrderListEntryViewModel(el)).ToList()
+                Results = query.Include("Siloses.Silo").ToList().Select(el => new OrderListEntryViewModel(el)).ToList()
             };
         }
 
         public OrderListEntryViewModel Get(string userId, bool isAdmin, int id)
         {
-            Order order = _context.Orders.SingleOrDefault(o => o.Id == id);
+            Order order = _context.Orders.Include("Siloses.Silo").SingleOrDefault(o => o.Id == id);
 
             if (!isAdmin)
             {
@@ -205,6 +205,9 @@ namespace FarmOrder.Services
             var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
             var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
 
+            int[] silosesIds = model.Siloses.Select(s => s.Id).ToArray();
+            var selectedSiloses = _context.Siloses.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId);
+
             List<string> errors = new List<string>();
 
             if (!isAdmin)
@@ -229,6 +232,9 @@ namespace FarmOrder.Services
             if(selectedRation == null)
                 errors.Add("Ration unavalibe select correct ration.");
 
+            if (selectedSiloses == null || selectedSiloses.Count() <= 0)
+                errors.Add("Atleast one silo needs to be selected.");
+
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
@@ -244,6 +250,19 @@ namespace FarmOrder.Services
                 FarmId = selectedFarm.Id,
                 RationId = selectedRation.Id
             };
+
+            foreach (var silo in selectedSiloses)
+            {
+                OrderSilo os = new OrderSilo()
+                {
+                    Order = order,
+                    Silo = silo,
+                    EntityStatus = Data.Entities.EntityStatus.NORMAL,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
+                };
+                order.Siloses.Add(os);
+            }
 
             _context.Orders.Add(order);
             _context.SaveChanges();
