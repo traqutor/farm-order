@@ -155,6 +155,9 @@ namespace FarmOrder.Services
             var orderStatus = _context.OrderStatuses.SingleOrDefault(os => os.Id == model.Status.Id);
             var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
 
+            int[] silosesIds = model.Siloses.Select(s => s.Id).ToArray();
+            var selectedSiloses = _context.Siloses.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId).ToList();
+
             List<string> errors = new List<string>();
 
             if (model.TonsOrdered <= 0)
@@ -173,6 +176,9 @@ namespace FarmOrder.Services
 
             if (selectedRation == null)
                 errors.Add("Ration unavalibe select correct ration.");
+
+            if (selectedSiloses == null || selectedSiloses.Count() <= 0)
+                errors.Add("Atleast one silo needs to be selected.");
 
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
@@ -195,6 +201,31 @@ namespace FarmOrder.Services
             oldOrder.TonsOrdered = model.TonsOrdered;
             oldOrder.RationId = selectedRation.Id;
 
+
+            List<OrderSilo> bindingsToRemove = new List<OrderSilo>();
+            List<OrderSilo> bindingsToAdd = new List<OrderSilo>();
+
+            oldOrder.Siloses.ForEach(el =>
+            {
+                if (!selectedSiloses.Any(s => s.Id == el.SiloId))
+                    bindingsToRemove.Add(el);
+            });
+
+            selectedSiloses.ForEach(el =>
+            {
+                if (!oldOrder.Siloses.Any(s => s.SiloId == el.Id))
+                    bindingsToAdd.Add(new OrderSilo {
+                        SiloId = el.Id,
+                        OrderId = oldOrder.Id,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow,
+                        EntityStatus = Data.Entities.EntityStatus.NORMAL
+                    });
+            });
+
+            _context.OrdersSiloses.RemoveRange(bindingsToRemove);
+            _context.OrdersSiloses.AddRange(bindingsToAdd);
+           
             _context.SaveChanges();
 
             return new OrderListEntryViewModel(oldOrder);
