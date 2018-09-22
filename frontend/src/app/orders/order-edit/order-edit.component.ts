@@ -66,7 +66,7 @@ export class OrderEditComponent implements OnInit {
             this.dialogService.alert(err.error);
           });
       });
-    this.farms$ = this.sharedService.getUserAssignedFarms();
+    this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.status$ = this.sharedService.getStatus();
     this.orderChangeReason$ = this.sharedService.getOrderChangeReason();
   }

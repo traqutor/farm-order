@@ -1,4 +1,4 @@
-export interface IFarm {
+export interface IShed {
   id: number;
   name: string;
 }

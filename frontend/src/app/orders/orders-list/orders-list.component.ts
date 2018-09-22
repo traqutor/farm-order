@@ -49,7 +49,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
-    this.farms$ = this.sharedService.getUserAssignedFarms();
+    this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.user = this.authService.getUser();
     this.subscribe = merge(this.paginator.page, interval(5000), this.matSelect.valueChange)
       .pipe(

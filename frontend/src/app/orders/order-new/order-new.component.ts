@@ -8,6 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSelect, MatSnackBar } from '@angular/material';
 import { DialogService } from '../../shared/dialogs/dialog.service';
 import { Ration } from '../../shared/models/ration';
+import {ImgSrcDirective} from "@angular/flex-layout";
+import {IShed} from "../../shared/models/shed";
+import {ISilo} from "../../shared/models/silo";
 
 @Component({
   selector: 'app-order-new',
@@ -28,10 +31,12 @@ export class OrderNewComponent implements OnInit {
   order: FormGroup;
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   rations$: Observable<{results: [Ration], resultsCount: number}>;
+  sheds$: Observable<{results: [IShed], resultsCount: number}>;
+  silos$: Observable<{results: [ISilo], resultsCount: number}>;
 
 
   ngOnInit() {
-    this.farms$ = this.sharedService.getUserAssignedFarms();
+    this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.order = this.fb.group({
       tonsOrdered: [null, [
         Validators.required,
@@ -45,12 +50,28 @@ export class OrderNewComponent implements OnInit {
       ]],
       ration: [null, [
         Validators.required
+      ]],
+      sheds: [null, [
+        Validators.required
+      ]],
+      silos: [null, [
+        Validators.required
       ]]
     });
   }
 
   getRations(farm: Farm) {
     this.rations$ = this.sharedService.getRations(farm.id);
+  }
+
+  getSheds(farm: Farm) {
+    this.sheds$ = this.sharedService.getSheds(farm.id, null);
+  }
+
+  getSiloses(sheds: Array<ISilo>) {
+    console.log('sheds', sheds);
+    this.silos$ = this.sharedService.getSilos(sheds, null);
+    console.log('this.silos$', this.silos$);
   }
 
   onSubmit() {
