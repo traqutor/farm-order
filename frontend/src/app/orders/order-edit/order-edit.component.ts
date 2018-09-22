@@ -92,7 +92,7 @@ export class OrderEditComponent implements OnInit {
                 });
               });
               this.order.controls.sheds.setValue(tmp);
-              this.getSilos(tmp);
+              this.silos$ = this.sharedService.getSilos(tmp, null);
             });
 
 
@@ -120,6 +120,9 @@ export class OrderEditComponent implements OnInit {
   }
 
   getSilos(sheds: Array<IShed>) {
+    if (this.order) {
+      this.order.controls.silos.setValue(null);
+    }
     this.silos$ = this.sharedService.getSilos(sheds, null);
   }
 
@@ -129,7 +132,7 @@ export class OrderEditComponent implements OnInit {
     if (valid) {
       this.ordersService.putOrder(this.orderId, value)
         .subscribe(() => {
-          this.snackBar.open('Order Edited!', '', {
+          this.snackBar.open('Order Changed!', '', {
             duration: 2000,
           });
         }, err => {

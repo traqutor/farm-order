@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
-import { IOrder } from '../shared/models/order';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {Observable} from 'rxjs';
+import {IOrder} from '../shared/models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class OrdersService {
   }
 
   getOrders(searchParams): Observable<{ results: Array<IOrder>, resultsCount: number }> {
-    return this.http.post<{results: Array<IOrder>, resultsCount: number}>(`${this.apiUrl}/api/Order/Search`, JSON.stringify(searchParams));
+    return this.http.post<{ results: Array<IOrder>, resultsCount: number }>(`${this.apiUrl}/api/Order/Search`, searchParams);
   }
 
   postOrder(order: IOrder) {
