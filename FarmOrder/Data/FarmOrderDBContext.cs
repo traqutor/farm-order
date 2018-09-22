@@ -39,9 +39,9 @@ namespace FarmOrder.Data
 
         public virtual DbSet<Farm> Farms { get; set; }
         public virtual DbSet<Shed> Sheds { get; set; }
-        public virtual DbSet<Silo> Siloses { get; set; }
+        public virtual DbSet<Silo> Silos { get; set; }
 
-        public virtual DbSet<OrderSilo> OrdersSiloses { get; set; }
+        public virtual DbSet<OrderSilo> OrdersSilos { get; set; }
         public virtual DbSet<FarmUser> FarmUsers { get; set; }
 
         public virtual DbSet<Order> Orders { get; set; }

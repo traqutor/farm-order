@@ -19,7 +19,7 @@ namespace FarmOrder.Models.Orders
         [Required]
         public FarmListEntryViewModel Farm { get; set; }
         [Required]
-        public List<SiloListEntryViewModel> Siloses { get; set; }
+        public List<SiloListEntryViewModel> Silos { get; set; }
         
     }
 }
