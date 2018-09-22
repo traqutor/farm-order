@@ -37,7 +37,7 @@ namespace FarmOrder.Services.Farms
             if (farmUser == null)
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
 
-            var query = _context.Siloses.Where(s => s.EntityStatus == Data.Entities.EntityStatus.NORMAL && shedIds.Contains(s.ShedId)).OrderBy(s => s.Id).AsQueryable();
+            var query = _context.Silos.Where(s => s.EntityStatus == Data.Entities.EntityStatus.NORMAL && shedIds.Contains(s.ShedId)).OrderBy(s => s.Id).AsQueryable();
 
             int totalCount = query.Count();
 

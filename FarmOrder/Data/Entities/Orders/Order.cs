@@ -16,7 +16,7 @@ namespace FarmOrder.Data.Entities.Orders
         public DateTime ModificationDate { get; set; }
         public DateTime DeliveryDate { get; set; }
 
-        public virtual List<OrderSilo> Siloses { get; set; } = new List<OrderSilo>();
+        public virtual List<OrderSilo> Silos { get; set; } = new List<OrderSilo>();
 
         public int TonsOrdered { get; set; }
 

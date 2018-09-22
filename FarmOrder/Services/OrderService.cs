@@ -131,13 +131,13 @@ namespace FarmOrder.Services
             return new SearchResults<OrderListEntryViewModel>
             {
                 ResultsCount = count,
-                Results = query.Include("Siloses.Silo").ToList().Select(el => new OrderListEntryViewModel(el)).ToList()
+                Results = query.Include("Silos.Silo").ToList().Select(el => new OrderListEntryViewModel(el)).ToList()
             };
         }
 
         public OrderListEntryViewModel Get(string userId, bool isAdmin, int id)
         {
-            Order order = _context.Orders.Include("Siloses.Silo").SingleOrDefault(o => o.Id == id);
+            Order order = _context.Orders.Include("Silos.Silo").SingleOrDefault(o => o.Id == id);
 
             if (!isAdmin)
             {
@@ -155,8 +155,8 @@ namespace FarmOrder.Services
             var orderStatus = _context.OrderStatuses.SingleOrDefault(os => os.Id == model.Status.Id);
             var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
 
-            int[] silosesIds = model.Siloses.Select(s => s.Id).ToArray();
-            var selectedSiloses = _context.Siloses.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId).ToList();
+            int[] silosesIds = model.Silos.Select(s => s.Id).ToArray();
+            var selectedSiloses = _context.Silos.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId).ToList();
 
             List<string> errors = new List<string>();
 
@@ -205,7 +205,7 @@ namespace FarmOrder.Services
             List<OrderSilo> bindingsToRemove = new List<OrderSilo>();
             List<OrderSilo> bindingsToAdd = new List<OrderSilo>();
 
-            oldOrder.Siloses.ForEach(el =>
+            oldOrder.Silos.ForEach(el =>
             {
                 if (!selectedSiloses.Any(s => s.Id == el.SiloId))
                     bindingsToRemove.Add(el);
@@ -213,7 +213,7 @@ namespace FarmOrder.Services
 
             selectedSiloses.ForEach(el =>
             {
-                if (!oldOrder.Siloses.Any(s => s.SiloId == el.Id))
+                if (!oldOrder.Silos.Any(s => s.SiloId == el.Id))
                     bindingsToAdd.Add(new OrderSilo {
                         SiloId = el.Id,
                         OrderId = oldOrder.Id,
@@ -223,8 +223,8 @@ namespace FarmOrder.Services
                     });
             });
 
-            _context.OrdersSiloses.RemoveRange(bindingsToRemove);
-            _context.OrdersSiloses.AddRange(bindingsToAdd);
+            _context.OrdersSilos.RemoveRange(bindingsToRemove);
+            _context.OrdersSilos.AddRange(bindingsToAdd);
            
             _context.SaveChanges();
 
@@ -236,8 +236,8 @@ namespace FarmOrder.Services
             var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
             var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
 
-            int[] silosesIds = model.Siloses.Select(s => s.Id).ToArray();
-            var selectedSiloses = _context.Siloses.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId);
+            int[] silosesIds = model.Silos.Select(s => s.Id).ToArray();
+            var selectedSiloses = _context.Silos.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId);
 
             List<string> errors = new List<string>();
 
@@ -292,7 +292,7 @@ namespace FarmOrder.Services
                     CreationDate = DateTime.UtcNow,
                     ModificationDate = DateTime.UtcNow
                 };
-                order.Siloses.Add(os);
+                order.Silos.Add(os);
             }
 
             _context.Orders.Add(order);

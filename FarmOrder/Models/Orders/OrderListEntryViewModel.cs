@@ -22,13 +22,13 @@ namespace FarmOrder.Models.Orders
             Status = new OrderStatusListEntryViewModel(el.Status);
             if(el.ChangeReason != null)
                 OrderChangeReason = new OrderChangeReasonListEntryViewModel(el.ChangeReason);
-            if (el.Siloses != null)
+            if (el.Silos != null)
             {
-                Siloses = new List<SiloListEntryViewModel>();
+                Silos = new List<SiloListEntryViewModel>();
 
-                foreach (var os in el.Siloses)
+                foreach (var os in el.Silos)
                 {
-                    Siloses.Add(new SiloListEntryViewModel(os.Silo));
+                    Silos.Add(new SiloListEntryViewModel(os.Silo));
                 }
             }
         }
