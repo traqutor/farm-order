@@ -14,7 +14,8 @@
   <mat-divider></mat-divider>
 
   <div>
-    <form [formGroup]="order" (ngSubmit)="onSubmit()" fxLayout="column" class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
+    <form [formGroup]="order" (ngSubmit)="onSubmit()" fxLayout="column" class="half-width"
+          [ngClass.xs]="{'half-width':false, 'full-width':true}">
 
       <mat-form-field>
         <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
@@ -66,14 +67,15 @@
           </mat-option>
         </mat-select>
         <mat-error
-          *ngIf="order.get('ration').hasError('required') && order.get('sheds').touched">
+          *ngIf="order.get('sheds').hasError('required') && order.get('sheds').touched">
           Sheds are required.
         </mat-error>
       </mat-form-field>
 
       <!--silos-->
 
-      <mat-form-field *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
+      <mat-form-field
+        *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
         <mat-select placeholder="Select Sheds" formControlName="silos" multiple>
           <mat-option *ngFor="let silo of silos.results" [value]="silo">
             {{silo.name}}
@@ -92,13 +94,18 @@
         <mat-datepicker #dp3 disabled="false"></mat-datepicker>
       </mat-form-field>
 
-      <button
-        mat-button
-        color="accent"
-        [disabled]="order.invalid"
-      >
-        Create Order
-      </button>
+      <div fxLayout="row">
+        <button
+          mat-button
+          [disabled]="order.invalid"
+        >
+          Add Order
+        </button>
+        <button mat-button (click)="cancel()" >
+          Cancel
+        </button>
+
+      </div>
     </form>
   </div>
 
