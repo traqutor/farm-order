@@ -14,7 +14,7 @@
   <mat-divider></mat-divider>
 
   <div *ngIf="order">
-    <form [formGroup]="order" (ngSubmit)="onSubmit(order)" fxLayout="column" class="half-width">
+    <form [formGroup]="order" fxLayout="column" class="half-width">
 
       <!--tons-->
       <mat-form-field>
@@ -135,6 +135,7 @@
         <button
           mat-raised-button
           color="primary"
+          (click)="onSubmit(order)"
           [disabled]="order.invalid"
         >
           Save Order

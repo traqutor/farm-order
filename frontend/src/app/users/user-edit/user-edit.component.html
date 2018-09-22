@@ -11,7 +11,7 @@
   <mat-divider></mat-divider>
 
   <div *ngIf="user">
-    <form [formGroup]="user" (ngSubmit)="onSubmit(user)" fxLayout="column" class="half-width">
+    <form [formGroup]="user" fxLayout="column" class="half-width">
       <mat-form-field>
         <input
           matInput
@@ -77,21 +77,31 @@
           Role is required.
         </mat-error>
       </mat-form-field>
-      <button
-        mat-raised-button
-        type="button"
-        color="primary"
-        (click)="resetPassword()"
-      >
-        Reset Password
-      </button>
-      <button
-        mat-button
-        color="accent"
-        [disabled]="user.invalid"
-      >
-        Edit User
-      </button>
+
+      <div fxLayout="row">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSubmit(user)"
+          [disabled]="user.invalid"
+        >
+          Save Changes
+        </button>
+
+        <button
+          mat-raised-button
+          type="button"
+          (click)="resetPassword()"
+        >
+          Reset Password
+        </button>
+
+        <button mat-button (click)="cancel()" >
+          Cancel
+        </button>
+
+
+      </div>
     </form>
   </div>
 </div>

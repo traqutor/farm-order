@@ -118,7 +118,6 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
   displayRow(row, column): string {
-    console.log('row, column', row, column);
     if (typeof row === 'object' && row !== null && row.name !== null) {
       if (column.value === 'silos') {
         return row[0].name;

@@ -14,7 +14,7 @@
   <mat-divider></mat-divider>
 
   <div>
-    <form [formGroup]="order" (ngSubmit)="onSubmit()" fxLayout="column" class="half-width"
+    <form [formGroup]="order" fxLayout="column" class="half-width"
           [ngClass.xs]="{'half-width':false, 'full-width':true}">
 
       <mat-form-field>
@@ -95,13 +95,16 @@
       </mat-form-field>
 
       <div fxLayout="row">
+
         <button
           mat-raised-button
+          (click)="onSubmit()"
           color="primary"
           [disabled]="order.invalid"
         >
           Add Order
         </button>
+
         <button mat-button (click)="cancel()" >
           Cancel
         </button>

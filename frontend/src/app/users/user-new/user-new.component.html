@@ -14,7 +14,7 @@
   <mat-divider></mat-divider>
 
   <div>
-    <form [formGroup]="user" (ngSubmit)="onSubmit()" fxLayout="column" class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
+    <form [formGroup]="user" fxLayout="column" class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
       <mat-form-field>
         <input
           matInput
@@ -109,13 +109,23 @@
       <mat-error *ngIf="user.get('confirmPassword').hasError('MatchPassword') && user.get('confirmPassword').touched">
         Password not match
       </mat-error>
-      <button
-        mat-button
-        color="accent"
-        [disabled]="user.invalid"
-      >
-        Create User
-      </button>
+
+      <div fxLayout="row">
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSubmit()"
+          [disabled]="user.invalid"
+        >
+          Create User
+        </button>
+
+        <button mat-button (click)="cancel()" >
+          Cancel
+        </button>
+
+      </div>
     </form>
   </div>
 
