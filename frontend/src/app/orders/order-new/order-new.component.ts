@@ -70,10 +70,8 @@ export class OrderNewComponent implements OnInit {
     this.sheds$ = this.sharedService.getSheds(farm.id, null);
   }
 
-  getSiloses(sheds: Array<ISilo>) {
-    console.log('sheds', sheds);
+  getSilos(sheds: Array<ISilo>) {
     this.silos$ = this.sharedService.getSilos(sheds, null);
-    console.log('this.silos$', this.silos$);
   }
 
   onSubmit() {

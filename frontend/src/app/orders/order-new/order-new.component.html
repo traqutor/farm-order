@@ -59,7 +59,7 @@
       <!--sheds-->
       <mat-form-field *ngIf="this.order.value.farm !== null && (sheds$ | async) as sheds">
         <mat-select #selectedSheds placeholder="Select Sheds"
-                    (valueChange)="getSiloses(selectedSheds.value)"
+                    (valueChange)="getSilos(selectedSheds.value)"
                     formControlName="sheds"
                     multiple>
           <mat-option *ngFor="let shed of sheds.results" [value]="shed">
@@ -76,7 +76,7 @@
 
       <mat-form-field
         *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
-        <mat-select placeholder="Select Sheds" formControlName="silos" multiple>
+        <mat-select placeholder="Select Silos" formControlName="silos" multiple>
           <mat-option *ngFor="let silo of silos.results" [value]="silo">
             {{silo.name}}
           </mat-option>
@@ -96,7 +96,8 @@
 
       <div fxLayout="row">
         <button
-          mat-button
+          mat-raised-button
+          color="primary"
           [disabled]="order.invalid"
         >
           Add Order

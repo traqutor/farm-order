@@ -23,9 +23,9 @@
 
   <div *ngIf="(customers$ | async) as customers">
     <mat-form-field class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
-      <mat-select #option (valueChange)="filterTableByCustomer(option)" placeholder="Select customer to filter">
+      <mat-select #option (valueChange)="filterTableByCustomer(option)" placeholder="Filter users by Customer">
         <mat-option value="">
-          ALL
+          All Customers
         </mat-option>
         <mat-option *ngFor="let customer of customers.results" [value]="customer">
           {{customer.name}}

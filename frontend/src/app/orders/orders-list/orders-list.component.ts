@@ -1,12 +1,13 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatInput, MatOption, MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
-import { OrdersService } from '../orders.service';
-import { Order } from '../../shared/models/order';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatSelect} from '@angular/material';
 import { DatePipe } from '@angular/common';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { interval, merge, Observable, of } from 'rxjs';
+
+import { OrdersService } from '../orders.service';
+import { IOrder } from '../../shared/models/order';
 import { Farm } from '../../shared/models/farm';
 import { SharedService } from '../../shared/shared.service';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../core/auth/auth.service';
 import { DialogService } from '../../shared/dialogs/dialog.service';
 import { User } from '../../shared/models/user';
@@ -18,7 +19,7 @@ import { User } from '../../shared/models/user';
 })
 export class OrdersListComponent implements OnInit, OnDestroy {
 
-  dataSource: Order[] = [];
+  dataSource: IOrder[] = [];
   displayedColumns = [
     { value: 'status', name: 'Status' },
     { value: 'orderChangeReason', name: 'Order change reason' },

@@ -15,6 +15,8 @@
 
   <div *ngIf="order">
     <form [formGroup]="order" (ngSubmit)="onSubmit(order)" fxLayout="column" class="half-width">
+
+      <!--tons-->
       <mat-form-field>
         <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
         <mat-error
@@ -26,9 +28,13 @@
           Minimum tons ordered is 1.
         </mat-error>
       </mat-form-field>
+
+      <!--farm-->
       <mat-form-field *ngIf="(farms$ | async) as farms">
-        <mat-select #option placeholder="Select Farm" formControlName="farm" [compareWith]="compare"
-                    (valueChange)="getRations(option.value)">
+        <mat-select #option placeholder="Select Farm"
+                    formControlName="farm"
+                    [compareWith]="compare"
+                    (valueChange)="getRations(option.value); getSheds(option.value)">
           <mat-option *ngFor="let farm of farms.results" [value]="farm">
             {{farm.name}}
           </mat-option>
@@ -38,8 +44,12 @@
           Farm is required.
         </mat-error>
       </mat-form-field>
+
+      <!--rations-->
       <mat-form-field *ngIf="this.order.value.farm !== null && (rations$ | async) as rations">
-        <mat-select placeholder="Select Ration" formControlName="ration" [compareWith]="compare">
+        <mat-select placeholder="Select Ration"
+                    formControlName="ration"
+                    [compareWith]="compare">
           <mat-option *ngFor="let ration of rations.results" [value]="ration">
             {{ration.name}}
           </mat-option>
@@ -49,8 +59,12 @@
           Ration is required.
         </mat-error>
       </mat-form-field>
+
+      <!--status-->
       <mat-form-field *ngIf="(status$ | async) as status">
-        <mat-select placeholder="Select Status" formControlName="status" [compareWith]="compare">
+        <mat-select placeholder="Select Status"
+                    formControlName="status"
+                    [compareWith]="compare">
           <mat-option *ngFor="let status of status.results" [value]="status">
             {{status.name}}
           </mat-option>
@@ -60,8 +74,45 @@
           Farm is required.
         </mat-error>
       </mat-form-field>
+
+      <!--sheds-->
+      <mat-form-field *ngIf="this.order.value.farm !== null && (sheds$ | async) as sheds">
+        <mat-select #selectedSheds placeholder="Select Sheds"
+                    (valueChange)="getSilos(selectedSheds.value)"
+                    formControlName="sheds"
+                    [compareWith]="compare"
+                    multiple>
+          <mat-option *ngFor="let shed of sheds.results" [value]="shed">
+            {{shed.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('sheds').hasError('required') && order.get('sheds').touched">
+          Sheds are required.
+        </mat-error>
+      </mat-form-field>
+
+      <!--silos-->
+      <mat-form-field
+        *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
+        <mat-select placeholder="Select Silos"
+                    formControlName="silos"
+                    [compareWith]="compare"
+                    multiple>
+          <mat-option *ngFor="let silo of silos.results" [value]="silo">
+            {{silo.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('silos').hasError('required') && order.get('silos').touched">
+          Silos are required.
+        </mat-error>
+      </mat-form-field>
+
+      <!--reason change-->
       <mat-form-field *ngIf="(orderChangeReason$ | async) as orderChangeReasons">
-        <mat-select placeholder="Select order change reason" formControlName="orderChangeReason"
+        <mat-select placeholder="Select order change reason"
+                    formControlName="orderChangeReason"
                     [compareWith]="compare">
           <mat-option *ngFor="let orderChangeReason of orderChangeReasons.results" [value]="orderChangeReason">
             {{orderChangeReason.name}}
@@ -72,18 +123,26 @@
           Farm is required.
         </mat-error>
       </mat-form-field>
+
+      <!--devivery date-->
       <mat-form-field>
         <input matInput [matDatepicker]="dp3" placeholder="Delivery Date" formControlName="deliveryDate">
         <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
         <mat-datepicker #dp3 disabled="false"></mat-datepicker>
       </mat-form-field>
-      <button
-        mat-button
-        color="accent"
-        [disabled]="order.invalid"
-      >
-        Edit Order
-      </button>
+
+      <div fxLayout="row">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="order.invalid"
+        >
+          Save Order
+        </button>
+        <button mat-button (click)="cancel()" >
+          Cancel
+        </button>
+      </div>
     </form>
   </div>
 
