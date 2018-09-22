@@ -25,6 +25,13 @@ namespace FarmOrder.Services.Farms
         {
             int[] shedIds = model.Sheds.Select(s => s.Id).ToArray();
 
+            if (shedIds.Count() == 0)
+                return new SearchResults<SiloListEntryViewModel>
+                {
+                    ResultsCount = 0,
+                    Results = new List<SiloListEntryViewModel>()
+                };
+
             FarmUser farmUser = _context.FarmUsers.SingleOrDefault(fu => fu.UserId == userId && fu.Farm.Sheds.Any(s => shedIds.Contains(s.Id)));
 
             if (farmUser == null)
