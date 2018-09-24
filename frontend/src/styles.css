@@ -18,6 +18,10 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
   padding: 16px;
 }
 
+.small-padding-content {
+  padding: 8px;
+}
+
 .full-width {
   width: 100%;
 }

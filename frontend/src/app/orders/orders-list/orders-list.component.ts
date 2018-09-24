@@ -23,14 +23,15 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   displayedColumns = [
     {value: 'status', name: 'Status'},
     {value: 'orderChangeReason', name: 'Order change reason'},
+    {value: 'creationDate', name: 'Add Order Date'},
+    {value: 'modificationDate', name: 'Modification Date'},
     {value: 'deliveryDate', name: 'Delivery Date'},
     {value: 'tonsOrdered', name: 'Tons ordered'},
     {value: 'ration', name: 'Ration'},
-    {value: 'farm', name: 'Farm'},
-    {value: 'silos', name: 'Silos'},
+    {value: 'farm', name: 'Farm'}
   ];
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
-  columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'ration', 'farm', 'silos', 'settings'];
+  columnsToRender = ['status', 'creationDate', 'modificationDate', 'deliveryDate', 'orderChangeReason', 'tonsOrdered', 'ration', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
 
@@ -124,7 +125,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       } else {
         return row.name;
       }
-    } else if (column.value === 'deliveryDate') {
+    } else if (column.value.indexOf('Date') !== -1 ) {
       return this.datePipe.transform(row, 'dd/MM/yyyy');
     }
     return row;
