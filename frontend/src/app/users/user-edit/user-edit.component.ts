@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { Role } from '../../shared/models/role';
-import { User } from '../../shared/models/user';
-import { SharedService } from '../../shared/shared.service';
-import { UsersService } from '../users.service';
-import { MatSnackBar } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Customer } from '../../shared/models/customer';
-import { Farm } from '../../shared/models/farm';
-import { CustomerSite } from '../../shared/models/customer-site';
-import { DialogService } from '../../shared/dialogs/dialog.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {Location} from '@angular/common';
+import {Role} from '../../shared/models/role';
+import {User} from '../../shared/models/user';
+import {SharedService} from '../../shared/shared.service';
+import {UsersService} from '../users.service';
+import {MatSnackBar} from '@angular/material';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Customer} from '../../shared/models/customer';
+import {Farm} from '../../shared/models/farm';
+import {CustomerSite} from '../../shared/models/customer-site';
+import {DialogService} from '../../shared/dialogs/dialog.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -31,6 +32,7 @@ export class UserEditComponent implements OnInit {
               private snackBar: MatSnackBar,
               private router: Router,
               private route: ActivatedRoute,
+              private _location: Location,
               private dialogService: DialogService) {
   }
 
@@ -75,7 +77,7 @@ export class UserEditComponent implements OnInit {
     if (this.user) {
       this.user.controls.farms.setValue(null);
     }
-    this.farms$ = this.sharedService.getFarms({ page: null, customerSites });
+    this.farms$ = this.sharedService.getFarms({page: null, customerSites});
   }
 
   resetFarms() {
@@ -110,7 +112,7 @@ export class UserEditComponent implements OnInit {
   }
 
   onSubmit() {
-    const { value, valid } = this.user;
+    const {value, valid} = this.user;
     value.customer.customerSites = value.customerSites;
     delete value.customerSites;
     if (valid) {
@@ -123,6 +125,10 @@ export class UserEditComponent implements OnInit {
           this.dialogService.alert(err.error);
         });
     }
+  }
+
+  cancel() {
+    this._location.back();
   }
 
 }

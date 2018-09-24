@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SharedService } from '../../shared/shared.service';
-import { OrdersService } from '../orders.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
-import { Observable } from 'rxjs';
-import { Farm } from '../../shared/models/farm';
-import { OrderChangeReason, Status } from '../../shared/models/order';
-import { DialogService } from '../../shared/dialogs/dialog.service';
-import { Ration } from '../../shared/models/ration';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material';
+import {Location} from "@angular/common";
+import {Observable} from 'rxjs';
+
+import {SharedService} from '../../shared/shared.service';
+import {OrdersService} from '../orders.service';
+import {Farm} from '../../shared/models/farm';
+import {OrderChangeReason, Status} from '../../shared/models/order';
+import {DialogService} from '../../shared/dialogs/dialog.service';
+import {Ration} from '../../shared/models/ration';
+import {ISilo} from "../../shared/models/silo";
+import {IShed} from "../../shared/models/shed";
 
 @Component({
   selector: 'app-order-edit',
@@ -23,6 +27,7 @@ export class OrderEditComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private snackBar: MatSnackBar,
+              private _location: Location,
               private dialogService: DialogService) {
   }
 
@@ -30,6 +35,9 @@ export class OrderEditComponent implements OnInit {
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   rations$: Observable<{ results: Array<Ration>, resultsCount: number }>;
   status$: Observable<{ results: Array<Status>, resultsCount: number }>;
+  sheds$: Observable<{ results: [IShed], resultsCount: number }>;
+  silos$: Observable<{ results: [ISilo], resultsCount: number }>;
+
   orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultsCount: number }>;
   orderId;
 
@@ -40,6 +48,9 @@ export class OrderEditComponent implements OnInit {
         this.orderId = +params['id'];
         this.ordersService.getOrderById(this.orderId)
           .subscribe(order => {
+
+            console.log('order', order);
+
             this.order = this.fb.group({
               tonsOrdered: [order.tonsOrdered, [
                 Validators.required,
@@ -54,6 +65,12 @@ export class OrderEditComponent implements OnInit {
               ration: [order.ration, [
                 Validators.required
               ]],
+              sheds: [order.sheds, [
+                Validators.required
+              ]],
+              silos: [order.silos, [
+                Validators.required
+              ]],
               status: [order.status, [
                 Validators.required
               ]],
@@ -61,12 +78,29 @@ export class OrderEditComponent implements OnInit {
                 Validators.required
               ]]
             });
+
             this.getRations(order.farm);
+
+            this.sheds$ = this.sharedService.getSheds(order.farm.id, null);
+            this.sheds$.subscribe((res: {results: Array<IShed>, resultsCount: number}) => {
+              let tmp: Array<IShed> = [];
+              res.results.forEach((shed: IShed) => {
+                order.silos.forEach( (silo: ISilo ) => {
+                  if (shed.id === silo.shedId) {
+                    tmp.push(shed);
+                  }
+                });
+              });
+              this.order.controls.sheds.setValue(tmp);
+              this.silos$ = this.sharedService.getSilos(tmp, null);
+            });
+
+
           }, err => {
             this.dialogService.alert(err.error);
           });
       });
-    this.farms$ = this.sharedService.getUserAssignedFarms();
+    this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.status$ = this.sharedService.getStatus();
     this.orderChangeReason$ = this.sharedService.getOrderChangeReason();
   }
@@ -81,13 +115,24 @@ export class OrderEditComponent implements OnInit {
     this.rations$ = this.sharedService.getRations(farm.id);
   }
 
+  getSheds(farm: Farm) {
+    this.sheds$ = this.sharedService.getSheds(farm.id, null);
+  }
+
+  getSilos(sheds: Array<IShed>) {
+    if (this.order) {
+      this.order.controls.silos.setValue(null);
+    }
+    this.silos$ = this.sharedService.getSilos(sheds, null);
+  }
+
   onSubmit() {
-    const { value, valid } = this.order;
+    const {value, valid} = this.order;
     console.log(value);
     if (valid) {
       this.ordersService.putOrder(this.orderId, value)
         .subscribe(() => {
-          this.snackBar.open('Order Edited!', '', {
+          this.snackBar.open('Order Changed!', '', {
             duration: 2000,
           });
         }, err => {
@@ -95,4 +140,9 @@ export class OrderEditComponent implements OnInit {
         });
     }
   }
+
+  cancel() {
+    this._location.back();
+  }
+
 }

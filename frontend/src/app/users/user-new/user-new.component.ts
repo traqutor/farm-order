@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Role } from '../../shared/models/role';
-import { User } from '../../shared/models/user';
 import { SharedService } from '../../shared/shared.service';
 import { PasswordValidation } from '../../shared/validators/match-password.validator';
 import { UsersService } from '../users.service';
@@ -31,6 +31,7 @@ export class UserNewComponent implements OnInit {
               private snackBar: MatSnackBar,
               private router: Router,
               private route: ActivatedRoute,
+              private _location: Location,
               private dialogService: DialogService) {
   }
 
@@ -89,6 +90,9 @@ export class UserNewComponent implements OnInit {
           this.dialogService.alert(err.error);
         });
     }
+  }
+  cancel() {
+    this._location.back();
   }
 
 }

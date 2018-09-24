@@ -18,5 +18,8 @@ namespace FarmOrder.Models.Orders
         public RationListEntryViewModel Ration { get; set; }
         [Required]
         public FarmListEntryViewModel Farm { get; set; }
+        [Required]
+        public List<SiloListEntryViewModel> Silos { get; set; }
+        
     }
 }

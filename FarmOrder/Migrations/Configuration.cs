@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using FarmOrder.Data.Entities.Farms.Sheds;
+
 namespace FarmOrder.Migrations
 {
     using FarmOrder.Data.Entities;
@@ -52,9 +55,6 @@ namespace FarmOrder.Migrations
 
             #endregion
 
-         
-
-
             #region customers and sites creation
             
             Customer customer1 = new Customer()
@@ -68,7 +68,7 @@ namespace FarmOrder.Migrations
             Customer customer2 = new Customer()
             {
                 Id = 2,
-                CompanyName = "Familyfoods",
+                CompanyName = "GordynPalmer",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
@@ -76,7 +76,7 @@ namespace FarmOrder.Migrations
             Customer customer3 = new Customer()
             {
                 Id = 3,
-                CompanyName = "Wholenature",
+                CompanyName = "Baiada",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
@@ -88,7 +88,7 @@ namespace FarmOrder.Migrations
             CustomerSite site1 = new CustomerSite()
             {
                 Id = 1,
-                SiteName = "Melbourne",
+                SiteName = "Home",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 CustomerId = customer1.Id
@@ -106,26 +106,46 @@ namespace FarmOrder.Migrations
             CustomerSite site3 = new CustomerSite()
             {
                 Id = 3,
-                SiteName = "Home",
+                SiteName = "Hanwood",
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 CustomerId = customer3.Id
             };
 
-            CustomerSite site4 = new CustomerSite()
-            {
-                Id = 4,
-                SiteName = "Brisbane",
-                CreationDate = DateTime.UtcNow,
-                ModificationDate = DateTime.UtcNow,
-                CustomerId = customer1.Id
-            };
-
             context.CustomerSites.AddOrUpdate(site1);
             context.CustomerSites.AddOrUpdate(site2);
             context.CustomerSites.AddOrUpdate(site3);
-            context.CustomerSites.AddOrUpdate(site4);
-            
+
+            #endregion
+
+            #region rations creation
+
+            Ration cs1ration1 = new Ration()
+            {
+                Name = "Ration 1",
+                Description = "100% wheat ration",
+                CustomerSite = site3
+            };
+
+            Ration cs1ration2 = new Ration()
+            {
+                Name = "Ration 2",
+                Description = "100% flour ration",
+                CustomerSite = site3
+            };
+
+            Ration cs1ration3 = new Ration()
+            {
+                Name = "Ration 3",
+                Description = "50% wheat 50% flour ration",
+                CustomerSite = site3
+            };
+
+            context.Rations.AddOrUpdate(cs1ration1);
+            context.Rations.AddOrUpdate(cs1ration2);
+            context.Rations.AddOrUpdate(cs1ration3);
+
+
             #endregion
 
             #region SystemAdmin creation
@@ -135,7 +155,7 @@ namespace FarmOrder.Migrations
             //user.Email = "sysadmin@gmail.com";
             user.EmailConfirmed = true;
 
-            string userPWD = "Profisol";
+            string userPWD = "Password";
 
             var chkUser = UserManager.Create(user, userPWD);
 
@@ -149,7 +169,7 @@ namespace FarmOrder.Migrations
             #region users creation
 
             var user2 = new User();
-            user2.UserName = "FamilyFoodsAdmin";
+            user2.UserName = "GordynPalmer";
             //user.Email = "sysadmin@gmail.com";
             user2.EmailConfirmed = true;
             user2.CustomerId = 2;
@@ -160,12 +180,12 @@ namespace FarmOrder.Migrations
 
             if (chkUser2.Succeeded)
             {
-                var result = UserManager.AddToRole(user2.Id, "CustomerAdmin");
+                var result = UserManager.AddToRole(user2.Id, "Admin");
             }
 
 
             var user3 = new User();
-            user3.UserName = "WholenatureAdmin";
+            user3.UserName = "Baiada";
             //user.Email = "sysadmin@gmail.com";
             user3.EmailConfirmed = true;
             user3.CustomerId = 3;
@@ -179,63 +199,28 @@ namespace FarmOrder.Migrations
                 var result = UserManager.AddToRole(user3.Id, "CustomerAdmin");
             }
 
-            var user4 = new User();
-            user4.UserName = "ProfisolAdmin";
-            user4.EmailConfirmed = true;
-            user4.CustomerId = 1;
-
-            string user4PWD = "Password";
-
-            var chkUser4 = UserManager.Create(user4, user3PWD);
-
-            if (chkUser4.Succeeded)
-            {
-                var result = UserManager.AddToRole(user4.Id, "CustomerAdmin");
-            }
-
-            var user5 = new User();
-            user5.UserName = "FamilyfoodsBrisbane";
-            user5.EmailConfirmed = true;
-            user5.CustomerId = 2;
-
-            string user5PWD = "Password";
-
-            var chkUser5 = UserManager.Create(user5, user3PWD);
-
-            if (chkUser5.Succeeded)
-            {
-                var result = UserManager.AddToRole(user5.Id, "CustomerAdmin");
-            }
-
             #endregion
 
             #region binding users to the sites
             //not adding if already added
-            if(context.CustomerSiteUsers.Count() == 0) { 
-                 CustomerSiteUser csu1 = new CustomerSiteUser
-                 {
-                     Id = 1,
-                     UserId = user2.Id,
-                     CustomerSiteId = site1.Id
-                 };
+            if (context.CustomerSiteUsers.Count() == 0)
+            {
+                CustomerSiteUser csu1 = new CustomerSiteUser
+                {
+                    Id = 1,
+                    UserId = user2.Id,
+                    CustomerSiteId = site2.Id
+                };
 
                 CustomerSiteUser csu2 = new CustomerSiteUser
                 {
                     Id = 2,
                     UserId = user3.Id,
-                    CustomerSiteId = site2.Id
-                };
-
-                CustomerSiteUser csu3 = new CustomerSiteUser
-                {
-                    Id = 3,
-                    UserId = user5.Id,
-                    CustomerSiteId = site4.Id
+                    CustomerSiteId = site3.Id
                 };
 
                 context.CustomerSiteUsers.AddOrUpdate(csu1);
                 context.CustomerSiteUsers.AddOrUpdate(csu2);
-                context.CustomerSiteUsers.AddOrUpdate(csu3);
             }
 
             #endregion
@@ -294,42 +279,135 @@ namespace FarmOrder.Migrations
 
             #endregion
 
-
             #region Farms
             if (context.Farms.Count() == 0)
             {
                 Farm farm1 = new Farm()
                 {
                     Id = 1,
-                    Name = "Sunny meadow in Melbourne",
-                    CustomerSiteId = 1
+                    Name = "Farm 1",
+                    CustomerSiteId = 3
                 };
 
                 Farm farm2 = new Farm()
                 {
                     Id = 2,
-                    Name = "Kirbiln in Home",
-                    CustomerSiteId = 2
+                    Name = "Farm 2",
+                    CustomerSiteId = 3
                 };
 
                 Farm farm3 = new Farm()
                 {
                     Id = 3,
-                    Name = "MacClaggen in Home",
+                    Name = "Farm 3",
                     CustomerSiteId = 3
                 };
 
                 Farm farm4 = new Farm()
                 {
                     Id = 3,
-                    Name = "Kukurydza in Brisbane",
-                    CustomerSiteId = 4
+                    Name = "Farm 4",
+                    CustomerSiteId = 3
                 };
+
+                List<Farm> farms = new List<Farm>();
+
+                farms.Add(farm1);
+                farms.Add(farm2);
+                farms.Add(farm3);
+                farms.Add(farm4);
+
+                foreach (var farm in farms)
+                {
+                    #region sheds and siloses
+
+                    Shed shed1Farm1 = new Shed()
+                    {
+                        Name = $"Shed1 in {farm.Name}",
+                        FarmId = farm.Id,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo1Shed1 = new Silo()
+                    {
+                        Name = $"Silo1 in {shed1Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed1Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo2Shed1 = new Silo()
+                    {
+                        Name = $"Silo2 in {shed1Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed1Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Shed shed2Farm1 = new Shed()
+                    {
+                        Name = $"Shed2 in {farm1.Name}",
+                        FarmId = farm.Id,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo1Shed2 = new Silo()
+                    {
+                        Name = $"Silo1 in {shed2Farm1.Name}",
+                        Capacity = 20,
+                        Occupancy = 0,
+                        Shed = shed2Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo2Shed2 = new Silo()
+                    {
+                        Name = $"Silo2 in {shed2Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed2Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+                    Silo silo3Shed2 = new Silo()
+                    {
+                        Name = $"Silo3 in {shed2Farm1.Name}",
+                        Capacity = 30,
+                        Occupancy = 0,
+                        Shed = shed2Farm1,
+                        CreationDate = DateTime.UtcNow,
+                        ModificationDate = DateTime.UtcNow
+                    };
+
+
+                    shed1Farm1.Siloses.Add(silo1Shed1);
+                    shed1Farm1.Siloses.Add(silo2Shed1);
+
+                    shed2Farm1.Siloses.Add(silo1Shed2);
+                    shed2Farm1.Siloses.Add(silo2Shed2);
+                    shed2Farm1.Siloses.Add(silo3Shed2);
+
+
+                    farm.Sheds.Add(shed1Farm1);
+                    farm.Sheds.Add(shed2Farm1);
+                    #endregion
+                }
 
                 context.Farms.Add(farm1);
                 context.Farms.Add(farm2);
                 context.Farms.Add(farm3);
                 context.Farms.Add(farm4);
+
+
+
             }
             #endregion
 

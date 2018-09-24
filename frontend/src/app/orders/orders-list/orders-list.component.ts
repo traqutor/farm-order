@@ -1,15 +1,16 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatInput, MatOption, MatPaginator, MatSelect, MatTableDataSource } from '@angular/material';
-import { OrdersService } from '../orders.service';
-import { Order } from '../../shared/models/order';
-import { DatePipe } from '@angular/common';
-import { interval, merge, Observable, of } from 'rxjs';
-import { Farm } from '../../shared/models/farm';
-import { SharedService } from '../../shared/shared.service';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
-import { AuthService } from '../../core/auth/auth.service';
-import { DialogService } from '../../shared/dialogs/dialog.service';
-import { User } from '../../shared/models/user';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator, MatSelect} from '@angular/material';
+import {DatePipe} from '@angular/common';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {interval, merge, Observable, of} from 'rxjs';
+
+import {OrdersService} from '../orders.service';
+import {IOrder} from '../../shared/models/order';
+import {Farm} from '../../shared/models/farm';
+import {SharedService} from '../../shared/shared.service';
+import {AuthService} from '../../core/auth/auth.service';
+import {DialogService} from '../../shared/dialogs/dialog.service';
+import {User} from '../../shared/models/user';
 
 @Component({
   selector: 'app-orders-list',
@@ -18,17 +19,18 @@ import { User } from '../../shared/models/user';
 })
 export class OrdersListComponent implements OnInit, OnDestroy {
 
-  dataSource: Order[] = [];
+  dataSource: IOrder[] = [];
   displayedColumns = [
-    { value: 'status', name: 'Status' },
-    { value: 'orderChangeReason', name: 'Order change reason' },
-    { value: 'deliveryDate', name: 'Delivery Date' },
-    { value: 'tonsOrdered', name: 'Tons ordered' },
-    { value: 'ration', name: 'Ration' },
-    { value: 'farm', name: 'Farm' },
+    {value: 'status', name: 'Status'},
+    {value: 'orderChangeReason', name: 'Order change reason'},
+    {value: 'deliveryDate', name: 'Delivery Date'},
+    {value: 'tonsOrdered', name: 'Tons ordered'},
+    {value: 'ration', name: 'Ration'},
+    {value: 'farm', name: 'Farm'},
+    {value: 'silos', name: 'Silos'},
   ];
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
-  columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'ration', 'farm', 'settings'];
+  columnsToRender = ['status', 'orderChangeReason', 'deliveryDate', 'tonsOrdered', 'ration', 'farm', 'silos', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
 
@@ -49,7 +51,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
-    this.farms$ = this.sharedService.getUserAssignedFarms();
+    this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.user = this.authService.getUser();
     this.subscribe = merge(this.paginator.page, interval(5000), this.matSelect.valueChange)
       .pipe(
@@ -115,9 +117,13 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       });
   }
 
-  displayRow(row, column) {
+  displayRow(row, column): string {
     if (typeof row === 'object' && row !== null && row.name !== null) {
-      return row.name;
+      if (column.value === 'silos') {
+        return row[0].name;
+      } else {
+        return row.name;
+      }
     } else if (column.value === 'deliveryDate') {
       return this.datePipe.transform(row, 'yyyy-MM-dd');
     }

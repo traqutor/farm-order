@@ -2,6 +2,7 @@
 using FarmOrder.Data.Entities.Customers;
 using FarmOrder.Data.Entities.CustomerSites;
 using FarmOrder.Data.Entities.Farms;
+using FarmOrder.Data.Entities.Farms.Sheds;
 using FarmOrder.Data.Entities.Orders;
 using FarmOrder.Data.Initializers;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -37,6 +38,10 @@ namespace FarmOrder.Data
         public virtual DbSet<Ration> Rations { get; set; }
 
         public virtual DbSet<Farm> Farms { get; set; }
+        public virtual DbSet<Shed> Sheds { get; set; }
+        public virtual DbSet<Silo> Silos { get; set; }
+
+        public virtual DbSet<OrderSilo> OrdersSilos { get; set; }
         public virtual DbSet<FarmUser> FarmUsers { get; set; }
 
         public virtual DbSet<Order> Orders { get; set; }
