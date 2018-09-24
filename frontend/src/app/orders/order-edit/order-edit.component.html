@@ -7,18 +7,22 @@
   >
     <div>
       <h2 class="mat-title">Edit Order</h2>
-      <p class="mat-subheading-2">Here you edit existing order.</p>
+      <p class="mat-subheading-2">Edit the order definition and select the change reason.</p>
     </div>
   </div>
 
   <mat-divider></mat-divider>
 
-  <div *ngIf="order">
+  <div class="padding-content" *ngIf="order">
     <form [formGroup]="order" fxLayout="column" class="half-width">
 
       <!--tons-->
       <mat-form-field>
-        <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
+        <input matInput
+               type="number"
+               placeholder="Tons ordered"
+               formControlName="tonsOrdered"
+               (change)="getTotalOrderAmount()">
         <mat-error
           *ngIf="order.get('tonsOrdered').hasError('required') && order.get('tonsOrdered').touched">
           Tons ordered is required.
@@ -95,6 +99,7 @@
       <!--silos-->
       <mat-form-field
         *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
+
         <mat-select placeholder="Select Silos"
                     formControlName="silos"
                     [compareWith]="compare"
@@ -103,11 +108,32 @@
             {{silo.name}}
           </mat-option>
         </mat-select>
+
         <mat-error
           *ngIf="order.get('silos').hasError('required') && order.get('silos').touched">
           Silos are required.
         </mat-error>
       </mat-form-field>
+
+      <div>
+        <div *ngFor="let silo of order.controls.silos.value" fxLayout="row">
+          <div>{{silo.name}}: <button mat-button color="primary" [matMenuTriggerFor]="menu">
+            <mat-icon>arrow_drop_down</mat-icon>
+            {{silo.amount}}
+          </button>
+            <mat-menu #menu="matMenu" >
+              <button mat-menu-item *ngFor="let i of [2, 5, 10, 15, 20, 25, 30]"
+              (click)="silo.amount = i; recalculateOrderTonnage()"
+              >{{i}} tons</button>
+            </mat-menu> tons of total silo capacity: {{silo.capacity}} </div>
+        </div>
+      </div>
+
+      <div>
+        <p>Total ordered vs. Silos distributed tonnage: <b>{{orderTotalTonnage}}</b> / <b>{{orderSilosTonnage}}</b>
+        </p>
+      </div>
+
 
       <!--reason change-->
       <mat-form-field *ngIf="(orderChangeReason$ | async) as orderChangeReasons">
@@ -135,12 +161,12 @@
         <button
           mat-raised-button
           color="primary"
-          (click)="onSubmit(order)"
+          (click)="onSubmit()"
           [disabled]="order.invalid"
         >
           Save Order
         </button>
-        <button mat-button (click)="cancel()" >
+        <button mat-button (click)="cancel()">
           Cancel
         </button>
       </div>

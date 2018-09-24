@@ -7,18 +7,23 @@
   >
     <div>
       <h2 class="mat-title">New Order</h2>
-      <p class="mat-subheading-2">Here you create new order.</p>
+      <p class="mat-subheading-2">Define new order.</p>
     </div>
   </div>
 
   <mat-divider></mat-divider>
 
-  <div>
+  <div *ngIf="order" class="padding-content">
     <form [formGroup]="order" fxLayout="column" class="half-width"
           [ngClass.xs]="{'half-width':false, 'full-width':true}">
 
       <mat-form-field>
-        <input matInput type="number" placeholder="Tons ordered" formControlName="tonsOrdered">
+        <input matInput
+               type="number"
+               placeholder="Tons ordered"
+               formControlName="tonsOrdered"
+               (change)="getTotalOrderAmount()"
+        >
         <mat-error
           *ngIf="order.get('tonsOrdered').hasError('required') && order.get('tonsOrdered').touched">
           Tons ordered is required.
@@ -30,10 +35,10 @@
       </mat-form-field>
 
       <!--farms-->
-      <mat-form-field *ngIf="(farms$ | async) as farms">
+      <mat-form-field>
         <mat-select #option placeholder="Select Farm" formControlName="farm"
                     (valueChange)="getRations(option.value); getSheds(option.value)">
-          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+          <mat-option *ngFor="let farm of farms" [value]="farm">
             {{farm.name}}
           </mat-option>
         </mat-select>
@@ -73,7 +78,6 @@
       </mat-form-field>
 
       <!--silos-->
-
       <mat-form-field
         *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
         <mat-select placeholder="Select Silos" formControlName="silos" multiple>
@@ -86,6 +90,26 @@
           Silos are required.
         </mat-error>
       </mat-form-field>
+
+      <div>
+        <div *ngFor="let silo of order.controls.silos.value" fxLayout="row">
+          <div>{{silo.name}}: <button mat-button color="primary" [matMenuTriggerFor]="menu">
+            <mat-icon>arrow_drop_down</mat-icon>
+            {{silo.amount}}
+          </button>
+            <mat-menu #menu="matMenu" >
+              <button mat-menu-item *ngFor="let i of [2, 5, 10, 15, 20, 25, 30]"
+                      (click)="silo.amount = i; recalculateOrderTonnage()"
+              >{{i}} tons</button>
+            </mat-menu> tons of total silo capacity: {{silo.capacity}} </div>
+        </div>
+      </div>
+
+      <div>
+        <p>Total ordered vs. Silos distributed tonnage: <b>{{orderTotalTonnage}}</b> / <b>{{orderSilosTonnage}}</b>
+        </p>
+      </div>
+
 
       <!--order date-->
       <mat-form-field>

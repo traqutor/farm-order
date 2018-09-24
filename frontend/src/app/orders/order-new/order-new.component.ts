@@ -35,31 +35,45 @@ export class OrderNewComponent implements OnInit {
   rations$: Observable<{ results: [Ration], resultsCount: number }>;
   sheds$: Observable<{ results: [IShed], resultsCount: number }>;
   silos$: Observable<{ results: [ISilo], resultsCount: number }>;
+  farms: Array<Farm> = [];
+  orderTotalTonnage: number = 0;
+  orderSilosTonnage: number = 0;
 
 
   ngOnInit() {
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
-    this.order = this.fb.group({
-      tonsOrdered: [null, [
-        Validators.required,
-        Validators.min(1),
-      ]],
-      deliveryDate: [null, [
-        Validators.required
-      ]],
-      farm: [null, [
-        Validators.required
-      ]],
-      ration: [null, [
-        Validators.required
-      ]],
-      sheds: [null, [
-        Validators.required
-      ]],
-      silos: [null, [
-        Validators.required
-      ]]
+    this.farms$.subscribe((res: { results: Array<Farm>, resultsCount: number}) => {
+      this.farms = res.results;
+      this.order = this.fb.group({
+        tonsOrdered: [0, [
+          Validators.required,
+          Validators.min(1),
+        ]],
+        deliveryDate: [null, [
+          Validators.required
+        ]],
+        farm: [this.farms[0], [
+          Validators.required
+        ]],
+        ration: [null, [
+          Validators.required
+        ]],
+        sheds: [[], [
+          Validators.required
+        ]],
+        silos: [[], [
+          Validators.required
+        ]]
+      });
+      this.getRations(this.farms[0]);
+      this.getSheds(this.farms[0]);
     });
+  }
+
+  getTotalOrderAmount() {
+    if (this.order) {
+      this.orderTotalTonnage = this.order.controls.tonsOrdered.value;
+    }
   }
 
   getRations(farm: Farm) {
@@ -71,8 +85,30 @@ export class OrderNewComponent implements OnInit {
   }
 
   getSilos(sheds: Array<ISilo>) {
+    let tmp: Array<ISilo> = [];
+    if (this.order) {
+      sheds.forEach((shed: IShed) => {
+        this.order.controls.silos.value.forEach((silo: ISilo) => {
+          if (shed.id === silo.shedId) {
+            tmp.push(silo);
+          }
+        });
+      });
+      this.order.controls.silos.setValue(tmp);
+    }
+    this.recalculateOrderTonnage();
     this.silos$ = this.sharedService.getSilos(sheds, null);
   }
+
+  recalculateOrderTonnage() {
+    this.orderSilosTonnage = 0;
+    if (this.order) {
+      this.order.controls.silos.value.forEach( (silo: ISilo) => {
+        this.orderSilosTonnage = this.orderSilosTonnage + silo.amount;
+      } );
+    }
+  }
+
 
   onSubmit() {
     const {value, valid} = this.order;
