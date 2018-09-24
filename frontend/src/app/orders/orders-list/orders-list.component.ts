@@ -125,7 +125,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         return row.name;
       }
     } else if (column.value === 'deliveryDate') {
-      return this.datePipe.transform(row, 'yyyy-MM-dd');
+      return this.datePipe.transform(row, 'dd/MM/yyyy');
     }
     return row;
   }
