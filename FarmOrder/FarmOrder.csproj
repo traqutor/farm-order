@@ -317,6 +317,10 @@
     <Compile Include="Migrations\201809211617426_ShedsSiloses.Designer.cs">
       <DependentUpon>201809211617426_ShedsSiloses.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809240945159_OrderSiloAssignedAmount.cs" />
+    <Compile Include="Migrations\201809240945159_OrderSiloAssignedAmount.Designer.cs">
+      <DependentUpon>201809240945159_OrderSiloAssignedAmount.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -497,6 +501,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809211617426_ShedsSiloses.resx">
       <DependentUpon>201809211617426_ShedsSiloses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240945159_OrderSiloAssignedAmount.resx">
+      <DependentUpon>201809240945159_OrderSiloAssignedAmount.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

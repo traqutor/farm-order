@@ -169,7 +169,7 @@ namespace FarmOrder.Services
             if (orderStatus == null)
                 errors.Add("Invalid order status.");
 
-            Order oldOrder = _context.Orders.SingleOrDefault(o => o.Id == id);
+            Order oldOrder = _context.Orders.Include("Silos.Silo").SingleOrDefault(o => o.Id == id);
 
             if (oldOrder.Status?.Name == "Delivered")
                 errors.Add("Can not modify delivered order.");
@@ -211,16 +211,23 @@ namespace FarmOrder.Services
                     bindingsToRemove.Add(el);
             });
 
-            selectedSiloses.ForEach(el =>
+            model.Silos.ForEach(el =>
             {
-                if (!oldOrder.Silos.Any(s => s.SiloId == el.Id))
+                if (!oldOrder.Silos.Any(s => s.SiloId == el.Id)) { 
                     bindingsToAdd.Add(new OrderSilo {
                         SiloId = el.Id,
                         OrderId = oldOrder.Id,
+                        Amount = el.Amount,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow,
                         EntityStatus = Data.Entities.EntityStatus.NORMAL
                     });
+                }
+                else
+                {
+                    OrderSilo os = oldOrder.Silos.SingleOrDefault(s => s.SiloId == el.Id);
+                    os.Amount = el.Amount;
+                }
             });
 
             _context.OrdersSilos.RemoveRange(bindingsToRemove);
@@ -282,12 +289,13 @@ namespace FarmOrder.Services
                 RationId = selectedRation.Id
             };
 
-            foreach (var silo in selectedSiloses)
+            foreach (var silo in model.Silos)
             {
                 OrderSilo os = new OrderSilo()
                 {
                     Order = order,
-                    Silo = silo,
+                    SiloId = silo.Id,
+                    Amount = silo.Amount,
                     EntityStatus = Data.Entities.EntityStatus.NORMAL,
                     CreationDate = DateTime.UtcNow,
                     ModificationDate = DateTime.UtcNow
@@ -297,6 +305,8 @@ namespace FarmOrder.Services
 
             _context.Orders.Add(order);
             _context.SaveChanges();
+
+            order = _context.Orders.Include("Silos.Silo").SingleOrDefault(el => order.Id == el.Id);
 
             return new OrderListEntryViewModel(order);
         }
