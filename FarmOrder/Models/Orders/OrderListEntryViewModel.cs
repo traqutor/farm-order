@@ -28,7 +28,7 @@ namespace FarmOrder.Models.Orders
 
                 foreach (var os in el.Silos)
                 {
-                    Silos.Add(new SiloListEntryViewModel(os.Silo));
+                    Silos.Add(new SiloListEntryViewModel(os));
                 }
             }
         }

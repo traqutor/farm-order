@@ -19,6 +19,8 @@ namespace FarmOrder.Data.Entities.Orders
         [ForeignKey("SiloId")]
         public virtual Silo Silo { get; set; }
 
+        public int Amount { get; set; }
+
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
 
