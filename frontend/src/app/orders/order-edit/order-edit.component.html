@@ -102,8 +102,10 @@
 
         <mat-select placeholder="Select Silos"
                     formControlName="silos"
+                    (valueChange)="recalculateOrderTonnage()"
                     [compareWith]="compare"
-                    multiple>
+                    multiple
+        >
           <mat-option *ngFor="let silo of silos.results" [value]="silo">
             {{silo.name}}
           </mat-option>
@@ -115,22 +117,29 @@
         </mat-error>
       </mat-form-field>
 
-      <div>
-        <div *ngFor="let silo of order.controls.silos.value" fxLayout="row">
-          <div>{{silo.name}}: <button mat-button color="primary" [matMenuTriggerFor]="menu">
-            <mat-icon>arrow_drop_down</mat-icon>
-            {{silo.amount}}
-          </button>
-            <mat-menu #menu="matMenu" >
-              <button mat-menu-item *ngFor="let i of [2, 5, 10, 15, 20, 25, 30]"
-              (click)="silo.amount = i; recalculateOrderTonnage()"
-              >{{i}} tons</button>
-            </mat-menu> tons of total silo capacity: {{silo.capacity}} </div>
-        </div>
+      <div *ngFor="let silo of order.controls.silos.value"
+           fxLayout="row"
+           fxLayoutAlign="start center"
+      >
+        <span>{{silo.name}}:</span>
+
+        <mat-form-field class="silo-amount-input">
+          <input type="number"
+                 matInput
+                 [(ngModel)]="silo.amount"
+                 [ngModelOptions]="{standalone: true}"
+                 (ngModelChange)="recalculateOrderTonnage()">
+        </mat-form-field>
+
+        <span>of {{silo.capacity}} tons of silo capacity.</span>
       </div>
 
       <div>
-        <p>Total ordered vs. Silos distributed tonnage: <b>{{orderTotalTonnage}}</b> / <b>{{orderSilosTonnage}}</b>
+        <p>Total ordered vs. Silos distributed tonnage:
+          <button mat-button
+                  [color]="orderTotalTonnage<orderSilosTonnage? 'warn': 'primary'"
+          > {{orderTotalTonnage}} / {{orderSilosTonnage}}
+          </button>
         </p>
       </div>
 

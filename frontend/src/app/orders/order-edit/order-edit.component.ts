@@ -129,6 +129,7 @@ export class OrderEditComponent implements OnInit {
   }
 
   recalculateOrderTonnage() {
+    'aaaaa'
     this.orderSilosTonnage = 0;
     if (this.order) {
       this.order.controls.silos.value.forEach((silo: ISilo) => {
