@@ -100,12 +100,17 @@
         <mat-form-field class="silo-amount-input">
           <input type="number"
                  matInput
+                 maxlength="2"
+                 min="0"
+                 max="50"
+                 required
                  [(ngModel)]="silo.amount"
                  [ngModelOptions]="{standalone: true}"
                  (ngModelChange)="recalculateOrderTonnage()">
         </mat-form-field>
 
         <span>of {{silo.capacity}} tons of silo capacity.</span>
+
       </div>
 
       <div>
