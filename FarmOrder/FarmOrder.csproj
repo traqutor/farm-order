@@ -364,10 +364,10 @@
     <Content Include="app\assets\genius_fom.png" />
     <Content Include="app\favicon.ico" />
     <Content Include="app\index.html" />
-    <Content Include="app\main.0181f2d613418a62f37f.js" />
+    <Content Include="app\main.ad145d372ee51bf6c7d4.js" />
     <Content Include="app\polyfills.7a0e6866a34e280f48e7.js" />
     <Content Include="app\runtime.a66f828dca56eeb90e02.js" />
-    <Content Include="app\styles.20de4e095bbd2f8c5e9d.css" />
+    <Content Include="app\styles.f0f661a2eb6549243b87.css" />
     <Content Include="App_Data\FarmOrder.xml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -423,6 +423,7 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Properties\PublishProfiles\geniusfom - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\geniusfomtest - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
