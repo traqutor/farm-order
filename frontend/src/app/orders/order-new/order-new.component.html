@@ -92,6 +92,7 @@
       </mat-form-field>
 
       <div *ngFor="let silo of order.controls.silos.value"
+           [style.color]="silo.amount>silo.capacity ? 'red': ''"
            fxLayout="row"
            fxLayoutAlign="start center"
       >
@@ -109,7 +110,7 @@
                  (ngModelChange)="recalculateOrderTonnage()">
         </mat-form-field>
 
-        <span>of {{silo.capacity}} tons of silo capacity.</span>
+        <span>of <b>{{silo.capacity}}</b> tons of silo capacity.</span>
 
       </div>
 
@@ -136,7 +137,7 @@
           mat-raised-button
           (click)="onSubmit()"
           color="primary"
-          [disabled]="order.invalid && orderTotalTonnage<orderSilosTonnage"
+          [disabled]="order.invalid || orderTotalTonnage<orderSilosTonnage"
         >
           Add Order
         </button>
