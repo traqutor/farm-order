@@ -136,7 +136,7 @@
           mat-raised-button
           (click)="onSubmit()"
           color="primary"
-          [disabled]="order.invalid"
+          [disabled]="order.invalid && orderTotalTonnage<orderSilosTonnage"
         >
           Add Order
         </button>

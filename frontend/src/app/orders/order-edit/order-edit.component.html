@@ -174,7 +174,7 @@
           mat-raised-button
           color="primary"
           (click)="onSubmit()"
-          [disabled]="order.invalid"
+          [disabled]="order.invalid && orderTotalTonnage<orderSilosTonnage"
         >
           Save Order
         </button>
