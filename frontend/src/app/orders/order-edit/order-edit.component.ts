@@ -155,15 +155,31 @@ export class OrderEditComponent implements OnInit {
   }
 
   onSiloSelectChange() {
-    setTimeout(()=> {
-      this.orderTmp.silos.forEach((silo: ISilo) => {
-        this.order.controls.silos.value.forEach((siloTmp: ISilo) => {
-          if (siloTmp.id === silo.id) {
-            siloTmp.amount = silo.amount;
+
+    setTimeout(() => {
+
+      this.order.controls.silos.value.forEach((silo: ISilo) => {
+        let addSilo = true;
+        this.orderTmp.silos.forEach((siloTmp: ISilo) => {
+          if (silo.id === siloTmp.id) {
+            addSilo = false;
+          }
+        });
+        if (addSilo) {
+          this.orderTmp.silos.push(silo);
+        }
+      });
+
+      this.orderTmp.silos.forEach((siloTmp: ISilo) => {
+        this.order.controls.silos.value.forEach((silo: ISilo) => {
+          if (silo.id === siloTmp.id) {
+            silo.amount = siloTmp.amount;
           }
         });
       });
+
       this.recalculateOrderTonnage();
+
     }, 300);
   }
 
@@ -206,13 +222,20 @@ export class OrderEditComponent implements OnInit {
   onSubmit() {
     const {value, valid} = this.order;
     if (valid) {
-      this.ordersService.putOrder(this.orderId, value)
-        .subscribe(() => {
-          this.snackBar.open('Order Changed!', '', {
-            duration: 2000,
-          });
-        }, err => {
-          this.dialogService.alert(err.error);
+
+      this.dialogService
+        .confirm('Allocated amount is less then Total ordered tonnage', 'Are you sure you would like to proceed?')
+        .subscribe(dialogRes => {
+          if (dialogRes) {
+            this.ordersService.putOrder(this.orderId, value)
+              .subscribe(() => {
+                this.snackBar.open('Order Changed!', '', {
+                  duration: 2000,
+                });
+              }, err => {
+                this.dialogService.alert(err.error);
+              });
+          }
         });
     }
   }
