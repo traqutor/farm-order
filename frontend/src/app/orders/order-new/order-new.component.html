@@ -63,6 +63,7 @@
 
       <!--sheds-->
       <mat-form-field *ngIf="this.order.value.farm !== null && (sheds$ | async) as sheds">
+
         <mat-select #selectedSheds placeholder="Select Sheds"
                     (valueChange)="getSilos(selectedSheds.value)"
                     formControlName="sheds"
@@ -71,6 +72,7 @@
             {{shed.name}}
           </mat-option>
         </mat-select>
+
         <mat-error
           *ngIf="order.get('sheds').hasError('required') && order.get('sheds').touched">
           Sheds are required.
@@ -79,9 +81,13 @@
 
       <!--silos-->
       <mat-form-field
-        *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
-        <mat-select placeholder="Select Silos" formControlName="silos" multiple>
-          <mat-option *ngFor="let silo of silos.results" [value]="silo">
+        *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silosSet">
+        <mat-select placeholder="Select Silos"
+                    formControlName="silos"
+                    (valueChange)="onSiloSelectChange()"
+                    [compareWith]="compare"
+                    multiple>
+          <mat-option *ngFor="let silo of silosSet.results" [value]="silo" >
             {{silo.name}}
           </mat-option>
         </mat-select>
@@ -92,6 +98,7 @@
       </mat-form-field>
 
       <div *ngFor="let silo of order.controls.silos.value"
+           [style.color]="silo.amount>silo.capacity ? 'red': ''"
            fxLayout="row"
            fxLayoutAlign="start center"
       >
@@ -106,10 +113,10 @@
                  required
                  [(ngModel)]="silo.amount"
                  [ngModelOptions]="{standalone: true}"
-                 (ngModelChange)="recalculateOrderTonnage()">
+                 (ngModelChange)="onSiloAmountChange(silo)">
         </mat-form-field>
 
-        <span>of {{silo.capacity}} tons of silo capacity.</span>
+        <span>of <b>{{silo.capacity}}</b> tons of silo capacity.</span>
 
       </div>
 
@@ -136,7 +143,7 @@
           mat-raised-button
           (click)="onSubmit()"
           color="primary"
-          [disabled]="order.invalid && orderTotalTonnage<orderSilosTonnage"
+          [disabled]="order.invalid || orderTotalTonnage<orderSilosTonnage"
         >
           Add Order
         </button>

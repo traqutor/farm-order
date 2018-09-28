@@ -34,7 +34,8 @@
       </mat-form-field>
 
       <!--farm-->
-      <mat-form-field *ngIf="(farms$ | async) as farms">
+      <mat-form-field *ngIf="farms">
+
         <mat-select #option placeholder="Select Farm"
                     formControlName="farm"
                     [compareWith]="compare"
@@ -43,10 +44,12 @@
             {{farm.name}}
           </mat-option>
         </mat-select>
+
         <mat-error
           *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
           Farm is required.
         </mat-error>
+
       </mat-form-field>
 
       <!--rations-->
@@ -98,15 +101,15 @@
 
       <!--silos-->
       <mat-form-field
-        *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silos">
+        *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silosSet">
 
         <mat-select placeholder="Select Silos"
                     formControlName="silos"
-                    (valueChange)="recalculateOrderTonnage()"
+                    (valueChange)="onSiloSelectChange()"
                     [compareWith]="compare"
                     multiple
         >
-          <mat-option *ngFor="let silo of silos.results" [value]="silo">
+          <mat-option *ngFor="let silo of silosSet.results" [value]="silo">
             {{silo.name}}
           </mat-option>
         </mat-select>
@@ -118,6 +121,7 @@
       </mat-form-field>
 
       <div *ngFor="let silo of order.controls.silos.value"
+           [style.color]="silo.amount>silo.capacity ? 'red': ''"
            fxLayout="row"
            fxLayoutAlign="start center"
       >
@@ -131,10 +135,10 @@
                  max="50"
                  [(ngModel)]="silo.amount"
                  [ngModelOptions]="{standalone: true}"
-                 (ngModelChange)="recalculateOrderTonnage()">
+                 (ngModelChange)="onSiloAmountChange(silo)">
         </mat-form-field>
 
-        <span>of {{silo.capacity}} tons of silo capacity.</span>
+        <span>of <b>{{silo.capacity}}</b> tons of silo capacity.</span>
       </div>
 
       <div>
@@ -170,17 +174,20 @@
       </mat-form-field>
 
       <div fxLayout="row">
+
         <button
           mat-raised-button
           color="primary"
           (click)="onSubmit()"
-          [disabled]="order.invalid && orderTotalTonnage<orderSilosTonnage"
+          [disabled]="order.invalid || orderTotalTonnage<orderSilosTonnage"
         >
           Save Order
         </button>
+
         <button mat-button (click)="cancel()">
           Cancel
         </button>
+
       </div>
     </form>
   </div>
