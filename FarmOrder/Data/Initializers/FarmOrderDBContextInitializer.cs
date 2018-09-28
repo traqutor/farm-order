@@ -343,7 +343,7 @@ namespace FarmOrder.Data.Initializers
 
                     Shed shed2Farm1 = new Shed()
                     {
-                        Name = $"Shed2 in {farm1.Name}",
+                        Name = $"Shed2 in {farm.Name}",
                         FarmId = farm.Id,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
