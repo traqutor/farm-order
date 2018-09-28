@@ -183,25 +183,40 @@ export class OrderNewComponent implements OnInit {
 
 
   onSubmit() {
+
     const {value, valid} = this.order;
     value.deliveryDate.toISOString();
+
     if (valid) {
 
-      this.dialogService
-        .confirm('Allocated amount is less then Total ordered tonnage', 'Are you sure you would like to proceed?')
-        .subscribe(dialogRes => {
-          if (dialogRes) {
-            this.ordersService.postOrder(value)
-              .subscribe(() => {
-                this.router.navigate(['../'], {relativeTo: this.route});
-                this.snackBar.open('Order Created!', '', {
-                  duration: 2000,
+      if (this.orderTotalTonnage > this.orderSilosTonnage) {
+        this.dialogService
+          .confirm('Allocated amount is less then Total ordered tonnage', 'Are you sure you would like to proceed?')
+          .subscribe(dialogRes => {
+            if (dialogRes) {
+              this.ordersService.postOrder(value)
+                .subscribe(() => {
+                  this.router.navigate(['../'], {relativeTo: this.route});
+                  this.snackBar.open('Order Created!', '', {
+                    duration: 2000,
+                  });
+                }, err => {
+                  this.dialogService.alert(err.error);
                 });
-              }, err => {
-                this.dialogService.alert(err.error);
-              });
-          }
-        });
+            }
+          });
+      }
+      else {
+        this.ordersService.postOrder(value)
+          .subscribe(() => {
+            this.router.navigate(['../'], {relativeTo: this.route});
+            this.snackBar.open('Order Created!', '', {
+              duration: 2000,
+            });
+          }, err => {
+            this.dialogService.alert(err.error);
+          });
+      }
 
     }
   }
