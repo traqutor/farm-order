@@ -19,7 +19,7 @@
         <input
           matInput
           type="text"
-          placeholder="Your full name"
+          placeholder="Username"
           formControlName="userName">
         <mat-error
           *ngIf="user.get('userName').hasError('required') && user.get('userName').touched">
@@ -73,7 +73,7 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field *ngIf="this.user.value.customer !== null">
-        <mat-select #option placeholder="Select CustomerSite" formControlName="customerSites" multiple
+        <mat-select #option placeholder="Select Site" formControlName="customerSites" multiple
                     (valueChange)="getFarms(option.value)">
           <mat-option *ngFor="let site of this.user.value.customer.customerSites" [value]="site">
             {{site.siteName}}
