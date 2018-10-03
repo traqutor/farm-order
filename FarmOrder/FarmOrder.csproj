@@ -364,7 +364,7 @@
     <Content Include="app\assets\genius_fom.png" />
     <Content Include="app\favicon.ico" />
     <Content Include="app\index.html" />
-    <Content Include="app\main.9c446b5f7246ac6e4072.js" />
+    <Content Include="app\main.2b08207ace45a3519a08.js" />
     <Content Include="app\polyfills.7a0e6866a34e280f48e7.js" />
     <Content Include="app\runtime.a66f828dca56eeb90e02.js" />
     <Content Include="app\styles.bf10af48bf0b7087e10d.css" />

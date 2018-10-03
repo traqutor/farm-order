@@ -4,7 +4,7 @@
   <div fxLayout="row">
     <div>
       <h2 class="mat-title">Edit User</h2>
-      <p class="mat-subheading-2">Here you can edit user.</p>
+      <p class="mat-subheading-2">Edit user.</p>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
         <input
           matInput
           type="text"
-          placeholder="Your full name"
+          placeholder="Username"
           formControlName="userName">
         <mat-error
           *ngIf="user.get('userName').hasError('required') && user.get('userName').touched">
@@ -41,7 +41,7 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field *ngIf="this.user.value.customer !== null">
-          <mat-select #option placeholder="Select CustomerSite" formControlName="customerSites" [compareWith]="compare"
+          <mat-select #option placeholder="Select Site" formControlName="customerSites" [compareWith]="compare"
                       multiple
                       (valueChange)="getFarms(option.value)">
             <mat-option *ngFor="let site of findCustomerSite(customers.results, this.user.value.customer.id)"
