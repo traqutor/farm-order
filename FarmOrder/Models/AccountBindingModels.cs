@@ -32,6 +32,12 @@ namespace FarmOrder.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ResetPasswordBindingModel : RegisterBindingModel
+    {
+        [Required]
+        public string Token { get; set; }
+    }
+
     public class RegisterBindingModel
     {
         [Required]
@@ -51,6 +57,13 @@ namespace FarmOrder.Models
     }
 
     public class RegisterExternalBindingModel
+    {
+        [Required]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
+
+    public class ForgotPassword
     {
         [Required]
         [Display(Name = "Email")]

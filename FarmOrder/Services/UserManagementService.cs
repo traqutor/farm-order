@@ -103,6 +103,7 @@ namespace FarmOrder.Services
 
             var user = new User();
             user.UserName = model.UserName;
+            user.Email = model.UserName;
             user.EmailConfirmed = true;
             user.CustomerId = selectedCustomer.Id;
 
@@ -295,7 +296,10 @@ namespace FarmOrder.Services
             }
 
             if (userToUpdate.UserName != model.UserName)
+            {
+                userToUpdate.Email = model.UserName;
                 userToUpdate.UserName = model.UserName;
+            }
 
             if (userToUpdate.CustomerId != selectedCustomer.Id)
                 userToUpdate.CustomerId = selectedCustomer.Id;
