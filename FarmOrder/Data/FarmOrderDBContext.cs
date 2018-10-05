@@ -30,6 +30,12 @@ namespace FarmOrder.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().HasOptional(u => u.CreatedBy).WithMany();
+            modelBuilder.Entity<User>().HasOptional(u => u.ModifiedBy).WithMany();
+
+            modelBuilder.Entity<Customer>().HasOptional(u => u.CreatedBy).WithMany();
+            modelBuilder.Entity<Customer>().HasOptional(u => u.ModifiedBy).WithMany();
         }
 
         public virtual DbSet<Customer> Customers { get; set; }
@@ -41,6 +47,7 @@ namespace FarmOrder.Data
         public virtual DbSet<Shed> Sheds { get; set; }
         public virtual DbSet<Silo> Silos { get; set; }
 
+        public virtual DbSet<FarmRation> FarmsRations { get; set; }
         public virtual DbSet<OrderSilo> OrdersSilos { get; set; }
         public virtual DbSet<FarmUser> FarmUsers { get; set; }
 

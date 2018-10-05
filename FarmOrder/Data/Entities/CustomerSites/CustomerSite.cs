@@ -20,6 +20,15 @@ namespace FarmOrder.Data.Entities.CustomerSites
 
         public string SiteName { get; set; }
 
+
+        public string CreatedById { get; set; }
+        [ForeignKey("CreatedById")]
+        public User CreatedBy { get; set; }
+
+        public string ModifiedById { get; set; }
+        [ForeignKey("ModifiedById")]
+        public User ModifiedBy { get; set; }
+
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
 

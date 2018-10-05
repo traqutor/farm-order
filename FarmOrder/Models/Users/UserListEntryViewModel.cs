@@ -30,6 +30,12 @@ namespace FarmOrder.Models.Users
 
         }
 
+        public UserListEntryViewModel(User entity)
+        {
+            Id = entity.Id;
+            UserName = entity.UserName;
+        }
+
         public UserListEntryViewModel(User entity, List<IdentityRole> roles)
         {
             Id = entity.Id;

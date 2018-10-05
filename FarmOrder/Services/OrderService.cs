@@ -195,12 +195,12 @@ namespace FarmOrder.Services
             }
 
             oldOrder.ModificationDate = DateTime.UtcNow;
+            oldOrder.ModifiedById = userId;
             oldOrder.StatusId = orderStatus.Id;
             oldOrder.ChangeReasonId = changeReason.Id;
             oldOrder.DeliveryDate = model.DeliveryDate;
             oldOrder.TonsOrdered = model.TonsOrdered;
             oldOrder.RationId = selectedRation.Id;
-
 
             List<OrderSilo> bindingsToRemove = new List<OrderSilo>();
             List<OrderSilo> bindingsToAdd = new List<OrderSilo>();
@@ -280,6 +280,7 @@ namespace FarmOrder.Services
 
             Order order = new Order()
             {
+                CreatedById = userId,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 StatusId = defaultStatus.Id,

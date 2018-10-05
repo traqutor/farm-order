@@ -29,6 +29,8 @@ namespace FarmOrder.Migrations
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<User>(new UserStore<User>(context));
 
+            return;
+
             #region Roles creation
 
 
@@ -55,12 +57,33 @@ namespace FarmOrder.Migrations
 
             #endregion
 
+            #region SystemAdmin creation
+
+            var sysAdmin = new User();
+            sysAdmin.UserName = "sysadmin@gmail.com";
+            sysAdmin.Email = "sysadmin@gmail.com";
+            sysAdmin.EmailConfirmed = true;
+            sysAdmin.CreationDate = DateTime.UtcNow;
+            sysAdmin.ModificationDate = DateTime.UtcNow;
+
+            string userPWD = "Password";
+
+            var chkUser = UserManager.Create(sysAdmin, userPWD);
+
+            if (chkUser.Succeeded)
+            {
+                var result = UserManager.AddToRole(sysAdmin.Id, "Admin");
+            }
+
+            #endregion
+
             #region customers and sites creation
-            
+
             Customer customer1 = new Customer()
             {
                 Id = 1,
                 CompanyName = "Profisol",
+                CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
@@ -69,6 +92,7 @@ namespace FarmOrder.Migrations
             {
                 Id = 2,
                 CompanyName = "GordynPalmer",
+                CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
@@ -77,6 +101,7 @@ namespace FarmOrder.Migrations
             {
                 Id = 3,
                 CompanyName = "Baiada",
+                CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
@@ -89,6 +114,7 @@ namespace FarmOrder.Migrations
             {
                 Id = 1,
                 SiteName = "Home",
+                CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 CustomerId = customer1.Id
@@ -98,6 +124,7 @@ namespace FarmOrder.Migrations
             {
                 Id = 2,
                 SiteName = "Home",
+                CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 CustomerId = customer2.Id
@@ -107,6 +134,7 @@ namespace FarmOrder.Migrations
             {
                 Id = 3,
                 SiteName = "Hanwood",
+                CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 CustomerId = customer3.Id
@@ -124,21 +152,30 @@ namespace FarmOrder.Migrations
             {
                 Name = "Ration 1",
                 Description = "100% wheat ration",
-                CustomerSite = site3
+                CustomerSite = site3,
+                CreatedBy = sysAdmin,
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
             };
 
             Ration cs1ration2 = new Ration()
             {
                 Name = "Ration 2",
                 Description = "100% flour ration",
-                CustomerSite = site3
+                CustomerSite = site3,
+                CreatedBy = sysAdmin,
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
             };
 
             Ration cs1ration3 = new Ration()
             {
                 Name = "Ration 3",
                 Description = "50% wheat 50% flour ration",
-                CustomerSite = site3
+                CustomerSite = site3,
+                CreatedBy = sysAdmin,
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
             };
 
             context.Rations.AddOrUpdate(cs1ration1);
@@ -148,31 +185,18 @@ namespace FarmOrder.Migrations
 
             #endregion
 
-            #region SystemAdmin creation
-
-            var user = new User();
-            user.UserName = "sysadmin";
-            //user.Email = "sysadmin@gmail.com";
-            user.EmailConfirmed = true;
-
-            string userPWD = "Password";
-
-            var chkUser = UserManager.Create(user, userPWD);
-
-            if (chkUser.Succeeded)
-            {
-                var result = UserManager.AddToRole(user.Id, "Admin");
-            }
-
-            #endregion
+           
 
             #region users creation
 
             var user2 = new User();
-            user2.UserName = "GordynPalmer";
-            //user.Email = "sysadmin@gmail.com";
+            user2.UserName = "GordynPalmer@gmail.com";
+            user2.Email = "GordynPalmer@gmail.com";
             user2.EmailConfirmed = true;
             user2.CustomerId = 2;
+            user2.CreatedBy = sysAdmin;
+            user2.CreationDate = DateTime.UtcNow;
+            user2.ModificationDate = DateTime.UtcNow;
 
             string user2PWD = "Password";
 
@@ -185,10 +209,13 @@ namespace FarmOrder.Migrations
 
 
             var user3 = new User();
-            user3.UserName = "Baiada";
-            //user.Email = "sysadmin@gmail.com";
+            user3.UserName = "Baiada@gmail.com";
+            user3.Email = "Baiada@gmail.com";
             user3.EmailConfirmed = true;
             user3.CustomerId = 3;
+            user3.CreatedBy = sysAdmin;
+            user3.CreationDate = DateTime.UtcNow;
+            user3.ModificationDate = DateTime.UtcNow;
 
             string user3PWD = "Password";
 
@@ -232,25 +259,37 @@ namespace FarmOrder.Migrations
                 OrderStatus status1 = new OrderStatus()
                 {
                     Id = 1,
-                    Name = "Open"
+                    Name = "Open",
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 OrderStatus status2 = new OrderStatus()
                 {
                     Id = 2,
-                    Name = "Pending"
+                    Name = "Pending",
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 OrderStatus status3 = new OrderStatus()
                 {
                     Id = 3,
-                    Name = "Confirmed"
+                    Name = "Confirmed",
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 OrderStatus status4 = new OrderStatus()
                 {
                     Id = 4,
-                    Name = "Delivered"
+                    Name = "Delivered",
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 context.OrderStatuses.Add(status1);
@@ -264,13 +303,19 @@ namespace FarmOrder.Migrations
                 OrderChangeReason changeReason1 = new OrderChangeReason()
                 {
                     Id = 1,
-                    Name = "Over order"
+                    Name = "Over order",
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 OrderChangeReason changeReason2 = new OrderChangeReason()
                 {
                     Id = 2,
-                    Name = "Late arrival"
+                    Name = "Late arrival",
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 context.OrderChangeReasons.Add(changeReason1);
@@ -286,28 +331,40 @@ namespace FarmOrder.Migrations
                 {
                     Id = 1,
                     Name = "Farm 1",
-                    CustomerSiteId = 3
+                    CustomerSiteId = 3,
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 Farm farm2 = new Farm()
                 {
                     Id = 2,
                     Name = "Farm 2",
-                    CustomerSiteId = 3
+                    CustomerSiteId = 3,
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 Farm farm3 = new Farm()
                 {
                     Id = 3,
                     Name = "Farm 3",
-                    CustomerSiteId = 3
+                    CustomerSiteId = 3,
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 Farm farm4 = new Farm()
                 {
                     Id = 3,
                     Name = "Farm 4",
-                    CustomerSiteId = 3
+                    CustomerSiteId = 3,
+                    CreatedBy = sysAdmin,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow
                 };
 
                 List<Farm> farms = new List<Farm>();
@@ -325,6 +382,7 @@ namespace FarmOrder.Migrations
                     {
                         Name = $"Shed1 in {farm.Name}",
                         FarmId = farm.Id,
+                        CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
                     };
@@ -335,6 +393,7 @@ namespace FarmOrder.Migrations
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed1Farm1,
+                        CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
                     };
@@ -345,6 +404,7 @@ namespace FarmOrder.Migrations
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed1Farm1,
+                        CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
                     };
@@ -353,6 +413,7 @@ namespace FarmOrder.Migrations
                     {
                         Name = $"Shed2 in {farm1.Name}",
                         FarmId = farm.Id,
+                        CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
                     };
@@ -363,6 +424,7 @@ namespace FarmOrder.Migrations
                         Capacity = 20,
                         Occupancy = 0,
                         Shed = shed2Farm1,
+                        CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
                     };
@@ -373,6 +435,7 @@ namespace FarmOrder.Migrations
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed2Farm1,
+                        CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
                     };
@@ -383,6 +446,7 @@ namespace FarmOrder.Migrations
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed2Farm1,
+                        CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow
                     };

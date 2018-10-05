@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using FarmOrder.Data.Entities.Orders;
 using FarmOrder.Models.CustomerSites;
+using FarmOrder.Models.Users;
 
 namespace FarmOrder.Models.Orders
 {
@@ -20,7 +21,13 @@ namespace FarmOrder.Models.Orders
             ModificationDate = el.ModificationDate;
             DeliveryDate = el.DeliveryDate;
             Status = new OrderStatusListEntryViewModel(el.Status);
-            if(el.ChangeReason != null)
+
+            if (el.CreatedBy != null)
+                CreatedBy = new UserListEntryViewModel(el.CreatedBy);
+            if (el.ModifiedBy != null)
+                ModifiedBy = new UserListEntryViewModel(el.ModifiedBy);
+
+            if (el.ChangeReason != null)
                 OrderChangeReason = new OrderChangeReasonListEntryViewModel(el.ChangeReason);
             if (el.Silos != null)
             {
@@ -41,7 +48,10 @@ namespace FarmOrder.Models.Orders
         public int Id { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
-       
+
+        public UserListEntryViewModel CreatedBy { get; set; }
+        public UserListEntryViewModel ModifiedBy { get; set; }
+
         public OrderStatusListEntryViewModel Status { get; set; }
         public OrderChangeReasonListEntryViewModel OrderChangeReason { get; set; }
     }

@@ -12,8 +12,7 @@ namespace FarmOrder.Data.Entities.Orders
     {
         public int Id { get; set; }
 
-        public DateTime CreationDate { get; set; }
-        public DateTime ModificationDate { get; set; }
+     
         public DateTime DeliveryDate { get; set; }
 
         public virtual List<OrderSilo> Silos { get; set; } = new List<OrderSilo>();
@@ -35,5 +34,20 @@ namespace FarmOrder.Data.Entities.Orders
         public int? ChangeReasonId { get; set; }
         [ForeignKey("ChangeReasonId")]
         public virtual OrderChangeReason ChangeReason { get; set; }
+
+
+
+        public string CreatedById { get; set; }
+        [ForeignKey("CreatedById")]
+        public User CreatedBy { get; set; }
+
+        public string ModifiedById { get; set; }
+        [ForeignKey("ModifiedById")]
+        public User ModifiedBy { get; set; }
+
+        public DateTime CreationDate { get; set; }
+        public DateTime ModificationDate { get; set; }
+
+        public EntityStatus EntityStatus { get; set; }
     }
 }

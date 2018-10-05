@@ -22,6 +22,18 @@ namespace FarmOrder.Data.Entities
         public virtual List<CustomerSiteUser> CustomerSiteUser { get; set; } = new List<CustomerSiteUser>();
         public virtual List<FarmUser> FarmUsers { get; set; } = new List<FarmUser>();
 
+
+        public string CreatedById { get; set; }
+        [ForeignKey("CreatedById")]
+        public User CreatedBy { get; set; }
+
+        public string ModifiedById { get; set; }
+        [ForeignKey("ModifiedById")]
+        public User ModifiedBy { get; set; }
+
+        public DateTime CreationDate { get; set; }
+        public DateTime ModificationDate { get; set; }
+
         public EntityStatus EntityStatus { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)

@@ -360,6 +360,9 @@ namespace FarmOrder.Controllers
 
             var user = await UserManager.FindByEmailAsync(model.Email);
 
+            if (user == null)
+                return BadRequest();
+
             string token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
             string baseUrl = HttpContext.Current.Request.Url.Host + ":" + HttpContext.Current.Request.Url.Port;
 

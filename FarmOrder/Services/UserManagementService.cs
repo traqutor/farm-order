@@ -106,6 +106,9 @@ namespace FarmOrder.Services
             user.Email = model.UserName;
             user.EmailConfirmed = true;
             user.CustomerId = selectedCustomer.Id;
+            user.CreationDate = DateTime.UtcNow;
+            user.ModificationDate = DateTime.UtcNow;
+            user.CreatedById = userId;
 
             string userPWD = model.Password;
 
@@ -175,6 +178,7 @@ namespace FarmOrder.Services
 
             _userManager.RemovePassword(userToUpdate.Id);
             _userManager.AddPassword(userToUpdate.Id, model.Password);
+
 
             var possibleRoles = _roleManager.Roles.ToList();
             var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
@@ -304,6 +308,8 @@ namespace FarmOrder.Services
             if (userToUpdate.CustomerId != selectedCustomer.Id)
                 userToUpdate.CustomerId = selectedCustomer.Id;
 
+            userToUpdate.ModificationDate = DateTime.UtcNow;
+            userToUpdate.ModifiedById = userId;
 
             _context.SaveChanges();
          

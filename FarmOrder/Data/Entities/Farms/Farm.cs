@@ -18,9 +18,23 @@ namespace FarmOrder.Data.Entities.Farms
 
         public virtual List<Shed> Sheds { get; set; } = new List<Shed>();
 
+        public virtual List<FarmRation> Rations { get; set; } = new List<FarmRation>();
+
         public int CustomerSiteId { get; set; }
         [ForeignKey("CustomerSiteId")]
         public virtual CustomerSite CustomerSite { get; set; }
+
+
+        public string CreatedById { get; set; }
+        [ForeignKey("CreatedById")]
+        public User CreatedBy { get; set; }
+
+        public string ModifiedById { get; set; }
+        [ForeignKey("ModifiedById")]
+        public User ModifiedBy { get; set; }
+
+        public DateTime CreationDate { get; set; }
+        public DateTime ModificationDate { get; set; }
 
         public EntityStatus EntityStatus { get; set; }
     }

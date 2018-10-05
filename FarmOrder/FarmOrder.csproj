@@ -281,6 +281,7 @@
     <Compile Include="Data\Entities\Customers\Customer.cs" />
     <Compile Include="Data\Entities\EntityStatus.cs" />
     <Compile Include="Data\Entities\Farms\Farm.cs" />
+    <Compile Include="Data\Entities\Farms\FarmRation.cs" />
     <Compile Include="Data\Entities\Farms\FarmUser.cs" />
     <Compile Include="Data\Entities\Farms\Sheds\Shed.cs" />
     <Compile Include="Data\Entities\Farms\Sheds\Silo.cs" />
@@ -326,6 +327,14 @@
     <Compile Include="Migrations\201809240945159_OrderSiloAssignedAmount.cs" />
     <Compile Include="Migrations\201809240945159_OrderSiloAssignedAmount.Designer.cs">
       <DependentUpon>201809240945159_OrderSiloAssignedAmount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810050939209_EntitiesCreatedByModifiedByAdded.cs" />
+    <Compile Include="Migrations\201810050939209_EntitiesCreatedByModifiedByAdded.Designer.cs">
+      <DependentUpon>201810050939209_EntitiesCreatedByModifiedByAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810051322290_FarmRation.cs" />
+    <Compile Include="Migrations\201810051322290_FarmRation.Designer.cs">
+      <DependentUpon>201810051322290_FarmRation.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -522,6 +531,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809240945159_OrderSiloAssignedAmount.resx">
       <DependentUpon>201809240945159_OrderSiloAssignedAmount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810050939209_EntitiesCreatedByModifiedByAdded.resx">
+      <DependentUpon>201810050939209_EntitiesCreatedByModifiedByAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810051322290_FarmRation.resx">
+      <DependentUpon>201810051322290_FarmRation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

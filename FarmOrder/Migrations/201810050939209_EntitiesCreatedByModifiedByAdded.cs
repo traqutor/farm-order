@@ -1,0 +1,166 @@
+namespace FarmOrder.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class EntitiesCreatedByModifiedByAdded : DbMigration
+    {
+        public override void Up()
+        {
+            var defaultDate = DateTime.UtcNow;
+
+            AddColumn("dbo.Customers", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Customers", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.CustomerSites", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.CustomerSites", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Farms", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Farms", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Farms", "CreationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.Farms", "ModificationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.Orders", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Orders", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Orders", "EntityStatus", c => c.Int(nullable: false, defaultValue: 0));
+            AddColumn("dbo.OrderChangeReasons", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.OrderChangeReasons", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.OrderChangeReasons", "CreationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.OrderChangeReasons", "ModificationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.OrderChangeReasons", "EntityStatus", c => c.Int(nullable: false, defaultValue: 0));
+            AddColumn("dbo.Rations", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Rations", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Rations", "CreationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.Rations", "ModificationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.Rations", "EntityStatus", c => c.Int(nullable: false, defaultValue: 0));
+            AddColumn("dbo.Silos", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Silos", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Sheds", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.Sheds", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.OrderStatus", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.OrderStatus", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.OrderStatus", "CreationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.OrderStatus", "ModificationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.OrderStatus", "EntityStatus", c => c.Int(nullable: false, defaultValue: 0));
+            AddColumn("dbo.AspNetUsers", "CreatedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.AspNetUsers", "ModifiedById", c => c.String(maxLength: 128));
+            AddColumn("dbo.AspNetUsers", "CreationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            AddColumn("dbo.AspNetUsers", "ModificationDate", c => c.DateTime(nullable: false, defaultValueSql: "GETDATE()", defaultValue: defaultDate));
+            CreateIndex("dbo.Customers", "CreatedById");
+            CreateIndex("dbo.Customers", "ModifiedById");
+            CreateIndex("dbo.AspNetUsers", "CreatedById");
+            CreateIndex("dbo.AspNetUsers", "ModifiedById");
+            CreateIndex("dbo.CustomerSites", "CreatedById");
+            CreateIndex("dbo.CustomerSites", "ModifiedById");
+            CreateIndex("dbo.Farms", "CreatedById");
+            CreateIndex("dbo.Farms", "ModifiedById");
+            CreateIndex("dbo.Orders", "CreatedById");
+            CreateIndex("dbo.Orders", "ModifiedById");
+            CreateIndex("dbo.OrderChangeReasons", "CreatedById");
+            CreateIndex("dbo.OrderChangeReasons", "ModifiedById");
+            CreateIndex("dbo.Rations", "CreatedById");
+            CreateIndex("dbo.Rations", "ModifiedById");
+            CreateIndex("dbo.Silos", "CreatedById");
+            CreateIndex("dbo.Silos", "ModifiedById");
+            CreateIndex("dbo.Sheds", "CreatedById");
+            CreateIndex("dbo.Sheds", "ModifiedById");
+            CreateIndex("dbo.OrderStatus", "CreatedById");
+            CreateIndex("dbo.OrderStatus", "ModifiedById");
+            AddForeignKey("dbo.AspNetUsers", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.CustomerSites", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Farms", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Farms", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.OrderChangeReasons", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.OrderChangeReasons", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Orders", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Orders", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Rations", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Rations", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Silos", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Silos", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Sheds", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Sheds", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.OrderStatus", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.OrderStatus", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.CustomerSites", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.AspNetUsers", "ModifiedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Customers", "CreatedById", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Customers", "ModifiedById", "dbo.AspNetUsers", "Id");
+        }
+        
+        public override void Down()
+        {
+            DropForeignKey("dbo.Customers", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Customers", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUsers", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.CustomerSites", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.OrderStatus", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.OrderStatus", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Sheds", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Sheds", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Silos", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Silos", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Rations", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Rations", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Orders", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Orders", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.OrderChangeReasons", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.OrderChangeReasons", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Farms", "ModifiedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Farms", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.CustomerSites", "CreatedById", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUsers", "CreatedById", "dbo.AspNetUsers");
+            DropIndex("dbo.OrderStatus", new[] { "ModifiedById" });
+            DropIndex("dbo.OrderStatus", new[] { "CreatedById" });
+            DropIndex("dbo.Sheds", new[] { "ModifiedById" });
+            DropIndex("dbo.Sheds", new[] { "CreatedById" });
+            DropIndex("dbo.Silos", new[] { "ModifiedById" });
+            DropIndex("dbo.Silos", new[] { "CreatedById" });
+            DropIndex("dbo.Rations", new[] { "ModifiedById" });
+            DropIndex("dbo.Rations", new[] { "CreatedById" });
+            DropIndex("dbo.OrderChangeReasons", new[] { "ModifiedById" });
+            DropIndex("dbo.OrderChangeReasons", new[] { "CreatedById" });
+            DropIndex("dbo.Orders", new[] { "ModifiedById" });
+            DropIndex("dbo.Orders", new[] { "CreatedById" });
+            DropIndex("dbo.Farms", new[] { "ModifiedById" });
+            DropIndex("dbo.Farms", new[] { "CreatedById" });
+            DropIndex("dbo.CustomerSites", new[] { "ModifiedById" });
+            DropIndex("dbo.CustomerSites", new[] { "CreatedById" });
+            DropIndex("dbo.AspNetUsers", new[] { "ModifiedById" });
+            DropIndex("dbo.AspNetUsers", new[] { "CreatedById" });
+            DropIndex("dbo.Customers", new[] { "ModifiedById" });
+            DropIndex("dbo.Customers", new[] { "CreatedById" });
+            DropColumn("dbo.AspNetUsers", "ModificationDate");
+            DropColumn("dbo.AspNetUsers", "CreationDate");
+            DropColumn("dbo.AspNetUsers", "ModifiedById");
+            DropColumn("dbo.AspNetUsers", "CreatedById");
+            DropColumn("dbo.OrderStatus", "EntityStatus");
+            DropColumn("dbo.OrderStatus", "ModificationDate");
+            DropColumn("dbo.OrderStatus", "CreationDate");
+            DropColumn("dbo.OrderStatus", "ModifiedById");
+            DropColumn("dbo.OrderStatus", "CreatedById");
+            DropColumn("dbo.Sheds", "ModifiedById");
+            DropColumn("dbo.Sheds", "CreatedById");
+            DropColumn("dbo.Silos", "ModifiedById");
+            DropColumn("dbo.Silos", "CreatedById");
+            DropColumn("dbo.Rations", "EntityStatus");
+            DropColumn("dbo.Rations", "ModificationDate");
+            DropColumn("dbo.Rations", "CreationDate");
+            DropColumn("dbo.Rations", "ModifiedById");
+            DropColumn("dbo.Rations", "CreatedById");
+            DropColumn("dbo.OrderChangeReasons", "EntityStatus");
+            DropColumn("dbo.OrderChangeReasons", "ModificationDate");
+            DropColumn("dbo.OrderChangeReasons", "CreationDate");
+            DropColumn("dbo.OrderChangeReasons", "ModifiedById");
+            DropColumn("dbo.OrderChangeReasons", "CreatedById");
+            DropColumn("dbo.Orders", "EntityStatus");
+            DropColumn("dbo.Orders", "ModifiedById");
+            DropColumn("dbo.Orders", "CreatedById");
+            DropColumn("dbo.Farms", "ModificationDate");
+            DropColumn("dbo.Farms", "CreationDate");
+            DropColumn("dbo.Farms", "ModifiedById");
+            DropColumn("dbo.Farms", "CreatedById");
+            DropColumn("dbo.CustomerSites", "ModifiedById");
+            DropColumn("dbo.CustomerSites", "CreatedById");
+            DropColumn("dbo.Customers", "ModifiedById");
+            DropColumn("dbo.Customers", "CreatedById");
+        }
+    }
+}
