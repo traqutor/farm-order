@@ -20,6 +20,8 @@ using FarmOrder.Data.Entities;
 using FarmOrder.Models.Users;
 using FarmOrder.Data;
 using System.Linq;
+using FarmOrder.Utils;
+using NLog;
 
 namespace FarmOrder.Controllers
 {
@@ -32,6 +34,8 @@ namespace FarmOrder.Controllers
 
         private readonly FarmOrderDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+
+        private static readonly Logger LOGGER = LogManager.GetCurrentClassLogger();
 
         public AccountController()
         {
@@ -343,6 +347,48 @@ namespace FarmOrder.Controllers
             }
 
             return Ok();
+        }
+
+        [AllowAnonymous]
+        [Route("ForgotPassword")]
+        public async Task<IHttpActionResult> ForgotPassword(ForgotPassword model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserManager.FindByEmailAsync(model.Email);
+
+            string token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            string baseUrl = HttpContext.Current.Request.Url.Host + ":" + HttpContext.Current.Request.Url.Port;
+
+            bool isSent = EmailSender.SendPasswordRecoveryEmail(user.Email, "Password reset", baseUrl, token);
+
+            return Ok();
+        }
+
+        [AllowAnonymous]
+        [Route("ForgotPasswordReset")]
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserManager.FindByEmailAsync(model.Email);
+
+            var result = await UserManager.ResetPasswordAsync(user.Id, model.Token, model.Password);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            LOGGER.Info("Failed to reset password: " + string.Concat(result.Errors));
+
+            return GetErrorResult(result);
         }
 
         // POST api/Account/RegisterExternal

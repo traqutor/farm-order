@@ -17,10 +17,10 @@
     <form [formGroup]="order" fxLayout="column" class="half-width"
           [ngClass.xs]="{'half-width':false, 'full-width':true}">
 
-      <mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Tons ordered</mat-label>
         <input matInput
                type="number"
-               placeholder="Tons ordered"
                formControlName="tonsOrdered"
                (change)="getTotalOrderAmount()"
         >
@@ -35,7 +35,7 @@
       </mat-form-field>
 
       <!--farms-->
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-select #option placeholder="Select Farm" formControlName="farm"
                     (valueChange)="getRations(option.value); getSheds(option.value)">
           <mat-option *ngFor="let farm of farms" [value]="farm">

@@ -500,6 +500,11 @@
             Amount ordered by the user in specific order - if displayed somehwere else (not in order context) its 0 
             </summary>
         </member>
+        <member name="P:FarmOrder.Models.Users.UserCreateModel.UserName">
+            <summary>
+            validated like an email
+            </summary>
+        </member>
         <member name="P:FarmOrder.Models.Users.UserCreateModel.Customer">
             <summary>
             Users customer that he belongs to, and inside the sides that user belongs to

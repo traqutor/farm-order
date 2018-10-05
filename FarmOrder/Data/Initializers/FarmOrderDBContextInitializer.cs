@@ -143,8 +143,8 @@ namespace FarmOrder.Data.Initializers
             #region SystemAdmin creation
 
             var user = new User();
-            user.UserName = "sysadmin";
-            //user.Email = "sysadmin@gmail.com";
+            user.UserName = "sysadmin@gmail.com";
+            user.Email = "sysadmin@gmail.com";
             user.EmailConfirmed = true;
 
             string userPWD = "Password";
@@ -161,8 +161,8 @@ namespace FarmOrder.Data.Initializers
             #region users creation
 
             var user2 = new User();
-            user2.UserName = "GordynPalmer";
-            //user.Email = "sysadmin@gmail.com";
+            user2.UserName = "GordynPalmer@gmail.com";
+            user2.Email = "GordynPalmer@gmail.com";
             user2.EmailConfirmed = true;
             user2.CustomerId = 2;
 
@@ -177,8 +177,8 @@ namespace FarmOrder.Data.Initializers
 
 
             var user3 = new User();
-            user3.UserName = "Baiada";
-            //user.Email = "sysadmin@gmail.com";
+            user3.UserName = "Baiada@gmail.com";
+            user3.Email = "Baiada@gmail.com";
             user3.EmailConfirmed = true;
             user3.CustomerId = 3;
 
