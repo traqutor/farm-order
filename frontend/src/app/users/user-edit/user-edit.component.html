@@ -12,11 +12,15 @@
 
   <div *ngIf="user">
     <form [formGroup]="user" fxLayout="column" class="half-width">
-      <mat-form-field>
+      <mat-form-field  appearance="outline">
+
+        <mat-label>Login - email</mat-label>
+
         <input
           matInput
-          type="text"
-          placeholder="Username"
+          type="email"
+          email="true"
+          placeholder="Email"
           formControlName="userName">
         <mat-error
           *ngIf="user.get('userName').hasError('required') && user.get('userName').touched">
@@ -26,10 +30,19 @@
           *ngIf="user.get('userName').hasError('minlength') && user.get('userName').touched">
           UserName must have minimum 6 characters.
         </mat-error>
+
       </mat-form-field>
+
       <div *ngIf="(customers$ | async) as customers" fxLayout="column">
-        <mat-form-field>
-          <mat-select #currentCustomer placeholder="Select Customer" formControlName="customer" [compareWith]="compare"
+
+        <mat-form-field  appearance="outline">
+
+          <mat-label>Customer</mat-label>
+
+          <mat-select #currentCustomer
+                      placeholder="Select Customer"
+                      formControlName="customer"
+                      [compareWith]="compare"
                       (valueChange)="resetFarms()">
             <mat-option *ngFor="let customer of customers.results" [value]="customer">
               {{customer.name}}
@@ -40,7 +53,12 @@
             Customer is required.
           </mat-error>
         </mat-form-field>
-        <mat-form-field *ngIf="this.user.value.customer !== null">
+
+        <mat-form-field  appearance="outline"
+                         *ngIf="this.user.value.customer !== null">
+
+          <mat-label>Site</mat-label>
+
           <mat-select #option placeholder="Select Site" formControlName="customerSites" [compareWith]="compare"
                       multiple
                       (valueChange)="getFarms(option.value)">
@@ -53,20 +71,33 @@
             *ngIf="user.get('customerSites').hasError('required') && user.get('customerSites').touched">
             Customer Site is required.
           </mat-error>
+
         </mat-form-field>
+
       </div>
-      <mat-form-field *ngIf="(farms$ | async) as farms">
+
+      <mat-form-field  appearance="outline"
+                       *ngIf="(farms$ | async) as farms">
+
+        <mat-label>Farm</mat-label>
+
         <mat-select #option placeholder="Select Farm" formControlName="farms" multiple [compareWith]="compare">
           <mat-option *ngFor="let farm of farms.results" [value]="farm">
             {{farm.name}}
           </mat-option>
         </mat-select>
+
         <mat-error
           *ngIf="user.get('farms').hasError('required') && user.get('farms').touched">
           Farm is required.
         </mat-error>
+
       </mat-form-field>
-      <mat-form-field *ngIf="(roles$ | async) as roles">
+
+      <mat-form-field  appearance="outline" *ngIf="(roles$ | async) as roles">
+
+        <mat-label>Role</mat-label>
+
         <mat-select placeholder="Select Role" formControlName="roleId">
           <mat-option *ngFor="let role of roles.results" [value]="role.id">
             {{role.name}}
@@ -79,6 +110,7 @@
       </mat-form-field>
 
       <div fxLayout="row" class="button-row">
+
         <button
           mat-raised-button
           color="primary"

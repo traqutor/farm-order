@@ -14,6 +14,7 @@
   <mat-divider></mat-divider>
 
   <div *ngIf="order" class="padding-content">
+
     <form [formGroup]="order" fxLayout="column" class="half-width"
           [ngClass.xs]="{'half-width':false, 'full-width':true}">
 
@@ -49,7 +50,8 @@
       </mat-form-field>
 
       <!--ration-->
-      <mat-form-field *ngIf="this.order.value.farm !== null && (rations$ | async) as rations">
+      <mat-form-field appearance="outline"
+                      *ngIf="this.order.value.farm !== null && (rations$ | async) as rations">
         <mat-select placeholder="Select Ration" formControlName="ration">
           <mat-option *ngFor="let ration of rations.results" [value]="ration">
             {{ration.name}}
@@ -62,7 +64,8 @@
       </mat-form-field>
 
       <!--sheds-->
-      <mat-form-field *ngIf="this.order.value.farm !== null && (sheds$ | async) as sheds">
+      <mat-form-field appearance="outline"
+        *ngIf="this.order.value.farm !== null && (sheds$ | async) as sheds">
 
         <mat-select #selectedSheds placeholder="Select Sheds"
                     (valueChange)="getSilos(selectedSheds.value)"
@@ -80,7 +83,7 @@
       </mat-form-field>
 
       <!--silos-->
-      <mat-form-field
+      <mat-form-field appearance="outline"
         *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silosSet">
         <mat-select placeholder="Select Silos"
                     formControlName="silos"
@@ -104,7 +107,7 @@
       >
         <span>{{silo.name}}:</span>
 
-        <mat-form-field class="silo-amount-input">
+        <mat-form-field appearance="outline" class="silo-amount-input">
           <input type="number"
                  matInput
                  maxlength="2"
@@ -131,7 +134,7 @@
 
 
       <!--order date-->
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <input matInput [matDatepicker]="dp3" placeholder="Delivery Date" formControlName="deliveryDate">
         <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
         <mat-datepicker #dp3 disabled="false"></mat-datepicker>
