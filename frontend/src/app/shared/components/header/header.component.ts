@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AuthService } from '../../../core/auth/auth.service';
-import { DialogService } from '../../dialogs/dialog.service';
-import { SharedService } from '../../shared.service';
-import { MatSnackBar } from '@angular/material';
-import { HttpErrorResponse } from '@angular/common/http';
+import {Component, HostBinding, OnInit, ViewChild} from '@angular/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {OverlayContainer} from "@angular/cdk/overlay";
+import {MatSnackBar} from '@angular/material';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+
+import {AuthService} from '../../../core/auth/auth.service';
+import {DialogService} from '../../dialogs/dialog.service';
+import {SharedService} from '../../shared.service';
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-header',
@@ -17,13 +19,16 @@ export class HeaderComponent implements OnInit {
 
   user$;
   auth$;
-  @ViewChild('drawer') sidenav: any;
+  user: User;
 
+  @ViewChild('drawer') sidenav: any;
+  @HostBinding('class') componentCssClass;
 
   constructor(private breakpointObserver: BreakpointObserver,
               public authService: AuthService,
               private dialogService: DialogService,
               private sharedService: SharedService,
+              public overlayContainer: OverlayContainer,
               private snackBar: MatSnackBar) {
   }
 
@@ -34,9 +39,28 @@ export class HeaderComponent implements OnInit {
     this.authService.setUser(user);
     this.user$ = this.authService.currentUser;
     this.auth$ = this.authService.isAuthenticated;
+
+    this.user$.subscribe((user: User) => {
+      this.user = user;
+      console.log('this.user', this.user);
+    });
+
+    this.isHandset$.subscribe(res => {
+      console.log('takie tam', res);
+    });
+
   }
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  onSetTheme(theme) {
+    this.overlayContainer.getContainerElement().classList.add(theme);
+    this.componentCssClass = theme;
+  }
+
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([
+    Breakpoints.XSmall,
+    Breakpoints.Small,
+    Breakpoints.Handset
+  ])
     .pipe(
       map(result => result.matches)
     );

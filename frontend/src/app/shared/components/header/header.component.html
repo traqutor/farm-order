@@ -6,7 +6,9 @@
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="!(isHandset$ | async)">
-    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <div>
+      <img [src]="this.user ? this.user.customer.logo : './assets/genius_fom.png'" class="logo">
+    </div>
     <mat-nav-list *ngIf="(user$ | async) as user">
       <a mat-list-item routerLink="orders">Orders</a>
       <a mat-list-item routerLink="users" *ngIf="user?.role?.name !== 'Customer'">Users</a>
@@ -23,8 +25,21 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Genius Farm Order Module</span>
+      <span>{{this.user.customer.name}} - Orders Module</span>
       <div class="spacer"></div>
+
+      <button mat-icon-button
+              [ngStyle]="{'display':(auth$ | async) ? 'block' : 'none' }"
+              [matMenuTriggerFor]="themeMenu">
+        <mat-icon>color_lens</mat-icon>
+      </button>
+      <mat-menu #themeMenu="matMenu">
+        <button mat-menu-item color="primary" (click)="onSetTheme('default-theme')">Default</button>
+        <button mat-menu-item color="primary" (click)="onSetTheme('dark-theme')">Dark</button>
+        <button mat-menu-item color="primary" (click)="onSetTheme('light-theme')">Light</button>
+      </mat-menu>
+
+
       <p *ngIf="(user$ | async) as user">
         {{user?.userName}}
       </p>
