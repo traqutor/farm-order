@@ -81,3 +81,17 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 .light-theme {
   @include angular-material-theme($light-theme)
 }
+
+// Profisol theme
+// Example of creation of the custom theme for Customer
+
+$light-primary: mat-palette($mat-blue, 900);
+$light-accent: mat-palette($mat-light-green);
+$light-warn: mat-palette($mat-red, 200);
+
+$profisol-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+
+.profisol-theme {
+  @include angular-material-theme($profisol-theme)
+}
+

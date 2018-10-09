@@ -10,7 +10,7 @@
     <div class="spacer"></div>
     <div>
       <button
-        mat-button
+        mat-raised-button
         color="accent"
         [routerLink]="'new'"
       >
@@ -48,7 +48,7 @@
         <mat-cell *matCellDef="let element">
           <button
             mat-icon-button
-            color="primary"
+            color="accent"
             matTooltip="Edit User"
             [routerLink]="element.id+'/edit'"
           >
