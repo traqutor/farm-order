@@ -14,7 +14,7 @@ namespace FarmOrder.Models.Users
         public string Id { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [EmailAddress]
         public string UserName { get; set; }
 
         public List<FarmListEntryViewModel> Farms { get; set; } = new List<FarmListEntryViewModel>();
