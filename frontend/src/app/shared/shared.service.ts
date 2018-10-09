@@ -55,6 +55,11 @@ export class SharedService {
     return this.http.post(`${this.apiUrl}/api/Account/ChangePassword`, JSON.stringify(credentials));
   }
 
+  forgotPassword(email: string) {
+    return this.http.post(`${this.apiUrl}/api/Account/ForgotPassword`, email);
+  }
+
+
   getRations(farmId: number): Observable<{ results: [Ration], resultsCount: number }> {
     return this.http.get<{ results: [Ration], resultsCount: number }>(`${this.apiUrl}/api/Ration?farmId=${farmId}`);
   }

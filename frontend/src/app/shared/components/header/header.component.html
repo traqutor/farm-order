@@ -1,5 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
+    color="primary"
     #drawer
     class="sidenav"
     fixedInViewport="true"
@@ -29,7 +30,9 @@
     </mat-nav-list>
 
   </mat-sidenav>
+
   <mat-sidenav-content class="page-wrap">
+
     <mat-toolbar color="primary" [ngClass.xs]="{'toolbar':true}">
       <button
         type="button"
@@ -83,10 +86,16 @@
       </mat-menu>
 
     </mat-toolbar>
+
+
     <div class="content">
       <router-outlet></router-outlet>
     </div>
+
+
     <app-footer></app-footer>
+
+
   </mat-sidenav-content>
 
 
