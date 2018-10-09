@@ -336,6 +336,10 @@
     <Compile Include="Migrations\201810051322290_FarmRation.Designer.cs">
       <DependentUpon>201810051322290_FarmRation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810090609507_CustomerLogoAndCss.cs" />
+    <Compile Include="Migrations\201810090609507_CustomerLogoAndCss.Designer.cs">
+      <DependentUpon>201810090609507_CustomerLogoAndCss.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -537,6 +541,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810051322290_FarmRation.resx">
       <DependentUpon>201810051322290_FarmRation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810090609507_CustomerLogoAndCss.resx">
+      <DependentUpon>201810090609507_CustomerLogoAndCss.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,7 @@ using FarmOrder.Data;
 using System.Linq;
 using FarmOrder.Utils;
 using NLog;
+using System.Data.Entity;
 
 namespace FarmOrder.Controllers
 {
@@ -70,7 +71,7 @@ namespace FarmOrder.Controllers
         public UserListEntryViewModel GetUserInfo()
         {
             string loggedUserId = User.Identity.GetUserId();
-            var userToReturn = _context.Users.SingleOrDefault(u => u.Id == loggedUserId);
+            var userToReturn = _context.Users.Include(u => u.Customer).SingleOrDefault(u => u.Id == loggedUserId);
             var possibleRoles = _roleManager.Roles.ToList();
             return new UserListEntryViewModel(userToReturn, possibleRoles);
         }

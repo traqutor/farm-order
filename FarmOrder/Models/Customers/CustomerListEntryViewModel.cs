@@ -12,6 +12,9 @@ namespace FarmOrder.Models.Customers
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public string Logo { get; set; }
+        public string CssFilePath { get; set; }
+
         public List<CustomerSiteListEntryViewModel> CustomerSites { get; set; } = new List<CustomerSiteListEntryViewModel>();
 
         public DateTime CreationDate { get; set; }
@@ -26,6 +29,10 @@ namespace FarmOrder.Models.Customers
         {
             Id = entity.Id;
             Name = entity.CompanyName;
+
+            Logo = entity.Logo;
+            CssFilePath = entity.CssFilePath;
+
             CreationDate = entity.CreationDate;
             ModificationDate = entity.ModificationDate;
 

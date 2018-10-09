@@ -19,6 +19,8 @@ namespace FarmOrder.Data.Entities
         [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
 
+        public string CssFilePath { get; set; }
+
         public virtual List<CustomerSiteUser> CustomerSiteUser { get; set; } = new List<CustomerSiteUser>();
         public virtual List<FarmUser> FarmUsers { get; set; } = new List<FarmUser>();
 

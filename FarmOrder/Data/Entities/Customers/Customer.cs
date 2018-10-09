@@ -15,7 +15,9 @@ namespace FarmOrder.Data.Entities.Customers
         public virtual List<User> Users { get; set; }
         public virtual List<CustomerSite> CustomerSites { get; set; }
 
-
+        public string Logo { get; set; }
+        public string CssFilePath { get; set; }
+        
         public EntityStatus EntityStatus { get; set; }
 
         public string CreatedById { get; set; }
