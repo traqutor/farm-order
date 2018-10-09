@@ -21,7 +21,7 @@
   <mat-divider></mat-divider>
 
   <div [ngClass]="{'hidden':user.role.name !== 'Admin'}"
-       fxLayout="row">
+       fxLayout="row" fxLayout.lt-md="column">
 
     <mat-form-field fxFlex="30" class="small-padding-content">
       <mat-select #matSelect placeholder="Filter orders by farms">
@@ -36,18 +36,21 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="small-padding-content">
-      <input matInput #dateFrom [(ngModel)]="dateFromValue" [matDatepicker]="dp1" placeholder="from date">
-      <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
-      <mat-datepicker #dp1 disabled="false"></mat-datepicker>
-    </mat-form-field>
+    <div fxLayout="row" fxLayout.lt-sm="column">
+      <mat-form-field class="small-padding-content">
+        <input matInput #dateFrom [(ngModel)]="dateFromValue" [matDatepicker]="dp1" placeholder="from date">
+        <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+        <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+      </mat-form-field>
 
-    <mat-form-field class="small-padding-content">
-      <input matInput #dateTo [min]="dateFromValue" [(ngModel)]="dateToValue" [matDatepicker]="dp2"
-             placeholder="to date">
-      <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
-      <mat-datepicker #dp2 disabled="false"></mat-datepicker>
-    </mat-form-field>
+      <mat-form-field class="small-padding-content">
+
+        <input matInput #dateTo [min]="dateFromValue" [(ngModel)]="dateToValue" [matDatepicker]="dp2"
+               placeholder="to date">
+        <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+        <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+      </mat-form-field>
+    </div>
 
     <div class="padding-content">
       <button

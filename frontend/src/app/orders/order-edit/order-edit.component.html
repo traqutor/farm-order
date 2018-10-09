@@ -173,7 +173,7 @@
         <mat-datepicker #dp3 disabled="false"></mat-datepicker>
       </mat-form-field>
 
-      <div fxLayout="row">
+      <div fxLayout="row" class="button-row">
 
         <button
           mat-raised-button
@@ -184,7 +184,7 @@
           Save Order
         </button>
 
-        <button mat-button (click)="cancel()">
+        <button mat-raised-button (click)="cancel()">
           Cancel
         </button>
 
