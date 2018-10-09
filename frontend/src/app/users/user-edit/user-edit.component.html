@@ -3,16 +3,15 @@
      fxLayout="column">
   <div fxLayout="row">
     <div>
-      <h2 class="mat-title">Edit User</h2>
-      <p class="mat-subheading-2">Edit user.</p>
+      <h2 class="mat-title">User</h2>
+      <p class="mat-subheading-2">Edit user properties.</p>
     </div>
   </div>
 
-  <mat-divider></mat-divider>
 
   <div *ngIf="user">
     <form [formGroup]="user" fxLayout="column" class="half-width">
-      <mat-form-field  appearance="outline">
+      <mat-form-field appearance="outline">
 
         <mat-label>Login - email</mat-label>
 
@@ -35,7 +34,7 @@
 
       <div *ngIf="(customers$ | async) as customers" fxLayout="column">
 
-        <mat-form-field  appearance="outline">
+        <mat-form-field appearance="outline">
 
           <mat-label>Customer</mat-label>
 
@@ -54,8 +53,8 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field  appearance="outline"
-                         *ngIf="this.user.value.customer !== null">
+        <mat-form-field appearance="outline"
+                        *ngIf="this.user.value.customer !== null">
 
           <mat-label>Site</mat-label>
 
@@ -76,8 +75,8 @@
 
       </div>
 
-      <mat-form-field  appearance="outline"
-                       *ngIf="(farms$ | async) as farms">
+      <mat-form-field appearance="outline"
+                      *ngIf="(farms$ | async) as farms">
 
         <mat-label>Farm</mat-label>
 
@@ -94,7 +93,7 @@
 
       </mat-form-field>
 
-      <mat-form-field  appearance="outline" *ngIf="(roles$ | async) as roles">
+      <mat-form-field appearance="outline" *ngIf="(roles$ | async) as roles">
 
         <mat-label>Role</mat-label>
 
@@ -113,7 +112,7 @@
 
         <button
           mat-raised-button
-          color="primary"
+          color="accent"
           (click)="onSubmit(user)"
           [disabled]="user.invalid"
         >
@@ -122,13 +121,14 @@
 
         <button
           mat-raised-button
+          color="primary"
           type="button"
           (click)="resetPassword()"
         >
           Reset Password
         </button>
 
-        <button mat-raised-button (click)="cancel()" >
+        <button mat-raised-button (click)="cancel()">
           Cancel
         </button>
 

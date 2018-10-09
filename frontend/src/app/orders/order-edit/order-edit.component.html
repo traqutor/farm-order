@@ -6,7 +6,7 @@
     fxLayout="row"
   >
     <div>
-      <h2 class="mat-title">Edit Order</h2>
+      <h2 class="mat-title">Order</h2>
       <p class="mat-subheading-2">Edit the order definition and select the change reason.</p>
     </div>
   </div>
@@ -203,7 +203,7 @@
 
         <button
           mat-raised-button
-          color="primary"
+          color="accent"
           (click)="onSubmit()"
           [disabled]="order.invalid || orderTotalTonnage<orderSilosTonnage"
         >

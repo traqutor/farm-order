@@ -44,6 +44,8 @@
       <div class="spacer"></div>
 
       <button mat-icon-button
+              style="margin-right: 24px"
+              matTooltip="Change Theme"
               [ngStyle]="{'display':(auth$ | async) ? 'block' : 'none' }"
               [matMenuTriggerFor]="themeMenu">
         <mat-icon>color_lens</mat-icon>
