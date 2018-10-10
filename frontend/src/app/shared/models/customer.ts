@@ -4,7 +4,7 @@ export interface Customer {
   id?: number;
   name: string;
   logo: string;
-  cssFiePath: string;
+  cssFilePath: string;
   customerSites?: [CustomerSite];
   creationDate: string;
   modificationDate: string;

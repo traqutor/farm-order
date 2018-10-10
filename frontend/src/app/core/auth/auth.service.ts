@@ -62,12 +62,8 @@ export class AuthService {
     this.isAuthenticatedSubject.next(auth);
   }
 
-  getUser() {
-    const user = localStorage.getItem('user');
-    if (null === user || undefined === user) {
-      return {};
-    }
-    return JSON.parse(user);
+  getUser(): User {
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   isUserAuthenticated() {

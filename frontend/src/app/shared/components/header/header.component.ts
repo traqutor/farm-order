@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
 
     this.user$.subscribe((user: User) => {
       this.user = user;
+      this.onSetTheme(this.user.customer.cssFilePath ? this.user.customer.cssFilePath : 'default-theme');
       console.log('this.user', this.user);
     });
 
