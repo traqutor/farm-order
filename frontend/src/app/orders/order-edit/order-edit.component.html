@@ -111,7 +111,7 @@
 
           <mat-select #selectedSheds
                       placeholder="Shed"
-                      (valueChange)="null"
+                      (valueChange)="onShedvalueChange(shedxsilo)"
                       [(ngModel)]="shedxsilo.shed"
                       [ngModelOptions]="{standalone: true}"
                       [compareWith]="compare">

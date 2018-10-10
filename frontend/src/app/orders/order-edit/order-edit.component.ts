@@ -239,6 +239,9 @@ export class OrderEditComponent implements OnInit {
     this.sheds$ = this.sharedService.getSheds(farm.id, null);
   }
 
+  onShedvalueChange(shed: IShedxSilo) {
+    shed.silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+  }
 
   onSubmit() {
     const tmpSilos: Array<ISilo> = [];

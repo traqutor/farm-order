@@ -155,6 +155,9 @@ export class OrderNewComponent implements OnInit {
     });
   }
 
+  onShedvalueChange(shed: IShedxSilo) {
+    shed.silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+  }
 
   onSiloSelectChange(shedxsilo: IShedxSilo, index: number) {
 
