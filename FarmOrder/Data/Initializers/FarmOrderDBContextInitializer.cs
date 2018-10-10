@@ -50,8 +50,8 @@ namespace FarmOrder.Data.Initializers
             #region SystemAdmin creation
 
             var sysAdmin = new User();
-            sysAdmin.UserName = "sysadmin@gmail.com";
-            sysAdmin.Email = "sysadmin@gmail.com";
+            sysAdmin.UserName = "sysadmin@gordynpalmer.com.au";
+            sysAdmin.Email = "sysadmin@gordynpalmer.com.au";
             sysAdmin.EmailConfirmed = true;
             sysAdmin.CreationDate = DateTime.UtcNow;
             sysAdmin.ModificationDate = DateTime.UtcNow;
@@ -69,7 +69,7 @@ namespace FarmOrder.Data.Initializers
 
             #region customers and sites creation
 
-            Customer customer1 = new Customer()
+            Customer custProfisol = new Customer()
             {
                 Id = 1,
                 CompanyName = "Profisol",
@@ -78,7 +78,7 @@ namespace FarmOrder.Data.Initializers
                 ModificationDate = DateTime.UtcNow
             };
 
-            Customer customer2 = new Customer()
+            Customer custGnP = new Customer()
             {
                 Id = 2,
                 CompanyName = "GordynPalmer",
@@ -87,7 +87,7 @@ namespace FarmOrder.Data.Initializers
                 ModificationDate = DateTime.UtcNow
             };
 
-            Customer customer3 = new Customer()
+            Customer custBaiada = new Customer()
             {
                 Id = 3,
                 CompanyName = "Baiada",
@@ -96,124 +96,167 @@ namespace FarmOrder.Data.Initializers
                 ModificationDate = DateTime.UtcNow
             };
 
-            context.Customers.AddOrUpdate(customer1);
-            context.Customers.AddOrUpdate(customer2);
-            context.Customers.AddOrUpdate(customer3);
+            context.Customers.AddOrUpdate(custProfisol);
+            context.Customers.AddOrUpdate(custGnP);
+            context.Customers.AddOrUpdate(custBaiada);
 
-            CustomerSite site1 = new CustomerSite()
+            CustomerSite siteProfisolHome = new CustomerSite()
             {
                 Id = 1,
                 SiteName = "Home",
                 CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
-                CustomerId = customer1.Id
+                CustomerId = custProfisol.Id
             };
 
-            CustomerSite site2 = new CustomerSite()
+            CustomerSite siteGnPHome = new CustomerSite()
             {
                 Id = 2,
                 SiteName = "Home",
                 CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
-                CustomerId = customer2.Id
+                CustomerId = custGnP.Id
             };
 
-            CustomerSite site3 = new CustomerSite()
+            CustomerSite siteBaiadaHanwood = new CustomerSite()
             {
                 Id = 3,
                 SiteName = "Hanwood",
                 CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
-                CustomerId = customer3.Id
+                CustomerId = custBaiada.Id
             };
 
-            context.CustomerSites.AddOrUpdate(site1);
-            context.CustomerSites.AddOrUpdate(site2);
-            context.CustomerSites.AddOrUpdate(site3);
+            context.CustomerSites.AddOrUpdate(siteProfisolHome);
+            context.CustomerSites.AddOrUpdate(siteGnPHome);
+            context.CustomerSites.AddOrUpdate(siteBaiadaHanwood);
 
             #endregion
 
             #region rations creation
 
-            Ration cs1ration1 = new Ration()
+            Ration rationChickenStarter = new Ration()
             {
-                Name = "Ration 1",
-                Description = "100% wheat ration",
-                CustomerSite = site3,
+                Name = "Chicken Starter",
+                Description = "Chicken Starter",
+                CustomerSite = siteBaiadaHanwood,
                 CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
 
-            Ration cs1ration2 = new Ration()
+            Ration rationChickenGrower = new Ration()
             {
-                Name = "Ration 2",
-                Description = "100% flour ration",
-                CustomerSite = site3,
+                Name = "Chicken Grower",
+                Description = "Chicken Grower",
+                CustomerSite = siteBaiadaHanwood,
                 CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
 
-            Ration cs1ration3 = new Ration()
+            Ration rationChickenFinisher = new Ration()
             {
-                Name = "Ration 3",
-                Description = "50% wheat 50% flour ration",
-                CustomerSite = site3,
+                Name = "Chicken Finisher",
+                Description = "Chicken Finisher",
+                CustomerSite = siteBaiadaHanwood,
                 CreatedBy = sysAdmin,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow
             };
 
-            context.Rations.AddOrUpdate(cs1ration1);
-            context.Rations.AddOrUpdate(cs1ration2);
-            context.Rations.AddOrUpdate(cs1ration3);
+            context.Rations.AddOrUpdate(rationChickenStarter);
+            context.Rations.AddOrUpdate(rationChickenGrower);
+            context.Rations.AddOrUpdate(rationChickenFinisher);
+
+            Ration rationDuckStarter = new Ration()
+            {
+                Name = "Duck Starter",
+                Description = "Duck Starter",
+                CustomerSite = siteBaiadaHanwood,
+                CreatedBy = sysAdmin,
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
+            };
+
+            Ration rationDuckGrowerA = new Ration()
+            {
+                Name = "Duck Grower A",
+                Description = "Duck Grower A",
+                CustomerSite = siteBaiadaHanwood,
+                CreatedBy = sysAdmin,
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
+            };
+
+            Ration rationDuckGrowerB = new Ration()
+            {
+                Name = "Duck Grower B",
+                Description = "Duck Grower B",
+                CustomerSite = siteBaiadaHanwood,
+                CreatedBy = sysAdmin,
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
+            };
+
+            Ration rationDuckFinisher = new Ration()
+            {
+                Name = "Duck Finisher",
+                Description = "Duck Finisher",
+                CustomerSite = siteBaiadaHanwood,
+                CreatedBy = sysAdmin,
+                CreationDate = DateTime.UtcNow,
+                ModificationDate = DateTime.UtcNow
+            };
+
+            context.Rations.AddOrUpdate(rationDuckStarter);
+            context.Rations.AddOrUpdate(rationDuckGrowerA);
+            context.Rations.AddOrUpdate(rationDuckGrowerB);
+            context.Rations.AddOrUpdate(rationDuckFinisher);
 
 
             #endregion
 
-          
-
             #region users creation
 
-            var user2 = new User();
-            user2.UserName = "GordynPalmer@gmail.com";
-            user2.Email = "GordynPalmer@gmail.com";
-            user2.EmailConfirmed = true;
-            user2.CustomerId = 2;
-            user2.CreatedBy = sysAdmin;
-            user2.CreationDate = DateTime.UtcNow;
-            user2.ModificationDate = DateTime.UtcNow;
+            var userGnP = new User();
+            userGnP.UserName = "info@gordynpalmer.com.au";
+            userGnP.Email = "info@gordynpalmer.com.au";
+            userGnP.EmailConfirmed = true;
+            userGnP.CustomerId = custGnP.Id;
+            userGnP.CreatedBy = sysAdmin;
+            userGnP.CreationDate = DateTime.UtcNow;
+            userGnP.ModificationDate = DateTime.UtcNow;
 
-            string user2PWD = "Password";
+            string gnpPassword = "Password";
 
-            var chkUser2 = UserManager.Create(user2, user2PWD);
+            var chkUser2 = UserManager.Create(userGnP, gnpPassword);
 
             if (chkUser2.Succeeded)
             {
-                var result = UserManager.AddToRole(user2.Id, "Admin");
+                var result = UserManager.AddToRole(userGnP.Id, "Admin");
             }
 
 
-            var user3 = new User();
-            user3.UserName = "Baiada@gmail.com";
-            user3.Email = "Baiada@gmail.com";
-            user3.EmailConfirmed = true;
-            user3.CustomerId = 3;
-            user3.CreatedBy = sysAdmin;
-            user3.CreationDate = DateTime.UtcNow;
-            user3.ModificationDate = DateTime.UtcNow;
+            var userBaiada = new User();
+            userBaiada.UserName = "admin@baiada.com.au";
+            userBaiada.Email = "admin@baiada.com.au";
+            userBaiada.EmailConfirmed = true;
+            userBaiada.CustomerId = custBaiada.Id;
+            userBaiada.CreatedBy = sysAdmin;
+            userBaiada.CreationDate = DateTime.UtcNow;
+            userBaiada.ModificationDate = DateTime.UtcNow;
 
-            string user3PWD = "Password";
+            string baiadaPassword = "Password";
 
-            var chkUser3 = UserManager.Create(user3, user3PWD);
+            var chkUser3 = UserManager.Create(userBaiada, baiadaPassword);
 
             if (chkUser3.Succeeded)
             {
-                var result = UserManager.AddToRole(user3.Id, "CustomerAdmin");
+                var result = UserManager.AddToRole(userBaiada.Id, "CustomerAdmin");
             }
 
             #endregion
@@ -225,15 +268,15 @@ namespace FarmOrder.Data.Initializers
                 CustomerSiteUser csu1 = new CustomerSiteUser
                 {
                     Id = 1,
-                    UserId = user2.Id,
-                    CustomerSiteId = site2.Id
+                    UserId = userGnP.Id,
+                    CustomerSiteId = siteGnPHome.Id
                 };
 
                 CustomerSiteUser csu2 = new CustomerSiteUser
                 {
                     Id = 2,
-                    UserId = user3.Id,
-                    CustomerSiteId = site3.Id
+                    UserId = userBaiada.Id,
+                    CustomerSiteId = siteBaiadaHanwood.Id
                 };
 
                 context.CustomerSiteUsers.AddOrUpdate(csu1);
@@ -320,18 +363,18 @@ namespace FarmOrder.Data.Initializers
                 Farm farm1 = new Farm()
                 {
                     Id = 1,
-                    Name = "Farm 1",
-                    CustomerSiteId = 3,
+                    Name = "Bidgee 13",
+                    CustomerSiteId = siteBaiadaHanwood.Id,
                     CreatedBy = sysAdmin,
                     CreationDate = DateTime.UtcNow,
                     ModificationDate = DateTime.UtcNow
                 };
-                
+
                 Farm farm2 = new Farm()
                 {
                     Id = 2,
-                    Name = "Farm 2",
-                    CustomerSiteId = 3,
+                    Name = "Coly 25",
+                    CustomerSiteId = siteBaiadaHanwood.Id,
                     CreatedBy = sysAdmin,
                     CreationDate = DateTime.UtcNow,
                     ModificationDate = DateTime.UtcNow
@@ -340,8 +383,8 @@ namespace FarmOrder.Data.Initializers
                 Farm farm3 = new Farm()
                 {
                     Id = 3,
-                    Name = "Farm 3",
-                    CustomerSiteId = 3,
+                    Name = "Avenues 31",
+                    CustomerSiteId = siteBaiadaHanwood.Id,
                     CreatedBy = sysAdmin,
                     CreationDate = DateTime.UtcNow,
                     ModificationDate = DateTime.UtcNow
@@ -350,8 +393,8 @@ namespace FarmOrder.Data.Initializers
                 Farm farm4 = new Farm()
                 {
                     Id = 3,
-                    Name = "Farm 4",
-                    CustomerSiteId = 3,
+                    Name = "Farm 75 - ProTen",
+                    CustomerSiteId = siteBaiadaHanwood.Id,
                     CreatedBy = sysAdmin,
                     CreationDate = DateTime.UtcNow,
                     ModificationDate = DateTime.UtcNow
@@ -370,7 +413,7 @@ namespace FarmOrder.Data.Initializers
 
                     Shed shed1Farm1 = new Shed()
                     {
-                        Name = $"Shed1 in {farm.Name}",
+                        Name = $"0001",
                         FarmId = farm.Id,
                         CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
@@ -379,7 +422,7 @@ namespace FarmOrder.Data.Initializers
 
                     Silo silo1Shed1 = new Silo()
                     {
-                        Name = $"Silo1 in {shed1Farm1.Name}",
+                        Name = $"S1",
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed1Farm1,
@@ -390,7 +433,7 @@ namespace FarmOrder.Data.Initializers
 
                     Silo silo2Shed1 = new Silo()
                     {
-                        Name = $"Silo2 in {shed1Farm1.Name}",
+                        Name = $"S2",
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed1Farm1,
@@ -401,7 +444,7 @@ namespace FarmOrder.Data.Initializers
 
                     Shed shed2Farm1 = new Shed()
                     {
-                        Name = $"Shed2 in {farm.Name}",
+                        Name = $"0002",
                         FarmId = farm.Id,
                         CreatedBy = sysAdmin,
                         CreationDate = DateTime.UtcNow,
@@ -410,7 +453,7 @@ namespace FarmOrder.Data.Initializers
 
                     Silo silo1Shed2 = new Silo()
                     {
-                        Name = $"Silo1 in {shed2Farm1.Name}",
+                        Name = $"S1",
                         Capacity = 20,
                         Occupancy = 0,
                         Shed = shed2Farm1,
@@ -421,7 +464,7 @@ namespace FarmOrder.Data.Initializers
 
                     Silo silo2Shed2 = new Silo()
                     {
-                        Name = $"Silo2 in {shed2Farm1.Name}",
+                        Name = $"S2",
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed2Farm1,
@@ -432,7 +475,7 @@ namespace FarmOrder.Data.Initializers
 
                     Silo silo3Shed2 = new Silo()
                     {
-                        Name = $"Silo3 in {shed2Farm1.Name}",
+                        Name = $"S3",
                         Capacity = 30,
                         Occupancy = 0,
                         Shed = shed2Farm1,
