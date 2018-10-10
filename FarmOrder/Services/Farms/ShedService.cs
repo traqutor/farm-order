@@ -8,6 +8,7 @@ using FarmOrder.Models.Farms;
 using FarmOrder.Data.Entities.Farms;
 using System.Web.Http;
 using System.Net;
+using System.Data.Entity;
 
 namespace FarmOrder.Services.Farms
 {
@@ -28,7 +29,7 @@ namespace FarmOrder.Services.Farms
             if(farmUser == null)
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
 
-            var query = _context.Sheds.Where(s => s.EntityStatus == Data.Entities.EntityStatus.NORMAL && s.FarmId == farmId).OrderBy(s => s.Id).AsQueryable();
+            var query = _context.Sheds.Include(sh => sh.Siloses).Where(s => s.EntityStatus == Data.Entities.EntityStatus.NORMAL && s.FarmId == farmId).OrderBy(s => s.Id).AsQueryable();
 
             int totalCount = query.Count();
 

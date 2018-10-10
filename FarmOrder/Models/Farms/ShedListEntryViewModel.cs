@@ -11,6 +11,8 @@ namespace FarmOrder.Models.Farms
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public List<SiloListEntryViewModel> Siloses { get; set; }
+
         public ShedListEntryViewModel()
         {
 
@@ -20,6 +22,9 @@ namespace FarmOrder.Models.Farms
         {
             Id = entity.Id;
             Name = entity.Name;
+
+            if(entity.Siloses != null)
+                Siloses = entity.Siloses.Select(s => new SiloListEntryViewModel(s)).ToList();
         }
     }
 }
