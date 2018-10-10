@@ -84,6 +84,17 @@ export class OrderNewComponent implements OnInit {
       this.getRations(this.farms[0]);
       this.getSheds(this.farms[0]);
     });
+
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
+    this.addSilo();
   }
 
 
@@ -251,7 +262,7 @@ export class OrderNewComponent implements OnInit {
     }
 
     this.orderShedsXSilos.forEach( (shedxsilo:IShedxSilo) => {
-      if (shedxsilo.silo.id === null || shedxsilo.shed.id === null  ) {
+      if ((shedxsilo.silo.id === null || shedxsilo.shed.id === null) && shedxsilo.silo.amount > 0 ) {
         tmp = true;
       }
     });
