@@ -9,7 +9,7 @@
     [opened]="!(isHandset$ | async)">
 
     <div>
-      <img [src]="this.user ? this.user.customer.logo : './assets/genius_fom.png'" class="logo">
+      <img [src]="this.user && this.user.customer && this.user.customer.logo !== null ? this.user.customer.logo : './assets/genius_fom.png'" class="logo">
     </div>
 
     <mat-nav-list *ngIf="(user$ | async) as user">
