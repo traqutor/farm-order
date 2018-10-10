@@ -85,6 +85,7 @@ export class OrderNewComponent implements OnInit {
       this.getSheds(this.farms[0]);
     });
 
+    // BSF 20181011 - Added these to provide entry for up to 10 silos
     this.addSilo();
     this.addSilo();
     this.addSilo();
@@ -202,7 +203,11 @@ export class OrderNewComponent implements OnInit {
   }
 
   removeSilo(index: number) {
-    this.orderShedsXSilos.splice(index, 1);
+    // BSF 20181011 - Modified to reset row rather than deleting
+    // this.orderShedsXSilos.splice(index, 1);
+    this.orderShedsXSilos[index].shed = {id: null, name: null, silos: []};
+    this.orderShedsXSilos[index].silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+
     this.recalculateOrderTonnage();
   };
 
@@ -262,6 +267,7 @@ export class OrderNewComponent implements OnInit {
     }
 
     this.orderShedsXSilos.forEach( (shedxsilo:IShedxSilo) => {
+      // BSF 20181011 - Added logic to allow records to exist which have null shed / silo and an amount = 0
       if ((shedxsilo.silo.id === null || shedxsilo.shed.id === null) && shedxsilo.silo.amount > 0 ) {
         tmp = true;
       }
