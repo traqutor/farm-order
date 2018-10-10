@@ -1,10 +1,12 @@
 <mat-toolbar color="primary">
-  <span>Genius Farm Order Module</span>
 </mat-toolbar>
 <div class="container">
   <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
-    <mat-card style="justify-content: center;">
-      <img src="./assets/genius_fom.png" style="width: 200px;" class="logo">
+
+    <mat-card class="mat-elevation-z4"
+              fxLayout="column">
+
+      <img src="./assets/genius_fom.png" class="logo">
 
       <form class="singInForm" (ngSubmit)="onSignIn(f)" #f="ngForm">
         <mat-form-field>
@@ -24,9 +26,15 @@
         <button mat-raised-button color="primary" type="submit" [disabled]="!f.valid">Sign In</button>
       </form>
 
+      <div fxLayout="row"
+           fxLayoutAlign="center center"
+           class="app-padding-small">
+        <button mat-button routerLink="/passwordReset" >Forgot your password?</button>
+      </div>
+
       <mat-progress-bar
         *ngIf="isLogging"
-        [color]="primary"
+        color="primary"
         [mode]="'indeterminate'">
       </mat-progress-bar>
 

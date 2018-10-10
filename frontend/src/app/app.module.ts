@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
@@ -16,6 +17,8 @@ import {AuthInterceptor} from './core/auth/auth.interceptor';
 import {ConfirmDialogComponent} from './shared/dialogs/confirm-dialog/confirm-dialog.component';
 import {ChangePasswordDialogComponent} from './shared/dialogs/change-password-dialog/change-password-dialog.component';
 import {AlertDialogComponent} from './shared/dialogs/alert-dialog/alert-dialog.component';
+import {OverlayModule} from "@angular/cdk/overlay";
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -32,10 +35,14 @@ export const MY_FORMATS = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PasswordResetComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    OverlayModule,
     AppMaterialModule,
     AppRoutingModule,
     BrowserAnimationsModule,

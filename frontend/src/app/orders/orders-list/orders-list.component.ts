@@ -11,6 +11,7 @@ import {SharedService} from '../../shared/shared.service';
 import {AuthService} from '../../core/auth/auth.service';
 import {DialogService} from '../../shared/dialogs/dialog.service';
 import {User} from '../../shared/models/user';
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-orders-list',
@@ -21,14 +22,14 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   dataSource: IOrder[] = [];
   displayedColumns = [
-    {value: 'status', name: 'Status'},
-    {value: 'orderChangeReason', name: 'Order change reason'},
-    {value: 'creationDate', name: 'Add Order Date'},
-    {value: 'modificationDate', name: 'Modification Date'},
-    {value: 'deliveryDate', name: 'Delivery Date'},
-    {value: 'tonsOrdered', name: 'Tons ordered'},
-    {value: 'ration', name: 'Ration'},
-    {value: 'farm', name: 'Farm'}
+    {value: 'status', name: 'Status', hideMobile: false},
+    {value: 'orderChangeReason', name: 'Order change reason', hideMobile: false},
+    {value: 'creationDate', name: 'Add Order Date', hideMobile: false},
+    {value: 'modificationDate', name: 'Modification Date', hideMobile: true},
+    {value: 'deliveryDate', name: 'Delivery Date', hideMobile: true},
+    {value: 'tonsOrdered', name: 'Tons ordered', hideMobile: false},
+    {value: 'ration', name: 'Ration', hideMobile: false},
+    {value: 'farm', name: 'Farm', hideMobile: false}
   ];
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   columnsToRender = ['status', 'creationDate', 'modificationDate', 'deliveryDate', 'orderChangeReason', 'tonsOrdered', 'ration', 'farm', 'settings'];
@@ -44,6 +45,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   loading = false;
 
   constructor(private ordersService: OrdersService,
+              private breakpointObserver: BreakpointObserver,
               private datePipe: DatePipe,
               private sharedService: SharedService,
               private authService: AuthService,
@@ -87,6 +89,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
           this.dialogService.alert(err.error);
         });
   }
+
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Tablet)
+    .pipe(
+      map(result => result.matches)
+    );
+
 
   filterByDate() {
     this.ordersService.getOrders({

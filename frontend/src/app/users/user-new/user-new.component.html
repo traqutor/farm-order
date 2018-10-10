@@ -7,30 +7,38 @@
   >
     <div>
       <h2 class="mat-title">New User</h2>
-      <p class="mat-subheading-2">Here you create new user.</p>
+      <p class="mat-subheading-2">Create new user.</p>
     </div>
   </div>
 
-  <mat-divider></mat-divider>
 
   <div>
     <form [formGroup]="user" fxLayout="column" class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>Email</mat-label>
+
         <input
           matInput
-          type="text"
-          placeholder="Username"
+          type="email"
+          email="true"
+          placeholder="Email"
           formControlName="userName">
         <mat-error
           *ngIf="user.get('userName').hasError('required') && user.get('userName').touched">
-          UserName is required.
+          Email is required.
         </mat-error>
         <mat-error
-          *ngIf="user.get('userName').hasError('minlength') && user.get('userName').touched">
-          UserName must have minimum 6 characters.
+          *ngIf="(user.get('userName').hasError('email') || user.get('userName').hasError('minlength')) && user.get('userName').touched">
+          Provide valid email.
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>Password</mat-label>
+
         <input
           matInput
           type="password"
@@ -45,7 +53,11 @@
           Password must have minimum 6 characters.
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
+
+      <mat-form-field appearance="outline">
+
+        <mat-label>Repeat Password</mat-label>
+
         <input
           matInput
           type="password"
@@ -59,8 +71,18 @@
           *ngIf="user.get('confirmPassword').hasError('minlength') && user.get('confirmPassword').touched">
           Password must have minimum 6 characters.
         </mat-error>
+
+        <mat-error *ngIf="user.get('confirmPassword').hasError('MatchPassword') && user.get('confirmPassword').touched">
+          Password not match
+        </mat-error>
+
       </mat-form-field>
-      <mat-form-field *ngIf="(customers$ | async) as customers">
+
+      <mat-form-field appearance="outline"
+                      *ngIf="(customers$ | async) as customers">
+
+        <mat-label>Customer</mat-label>
+
         <mat-select placeholder="Select Customer" formControlName="customer"
                     (valueChange)="resetFarms()">
           <mat-option *ngFor="let customer of customers.results" [value]="customer">
@@ -72,7 +94,12 @@
           Customer is required.
         </mat-error>
       </mat-form-field>
-      <mat-form-field *ngIf="this.user.value.customer !== null">
+
+      <mat-form-field appearance="outline"
+                      *ngIf="this.user.value.customer !== null">
+
+        <mat-label>Site</mat-label>
+
         <mat-select #option placeholder="Select Site" formControlName="customerSites" multiple
                     (valueChange)="getFarms(option.value)">
           <mat-option *ngFor="let site of this.user.value.customer.customerSites" [value]="site">
@@ -84,7 +111,12 @@
           Customer Site is required.
         </mat-error>
       </mat-form-field>
-      <mat-form-field *ngIf="this.user.value.customerSites !== null && (farms$ | async) as farms">
+
+      <mat-form-field appearance="outline"
+                      *ngIf="this.user.value.customerSites !== null && (farms$ | async) as farms">
+
+        <mat-label>Farm</mat-label>
+
         <mat-select #option placeholder="Select Farm" formControlName="farms" multiple>
           <mat-option *ngFor="let farm of farms.results" [value]="farm">
             {{farm.name}}
@@ -95,7 +127,12 @@
           Farm is required.
         </mat-error>
       </mat-form-field>
-      <mat-form-field *ngIf="(roles$ | async) as roles">
+
+      <mat-form-field appearance="outline"
+                      *ngIf="(roles$ | async) as roles">
+
+        <mat-label>Role</mat-label>
+
         <mat-select placeholder="Select Role" formControlName="roleId">
           <mat-option *ngFor="let role of roles.results" [value]="role.id">
             {{role.name}}
@@ -106,22 +143,20 @@
           Role is required.
         </mat-error>
       </mat-form-field>
-      <mat-error *ngIf="user.get('confirmPassword').hasError('MatchPassword') && user.get('confirmPassword').touched">
-        Password not match
-      </mat-error>
 
-      <div fxLayout="row">
+
+      <div fxLayout="row" class="button-row">
 
         <button
           mat-raised-button
-          color="primary"
+          color="accent"
           (click)="onSubmit()"
           [disabled]="user.invalid"
         >
           Create User
         </button>
 
-        <button mat-button (click)="cancel()" >
+        <button mat-raised-button (click)="cancel()" >
           Cancel
         </button>
 

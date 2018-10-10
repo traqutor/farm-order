@@ -1,5 +1,6 @@
 
 
+
 .filter-date-full {
   display: flex;
   width: 100%;
@@ -13,7 +14,6 @@
 
 .example-table-container {
   position: relative;
-  max-height: 400px;
   overflow: auto;
 }
 
