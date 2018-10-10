@@ -25,7 +25,6 @@ namespace FarmOrder.Migrations
         protected override void Seed(FarmOrder.Data.FarmOrderDBContext context)
         {
             //  This method will be called after migrating to the latest version.
-
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<User>(new UserStore<User>(context));
 
