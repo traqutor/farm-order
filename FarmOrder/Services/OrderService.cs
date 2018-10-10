@@ -153,7 +153,7 @@ namespace FarmOrder.Services
         {
             var changeReason = _context.OrderChangeReasons.SingleOrDefault(ocr => ocr.Id == model.OrderChangeReason.Id);
             var orderStatus = _context.OrderStatuses.SingleOrDefault(os => os.Id == model.Status.Id);
-            var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
+            var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.Farms.Any(f => f.FarmId == model.Farm.Id));
 
             int[] silosesIds = model.Silos.Select(s => s.Id).ToArray();
             var selectedSiloses = _context.Silos.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId).ToList();
@@ -241,7 +241,7 @@ namespace FarmOrder.Services
         public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)
         {
             var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
-            var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.CustomerSite.Farms.Any(f => f.Id == model.Farm.Id));
+            var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.Farms.Any(f => f.FarmId == model.Farm.Id));
 
             int[] silosesIds = model.Silos.Select(s => s.Id).ToArray();
             var selectedSiloses = _context.Silos.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId);
