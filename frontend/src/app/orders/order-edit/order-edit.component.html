@@ -12,9 +12,10 @@
   </div>
 
 
-  <div class="padding-content" *ngIf="order">
+  <div class="padding-content"
+       *ngIf="order">
 
-    <form [formGroup]="order" fxLayout="column" class="half-width">
+    <form [formGroup]="order" fxFlex="60" fxFlex.lt-md="100" fxLayout="column">
 
       <!--tons-->
       <mat-form-field appearance="outline">

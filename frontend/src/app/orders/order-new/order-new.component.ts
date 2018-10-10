@@ -13,6 +13,7 @@ import {Ration} from '../../shared/models/ration';
 import {IShed} from "../../shared/models/shed";
 import {ISilo} from "../../shared/models/silo";
 import {IOrder} from "../../shared/models/order";
+import {IShedxSilo} from "../../shared/models/sheldxsilo";
 
 @Component({
   selector: 'app-order-new',
@@ -36,6 +37,13 @@ export class OrderNewComponent implements OnInit {
   rations$: Observable<{ results: [Ration], resultsCount: number }>;
   sheds$: Observable<{ results: [IShed], resultsCount: number }>;
   silos$: Observable<{ results: [ISilo], resultsCount: number }>;
+
+  allFarmSheds: { results: IShed[], resultsCount: number };
+
+  allShedsXSilos: Array<IShedxSilo> = [];
+  orderShedsXSilos: Array<IShedxSilo> = [];
+
+
   farms: Array<Farm> = [];
   orderTotalTonnage: number = 0;
   orderSilosTonnage: number = 0;
@@ -71,16 +79,28 @@ export class OrderNewComponent implements OnInit {
         ration: [null, [
           Validators.required
         ]],
-        sheds: [[], [
-          Validators.required
-        ]],
-        silos: [[], [
-          Validators.required
-        ]]
+        silos: [[]]
       });
       this.getRations(this.farms[0]);
       this.getSheds(this.farms[0]);
     });
+  }
+
+
+  addSilo() {
+    let shredxsilo: IShedxSilo = {
+      shed: {id: null, silos: [], name: null},
+      silo: {id: null, shedId: null, name: null, amount: 0, capacity: 0}
+    };
+    if (this.orderShedsXSilos.length <= 9) {
+      this.orderShedsXSilos.push(shredxsilo);
+    } else {
+      this.snackBar.open('The limit of silos is 10 per order!', '', {
+        duration: 2500,
+      });
+
+    }
+    this.recalculateOrderTonnage();
   }
 
   getTotalOrderAmount() {
@@ -101,88 +121,88 @@ export class OrderNewComponent implements OnInit {
 
   getSheds(farm: Farm) {
     this.sheds$ = this.sharedService.getSheds(farm.id, null);
-  }
+    this.sheds$.subscribe((res: { results: Array<IShed>, resultsCount: number }) => {
 
-  getSilos(sheds: Array<ISilo>) {
+      let tmp: Array<IShed> = [];
 
-    this.orderSilosTonnage = 0;
-    this.silos$ = this.sharedService.getSilos(sheds, null);
-    this.silos$.subscribe((res: { results: Array<ISilo>, resultsCount: number }) => {
+      // take all sheds an make the list shed_x_silo
 
-      let tmp: Array<ISilo> = [];
+      this.allFarmSheds = res;
+      this.allFarmSheds.results.forEach((shed: IShed) => {
+        shed.silos.forEach((silo: ISilo) => {
+          this.allShedsXSilos.push({shed, silo});
+        });
+      });
 
-      console.log('this.orderTmp.silos', this.orderTmp.silos);
+      // for each shed_x_silo add order amount
 
       this.orderTmp.silos.forEach((silo: ISilo) => {
-        sheds.forEach((shed: IShed) => {
-          if (shed.id === silo.shedId) {
-            tmp.push(silo);
+
+        this.allShedsXSilos.forEach((sheadXSilo: IShedxSilo, index, object) => {
+
+          if (sheadXSilo.silo.id === silo.id && sheadXSilo.shed.id === silo.shedId) {
+
+            sheadXSilo.silo.amount = silo.amount;
+            this.orderShedsXSilos.push(sheadXSilo);
+            object.splice(index, 1);
+
           }
         });
       });
 
-      console.log('tmp', tmp);
 
-      this.order.controls.silos.setValue(tmp);
-
-      this.onSiloSelectChange();
 
     });
   }
 
-  onSiloSelectChange() {
+
+  onSiloSelectChange(shedxsilo: IShedxSilo, index: number) {
 
     setTimeout(() => {
+      this.orderShedsXSilos.forEach((shedxsiloTmp: IShedxSilo, indexTmp) => {
 
-      this.order.controls.silos.value.forEach((silo: ISilo) => {
-
-
-        let addSilo = true;
-        this.orderTmp.silos.forEach((siloTmp: ISilo) => {
-          if (silo.id === siloTmp.id) {
-            addSilo = false;
-          }
-        });
-        if (addSilo) {
-          this.orderTmp.silos.push(silo);
+        if (shedxsilo.shed.id === shedxsiloTmp.shed.id && shedxsilo.silo.id === shedxsiloTmp.silo.id && indexTmp !== index) {
+          shedxsilo.silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+          this.snackBar.open('There is such silos selected!', '', {
+            duration: 2500,
+          });
+          return;
         }
       });
 
-      this.orderTmp.silos.forEach((siloTmp: ISilo) => {
-        this.order.controls.silos.value.forEach((silo: ISilo) => {
-          if (silo.id === siloTmp.id) {
-            silo.amount = siloTmp.amount;
-          }
-        });
-      });
       this.recalculateOrderTonnage();
+    }, 200);
 
-      console.log('this.orderTmp', this.orderTmp);
-
-    }, 400);
   }
-
-  onSiloAmountChange(silo: ISilo) {
-    this.orderTmp.silos.forEach((siloTmp: ISilo) => {
-      if (siloTmp.id === silo.id) {
-        siloTmp.amount = silo.amount;
-      }
-    });
-    this.recalculateOrderTonnage();
-  }
-
 
   recalculateOrderTonnage() {
-    this.orderSilosTonnage = 0;
-    if (this.order) {
-      this.order.controls.silos.value.forEach((silo: ISilo) => {
-        this.orderSilosTonnage = this.orderSilosTonnage + silo.amount;
-      });
-    }
+
+    setTimeout(() => {
+      this.orderSilosTonnage = 0;
+      this.orderShedsXSilos.forEach((shedxsilo: IShedxSilo) => {
+        this.orderSilosTonnage = this.orderSilosTonnage + shedxsilo.silo.amount;
+
+      }, 200);
+    });
+
   }
+
+  removeSilo(index: number) {
+    this.orderShedsXSilos.splice(index, 1);
+    this.recalculateOrderTonnage();
+  };
 
 
   onSubmit() {
+    const tmpSilos: Array<ISilo> = [];
+    tmpSilos.length = 0;
+    this.orderShedsXSilos.forEach((shedxsilo: IShedxSilo) => {
+      if (shedxsilo.silo.id !== null) {
+        tmpSilos.push(shedxsilo.silo);
+      }
+    });
+
+    this.order.controls.silos.setValue(tmpSilos);
 
     const {value, valid} = this.order;
     value.deliveryDate.toISOString();
@@ -220,6 +240,22 @@ export class OrderNewComponent implements OnInit {
 
     }
   }
+
+  submitDisabled() {
+    let tmp = false;
+    if (this.order.invalid || this.orderTotalTonnage < this.orderSilosTonnage || this.orderShedsXSilos.length <= 0) {
+      tmp = true;
+    }
+
+    this.orderShedsXSilos.forEach( (shedxsilo:IShedxSilo) => {
+      if (shedxsilo.silo.id === null || shedxsilo.shed.id === null  ) {
+        tmp = true;
+      }
+    });
+
+    return tmp;
+  }
+
 
   cancel() {
     this._location.back();

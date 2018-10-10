@@ -14,8 +14,7 @@
 
   <div *ngIf="order" class="padding-content">
 
-    <form [formGroup]="order" fxLayout="column" class="half-width"
-          [ngClass.xs]="{'half-width':false, 'full-width':true}">
+    <form [formGroup]="order" fxFlex="60" fxFlex.lt-md="100" fxLayout="column" >
 
       <mat-form-field appearance="outline">
         <mat-label>Tons ordered</mat-label>
@@ -36,6 +35,7 @@
 
       <!--farms-->
       <mat-form-field appearance="outline">
+        <mat-label>Farm</mat-label>
         <mat-select #option placeholder="Select Farm" formControlName="farm"
                     (valueChange)="getRations(option.value); getSheds(option.value)">
           <mat-option *ngFor="let farm of farms" [value]="farm">
@@ -51,6 +51,7 @@
       <!--ration-->
       <mat-form-field appearance="outline"
                       *ngIf="this.order.value.farm !== null && (rations$ | async) as rations">
+        <mat-label>Ration</mat-label>
         <mat-select placeholder="Select Ration" formControlName="ration">
           <mat-option *ngFor="let ration of rations.results" [value]="ration">
             {{ration.name}}
@@ -63,64 +64,89 @@
       </mat-form-field>
 
       <!--sheds-->
-      <mat-form-field appearance="outline"
-        *ngIf="this.order.value.farm !== null && (sheds$ | async) as sheds">
 
-        <mat-select #selectedSheds placeholder="Select Sheds"
-                    (valueChange)="getSilos(selectedSheds.value)"
-                    formControlName="sheds"
-                    multiple>
-          <mat-option *ngFor="let shed of sheds.results" [value]="shed">
-            {{shed.name}}
-          </mat-option>
-        </mat-select>
-
-        <mat-error
-          *ngIf="order.get('sheds').hasError('required') && order.get('sheds').touched">
-          Sheds are required.
-        </mat-error>
-      </mat-form-field>
-
-      <!--silos-->
-      <mat-form-field appearance="outline"
-        *ngIf="this.order.value.farm !== null && this.order.value.sheds !== null && (silos$ | async) as silosSet">
-        <mat-select placeholder="Select Silos"
-                    formControlName="silos"
-                    (valueChange)="onSiloSelectChange()"
-                    [compareWith]="compare"
-                    multiple>
-          <mat-option *ngFor="let silo of silosSet.results" [value]="silo" >
-            {{silo.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error
-          *ngIf="order.get('silos').hasError('required') && order.get('silos').touched">
-          Silos are required.
-        </mat-error>
-      </mat-form-field>
-
-      <div *ngFor="let silo of order.controls.silos.value"
-           [style.color]="silo.amount>silo.capacity ? 'red': ''"
+      <div *ngFor="let shedxsilo of orderShedsXSilos; let i = index"
            fxLayout="row"
-           fxLayoutAlign="start center"
-      >
-        <span>{{silo.name}}:</span>
+           fxLayoutAlign="start center">
 
-        <mat-form-field appearance="outline" class="silo-amount-input">
+        <mat-form-field fxFlex="20" appearance="outline">
+
+          <mat-label>Sheds</mat-label>
+
+          <mat-select #selectedSheds
+                      placeholder="Shed"
+                      (valueChange)="null"
+                      [(ngModel)]="shedxsilo.shed"
+                      [ngModelOptions]="{standalone: true}"
+                      [compareWith]="compare">
+            <mat-option *ngFor="let shed of allFarmSheds.results" [value]="shed">
+              {{shed.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="30" appearance="outline">
+
+          <mat-label>Silos</mat-label>
+
+          <mat-select placeholder="Silo"
+                      [(ngModel)]="shedxsilo.silo"
+                      [ngModelOptions]="{standalone: true}"
+                      (valueChange)="onSiloSelectChange(shedxsilo, i)"
+                      [compareWith]="compare">
+
+            <mat-option *ngFor="let silo of shedxsilo.shed.silos" [value]="silo">
+              {{silo.name}}
+            </mat-option>
+
+          </mat-select>
+
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline"
+                        class="silo-amount-input">
+          <mat-label>Amount</mat-label>
+
           <input type="number"
                  matInput
                  maxlength="2"
                  min="0"
-                 max="50"
-                 required
-                 [(ngModel)]="silo.amount"
+                 [max]="shedxsilo.silo.capacity"
+                 [(ngModel)]="shedxsilo.silo.amount"
                  [ngModelOptions]="{standalone: true}"
-                 (ngModelChange)="onSiloAmountChange(silo)">
+                 (ngModelChange)="recalculateOrderTonnage()">
         </mat-form-field>
 
-        <span>(MAX <b>{{silo.capacity}}</b> tons)</span>
+        <div>(MAX <b>{{shedxsilo.silo.capacity}}</b> tons)
+
+        </div>
+
+        <button mat-icon-button
+                (click)="removeSilo(i)"
+                matTooltip="Remove silo">
+          <mat-icon>clear</mat-icon>
+        </button>
 
       </div>
+
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <p>Allocated / Total ordered tonnage:
+          <button mat-button
+                  [color]="orderTotalTonnage<orderSilosTonnage? 'warn': 'accent'"
+          > {{orderSilosTonnage}} / {{orderTotalTonnage}}
+          </button>
+        </p>
+        <span class="spacer"></span>
+        <button mat-raised-button
+                color="accent"
+                matTooltip="Add silo"
+                (click)="addSilo()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
 
       <div>
         <p>Allocated / Total ordered tonnage:
@@ -145,7 +171,7 @@
           mat-raised-button
           (click)="onSubmit()"
           color="accent"
-          [disabled]="order.invalid || orderTotalTonnage<orderSilosTonnage"
+          [disabled]="submitDisabled()"
         >
           Add Order
         </button>

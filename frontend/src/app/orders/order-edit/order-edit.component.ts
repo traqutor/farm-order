@@ -13,12 +13,9 @@ import {DialogService} from '../../shared/dialogs/dialog.service';
 import {Ration} from '../../shared/models/ration';
 import {ISilo} from "../../shared/models/silo";
 import {IShed} from "../../shared/models/shed";
+import {IShedxSilo} from "../../shared/models/sheldxsilo";
 
 
-interface IShedxSilo {
-  shed: IShed;
-  silo: ISilo;
-}
 
 @Component({
   selector: 'app-order-edit',
@@ -165,7 +162,14 @@ export class OrderEditComponent implements OnInit {
       shed: {id: null, silos: [], name: null},
       silo: {id: null, shedId: null, name: null, amount: 0, capacity: 0}
     };
-    this.orderShedsXSilos.push(shredxsilo);
+    if (this.orderShedsXSilos.length <= 9) {
+      this.orderShedsXSilos.push(shredxsilo);
+    } else {
+      this.snackBar.open('The limit of silos is 10 per order!', '', {
+        duration: 2500,
+      });
+
+    }
     this.recalculateOrderTonnage();
   }
 
@@ -291,7 +295,7 @@ export class OrderEditComponent implements OnInit {
     }
 
     this.orderShedsXSilos.forEach( (shedxsilo:IShedxSilo) => {
-      if (shedxsilo.silo.id === null || shedxsilo.shed.id === null || shedxsilo.silo.amount <= 0 ) {
+      if (shedxsilo.silo.id === null || shedxsilo.shed.id === null ) {
         tmp = true;
       }
     });
