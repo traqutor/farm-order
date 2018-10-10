@@ -14,6 +14,12 @@ import {Ration} from '../../shared/models/ration';
 import {ISilo} from "../../shared/models/silo";
 import {IShed} from "../../shared/models/shed";
 
+
+interface IShedxSilo {
+  shed: IShed;
+  silo: ISilo;
+}
+
 @Component({
   selector: 'app-order-edit',
   templateUrl: './order-edit.component.html',
@@ -38,10 +44,16 @@ export class OrderEditComponent implements OnInit {
   status$: Observable<{ results: Array<Status>, resultsCount: number }>;
 
   farms: { results: Array<Farm>, resultsCount: number };
-  sheds$: Observable<{ results: [IShed], resultsCount: number }>;
-  sheds: { results: [IShed], resultsCount: number };
-  silos$: Observable<{ results: [ISilo], resultsCount: number }>;
-  silos: { results: [ISilo], resultsCount: number };
+  sheds$: Observable<{ results: IShed[], resultsCount: number }>;
+  sheds: { results: IShed[], resultsCount: number };
+
+  allFarmSheds: { results: IShed[], resultsCount: number };
+
+  allShedsXSilos: Array<IShedxSilo> = [];
+  orderShedsXSilos: Array<IShedxSilo> = [];
+
+  silos$: Observable<{ results: ISilo[], resultsCount: number }>;
+  silos: { results: ISilo[], resultsCount: number };
 
   orderChangeReason$: Observable<{ results: Array<OrderChangeReason>, resultsCount: number }>;
   orderId;
@@ -88,12 +100,41 @@ export class OrderEditComponent implements OnInit {
             });
 
             this.getRations(this.orderTmp.farm);
+
             this.getFarms();
 
-
             this.sheds$ = this.sharedService.getSheds(this.orderTmp.farm.id, null);
+
+
             this.sheds$.subscribe((res: { results: Array<IShed>, resultsCount: number }) => {
+
               let tmp: Array<IShed> = [];
+
+              // take all sheds an make the list shed_x_silo
+
+              this.allFarmSheds = res;
+              this.allFarmSheds.results.forEach((shed: IShed) => {
+                shed.silos.forEach((silo: ISilo) => {
+                  this.allShedsXSilos.push({shed, silo});
+                });
+              });
+
+              // for each shed_x_silo add order amount
+
+              this.orderTmp.silos.forEach((silo: ISilo) => {
+
+                this.allShedsXSilos.forEach((sheadXSilo: IShedxSilo, index, object) => {
+
+                  if (sheadXSilo.silo.id === silo.id && sheadXSilo.shed.id === silo.shedId) {
+
+                    sheadXSilo.silo.amount = silo.amount;
+                    this.orderShedsXSilos.push(sheadXSilo);
+                    object.splice(index, 1);
+
+                  }
+                });
+              });
+
               res.results.forEach((shed: IShed) => {
                 this.orderTmp.silos.forEach((silo: ISilo) => {
                   if (shed.id === silo.shedId) {
@@ -101,8 +142,10 @@ export class OrderEditComponent implements OnInit {
                   }
                 });
               });
+
               this.order.controls.sheds.setValue(tmp);
               this.silos$ = this.sharedService.getSilos(tmp, null);
+
               this.recalculateOrderTonnage();
             });
 
@@ -114,6 +157,53 @@ export class OrderEditComponent implements OnInit {
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.status$ = this.sharedService.getStatus();
     this.orderChangeReason$ = this.sharedService.getOrderChangeReason();
+  }
+
+
+  addSilo() {
+    let shredxsilo: IShedxSilo = {
+      shed: {id: null, silos: [], name: null},
+      silo: {id: null, shedId: null, name: null, amount: 0, capacity: 0}
+    };
+    this.orderShedsXSilos.push(shredxsilo);
+    this.recalculateOrderTonnage();
+  }
+
+  removeSilo(index: number) {
+    this.orderShedsXSilos.splice(index, 1);
+    this.recalculateOrderTonnage();
+  };
+
+  onSiloSelectChange(shedxsilo: IShedxSilo, index: number) {
+
+    setTimeout(() => {
+      this.orderShedsXSilos.forEach((shedxsiloTmp: IShedxSilo, indexTmp) => {
+
+        if (shedxsilo.shed.id === shedxsiloTmp.shed.id && shedxsilo.silo.id === shedxsiloTmp.silo.id && indexTmp !== index) {
+          shedxsilo.silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+          this.snackBar.open('There is such silos selected!', '', {
+            duration: 2500,
+          });
+          return;
+        }
+      });
+
+      this.recalculateOrderTonnage();
+    }, 200);
+
+  }
+
+
+  recalculateOrderTonnage() {
+
+    setTimeout(() => {
+      this.orderSilosTonnage = 0;
+      this.orderShedsXSilos.forEach((shedxsilo: IShedxSilo) => {
+        this.orderSilosTonnage = this.orderSilosTonnage + shedxsilo.silo.amount;
+
+      }, 200);
+    });
+
   }
 
   getFarms() {
@@ -145,81 +235,17 @@ export class OrderEditComponent implements OnInit {
     this.sheds$ = this.sharedService.getSheds(farm.id, null);
   }
 
-  recalculateOrderTonnage() {
-    if (this.order) {
-      this.orderSilosTonnage = 0;
-      this.order.controls.silos.value.forEach((silo: ISilo) => {
-        this.orderSilosTonnage = this.orderSilosTonnage + silo.amount;
-      });
-    }
-  }
-
-  onSiloSelectChange() {
-
-    setTimeout(() => {
-
-      this.order.controls.silos.value.forEach((silo: ISilo) => {
-        let addSilo = true;
-        this.orderTmp.silos.forEach((siloTmp: ISilo) => {
-          if (silo.id === siloTmp.id) {
-            addSilo = false;
-          }
-        });
-        if (addSilo) {
-          this.orderTmp.silos.push(silo);
-        }
-      });
-
-      this.orderTmp.silos.forEach((siloTmp: ISilo) => {
-        this.order.controls.silos.value.forEach((silo: ISilo) => {
-          if (silo.id === siloTmp.id) {
-            silo.amount = siloTmp.amount;
-          }
-        });
-      });
-
-      this.recalculateOrderTonnage();
-
-    }, 300);
-  }
-
-  onSiloAmountChange(silo: ISilo) {
-    this.orderTmp.silos.forEach((siloTmp: ISilo) => {
-      if (siloTmp.id === silo.id) {
-        siloTmp.amount = silo.amount;
-      }
-    });
-    this.recalculateOrderTonnage();
-  }
-
-  getSilos(sheds: Array<IShed>) {
-
-    this.orderSilosTonnage = 0;
-    this.silos$ = this.sharedService.getSilos(sheds, null);
-    this.silos$.subscribe((res: { results: Array<ISilo>, resultsCount: number }) => {
-
-      let tmp: Array<ISilo> = [];
-
-      if (this.order) {
-
-        this.order.controls.silos.value.forEach((silo: ISilo) => {
-          sheds.forEach((shed: IShed) => {
-            if (shed.id === silo.shedId) {
-              tmp.push(silo);
-            }
-          });
-        });
-
-        this.order.controls.silos.setValue(tmp);
-
-        this.onSiloSelectChange();
-
-      }
-
-    });
-  }
 
   onSubmit() {
+    const tmpSilos: Array<ISilo> = [];
+    tmpSilos.length = 0;
+    this.orderShedsXSilos.forEach((shedxsilo: IShedxSilo) => {
+      if (shedxsilo.silo.id !== null) {
+        tmpSilos.push(shedxsilo.silo);
+      }
+    });
+
+    this.order.controls.silos.setValue(tmpSilos);
 
     const {value, valid} = this.order;
 
@@ -256,6 +282,21 @@ export class OrderEditComponent implements OnInit {
       }
     }
 
+  }
+
+  submitDisabled() {
+    let tmp = false;
+    if (this.order.invalid || this.orderTotalTonnage < this.orderSilosTonnage || this.orderShedsXSilos.length <= 0) {
+      tmp = true;
+    }
+
+    this.orderShedsXSilos.forEach( (shedxsilo:IShedxSilo) => {
+      if (shedxsilo.silo.id === null || shedxsilo.shed.id === null || shedxsilo.silo.amount <= 0 ) {
+        tmp = true;
+      }
+    });
+
+    return tmp;
   }
 
   cancel() {
