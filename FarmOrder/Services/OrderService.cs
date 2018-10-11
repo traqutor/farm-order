@@ -10,6 +10,9 @@ using System.Net.Http;
 using System.Web.Http;
 using FarmOrder.Data.Entities.Orders;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using FarmOrder.Data.Entities;
 
 namespace FarmOrder.Services
 {
@@ -17,10 +20,13 @@ namespace FarmOrder.Services
     {
         private readonly int _pageSize = 20;
         private readonly FarmOrderDBContext _context;
+        private readonly UserManager<User> _userManager;
 
         public OrderService()
         {
             _context = FarmOrderDBContext.Create();
+            _userManager = new UserManager<User>(new UserStore<User>(_context));
+
         }
 
         public SearchResults<OrderListEntryViewModel> GetOrders(string userId, bool isAdmin, OrderSearchModel searchModel)
@@ -135,6 +141,27 @@ namespace FarmOrder.Services
             };
         }
 
+        public void Delete(string userId, bool isAdmin, int id, HttpRequestMessage request)
+        {
+            Order oldOrder = _context.Orders.SingleOrDefault(o => o.Id == id);
+            List<string> errors = new List<string>();
+            var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
+
+            if (!isAdmin)
+            {
+                if (loggedUser.CustomerId != oldOrder.Farm.CustomerSite.CustomerId)
+                {
+                    errors.Add("User does not posses access this farm.");
+                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Unauthorized, errors));
+                }
+            }
+
+            oldOrder.ModificationDate = DateTime.UtcNow;
+            oldOrder.ModifiedById = loggedUser.Id;
+
+            _context.SaveChanges();
+        }
+
         public OrderListEntryViewModel Get(string userId, bool isAdmin, int id)
         {
             Order order = _context.Orders.Include("Silos.Silo").SingleOrDefault(o => o.Id == id);
@@ -173,6 +200,9 @@ namespace FarmOrder.Services
 
             if (oldOrder.Status?.Name == "Delivered")
                 errors.Add("Can not modify delivered order.");
+
+            if(oldOrder.Status?.Name == "Confirmed" && _userManager.IsInRole(userId, UserSystemRoles.Customer))
+                errors.Add("Can not modify confirmed order.");
 
             if (selectedRation == null)
                 errors.Add("Ration unavalibe select correct ration.");

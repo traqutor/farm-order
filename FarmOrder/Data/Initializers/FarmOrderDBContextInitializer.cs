@@ -402,6 +402,53 @@ namespace FarmOrder.Data.Initializers
 
                 List<Farm> farms = new List<Farm>();
 
+                #region rations 
+
+                #region for farm1
+
+                FarmRation fr1 = new FarmRation();
+                fr1.Farm = farm1;
+                fr1.Ration = rationChickenStarter;
+
+                FarmRation fr2 = new FarmRation();
+                fr2.Farm = farm1;
+                fr2.Ration = rationChickenGrower;
+
+                FarmRation fr3 = new FarmRation();
+                fr3.Farm = farm1;
+                fr3.Ration = rationChickenFinisher;
+
+                context.FarmsRations.Add(fr1);
+                context.FarmsRations.Add(fr2);
+                context.FarmsRations.Add(fr3);
+                #endregion
+
+                #region for farm2
+
+                FarmRation fr4 = new FarmRation();
+                fr4.Farm = farm2;
+                fr4.Ration = rationDuckStarter;
+
+                FarmRation fr5 = new FarmRation();
+                fr5.Farm = farm2;
+                fr5.Ration = rationDuckGrowerA;
+
+                FarmRation fr6 = new FarmRation();
+                fr6.Farm = farm2;
+                fr6.Ration = rationDuckGrowerB;
+
+                FarmRation fr7 = new FarmRation();
+                fr7.Farm = farm2;
+                fr7.Ration = rationDuckFinisher;
+
+                context.FarmsRations.Add(fr4);
+                context.FarmsRations.Add(fr5);
+                context.FarmsRations.Add(fr6);
+                context.FarmsRations.Add(fr7);
+                #endregion
+
+                #endregion
+
                 farms.Add(farm1);
                 farms.Add(farm2);
                 farms.Add(farm3);

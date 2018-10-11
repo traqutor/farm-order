@@ -75,5 +75,14 @@ namespace FarmOrder.Controllers
             else
                 return _service.Update(User.Identity.GetUserId(), false, id, model, Request);
         }
+
+        [Authorize(Roles = "Admin, CustomerAdmin")]
+        public void Delete(int id)
+        {
+            if (User.IsInRole("Admin"))
+                _service.Delete(User.Identity.GetUserId(), true, id, Request);
+            else
+                _service.Delete(User.Identity.GetUserId(), false, id, Request);
+        }
     }
 }
