@@ -385,8 +385,18 @@
     <Compile Include="Utils\EmailSender.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\assets\genius_fom.png" />
-    <Content Include="app\*" />
+    <Content Include="app\3rdpartylicenses.txt" />
+    <Content Include="app\assets\baiada_logo.png" />
+    <Content Include="app\assets\baiada_logo_small.png" />
+    <Content Include="app\assets\genius_fom_logo.png" />
+    <Content Include="app\assets\genius_fom_logo_small.png" />
+    <Content Include="app\favicon.ico" />
+    <Content Include="app\index.html" />
+    <Content Include="app\main.34fca04c026b778f3a4e.js" />
+    <Content Include="app\main.e77602e3ca082d4b3dbc.js" />
+    <Content Include="app\polyfills.7a0e6866a34e280f48e7.js" />
+    <Content Include="app\runtime.a66f828dca56eeb90e02.js" />
+    <Content Include="app\styles.12c46f681920395b8d1f.css" />
     <Content Include="App_Data\FarmOrder.xml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -444,6 +454,7 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="app\assets\farms-theme.scss" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
