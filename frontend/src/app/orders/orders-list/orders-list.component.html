@@ -105,6 +105,7 @@
           <button
             mat-icon-button
             color="accent"
+            [disabled]="disableEdit(element)"
             matTooltip="Edit Order"
             [routerLink]="element.id+'/edit'"
           >
