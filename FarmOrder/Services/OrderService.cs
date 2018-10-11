@@ -31,7 +31,8 @@ namespace FarmOrder.Services
 
         public SearchResults<OrderListEntryViewModel> GetOrders(string userId, bool isAdmin, OrderSearchModel searchModel)
         {
-            var query = _context.Orders.AsQueryable();
+            // BSF 20181012 - Added filter to only non-deleted orders.
+            var query = _context.Orders.Where(x => x.EntityStatus == EntityStatus.NORMAL).AsQueryable();
           
             switch (searchModel.OrderByAttribute)
             {
@@ -156,6 +157,8 @@ namespace FarmOrder.Services
                 }
             }
 
+            // BSF 20181012 - Added update to DELETED status
+            oldOrder.EntityStatus = EntityStatus.DELETED;
             oldOrder.ModificationDate = DateTime.UtcNow;
             oldOrder.ModifiedById = loggedUser.Id;
 
