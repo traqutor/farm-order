@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSelect} from '@angular/material';
+import {MatPaginator, MatSelect, MatSnackBar} from '@angular/material';
 import {DatePipe} from '@angular/common';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {interval, merge, Observable, of} from 'rxjs';
@@ -47,6 +47,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   constructor(private ordersService: OrdersService,
               private breakpointObserver: BreakpointObserver,
               private datePipe: DatePipe,
+              private snackBar: MatSnackBar,
               private sharedService: SharedService,
               private authService: AuthService,
               private dialogService: DialogService) {
@@ -133,10 +134,25 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       } else {
         return row.name;
       }
-    } else if (column.value.indexOf('Date') !== -1 ) {
+    } else if (column.value.indexOf('Date') !== -1) {
       return this.datePipe.transform(row, 'dd/MM/yyyy');
     }
     return row;
+  }
+
+  deleteOreder(order: IOrder) {
+    if (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin') {
+      this.ordersService.deleteOrderById(order.id).subscribe(() => {
+        this.snackBar.open('Order was deleted', '', {
+          duration: 2500,
+        });
+      })
+    } else {
+      this.snackBar.open('You have no rights to delete order', '', {
+        duration: 2500,
+      });
+
+    }
   }
 
   ngOnDestroy() {

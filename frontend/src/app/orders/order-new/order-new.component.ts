@@ -43,6 +43,7 @@ export class OrderNewComponent implements OnInit {
   allShedsXSilos: Array<IShedxSilo> = [];
   orderShedsXSilos: Array<IShedxSilo> = [];
 
+  tmpFarm: Farm = {id: null, name: null};
 
   farms: Array<Farm> = [];
   orderTotalTonnage: number = 0;
@@ -64,7 +65,13 @@ export class OrderNewComponent implements OnInit {
   ngOnInit() {
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.farms$.subscribe((res: { results: Array<Farm>, resultsCount: number }) => {
-      this.farms = res.results;
+
+      this.farms = res ? res.results : [];
+
+      if (this.farms.length > 0) {
+        this.tmpFarm = this.farms[0];
+      }
+
       this.order = this.fb.group({
         tonsOrdered: [0, [
           Validators.required,
@@ -73,7 +80,7 @@ export class OrderNewComponent implements OnInit {
         deliveryDate: [null, [
           Validators.required
         ]],
-        farm: [this.farms[0], [
+        farm: [this.tmpFarm, [
           Validators.required
         ]],
         ration: [null, [
@@ -81,8 +88,13 @@ export class OrderNewComponent implements OnInit {
         ]],
         silos: [[]]
       });
-      this.getRations(this.farms[0]);
-      this.getSheds(this.farms[0]);
+
+      if (this.tmpFarm.id !== null) {
+        this.getRations(this.tmpFarm);
+        this.getSheds(this.tmpFarm);
+
+      }
+
     });
 
     // BSF 20181011 - Added these to provide entry for up to 10 silos
@@ -161,7 +173,6 @@ export class OrderNewComponent implements OnInit {
           }
         });
       });
-
 
 
     });
@@ -266,9 +277,9 @@ export class OrderNewComponent implements OnInit {
       tmp = true;
     }
 
-    this.orderShedsXSilos.forEach( (shedxsilo:IShedxSilo) => {
+    this.orderShedsXSilos.forEach((shedxsilo: IShedxSilo) => {
       // BSF 20181011 - Added logic to allow records to exist which have null shed / silo and an amount = 0
-      if ((shedxsilo.silo.id === null || shedxsilo.shed.id === null) && shedxsilo.silo.amount > 0 ) {
+      if ((shedxsilo.silo.id === null || shedxsilo.shed.id === null) && shedxsilo.silo.amount > 0) {
         tmp = true;
       }
     });
