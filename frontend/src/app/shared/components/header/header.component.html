@@ -8,8 +8,8 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="!(isHandset$ | async)">
 
-    <div>
-      <img [src]="this.user && this.user.customer && this.user.customer.logo !== null ? this.user.customer.logo : './assets/genius_fom.png'" class="logo">
+    <div  fxLayoutAlign="center center">
+      <img [src]="this.user && this.user.customer && this.user.customer.logo !== null ? this.user.customer.logo : './assets/genius_fom_logo_small.png'">
     </div>
 
     <mat-nav-list *ngIf="(user$ | async) as user">
@@ -43,10 +43,10 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>{{this.user.customer.name}} - Orders Module</span>
+      <!-- <span>{{this.user.customer.name}} - Orders Module</span> -->
       <div class="spacer"></div>
 
-      <button mat-icon-button
+      <!-- <button mat-icon-button
               style="margin-right: 24px"
               matTooltip="Change Theme"
               [ngStyle]="{'display':(auth$ | async) ? 'block' : 'none' }"
@@ -56,9 +56,10 @@
       <mat-menu #themeMenu="matMenu">
         <button mat-menu-item color="primary" (click)="onSetTheme('default-theme')">Default</button>
         <button mat-menu-item color="primary" (click)="onSetTheme('profisol-theme')">Profisol</button>
+        <button mat-menu-item color="primary" (click)="onSetTheme('baiada-theme')">Baiada</button>
         <button mat-menu-item color="primary" (click)="onSetTheme('dark-theme')">Dark</button>
         <button mat-menu-item color="primary" (click)="onSetTheme('light-theme')">Light</button>
-      </mat-menu>
+      </mat-menu> -->
 
 
       <p *ngIf="(user$ | async) as user">
