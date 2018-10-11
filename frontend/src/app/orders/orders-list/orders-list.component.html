@@ -115,6 +115,7 @@
           </button>
 
           <button
+            *ngIf="this.user &&  this.user.role && (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin' )"
             mat-icon-button
             color="warn"
             matTooltip="Delete Order"
