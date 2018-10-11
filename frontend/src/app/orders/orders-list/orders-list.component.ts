@@ -142,11 +142,16 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   deleteOrder(order: IOrder) {
     if (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin') {
-      this.ordersService.deleteOrderById(order.id).subscribe(() => {
-        this.snackBar.open('Order was deleted', '', {
-          duration: 2500,
+      this.dialogService
+        .confirm('Delete order', 'Are you sure you would like to proceed?')
+        .subscribe(dialogRes => {
+          if (dialogRes)
+            this.ordersService.deleteOrderById(order.id).subscribe(() => {
+              this.snackBar.open('Order was deleted', '', {
+                duration: 2500,
+              });
+            });
         });
-      })
     } else {
       this.snackBar.open('You have no rights to delete order', '', {
         duration: 2500,
