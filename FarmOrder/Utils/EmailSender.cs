@@ -51,7 +51,13 @@ namespace FarmOrder.Utils
 
         public static bool SendPasswordRecoveryEmail(string emailTo, string subject, string callbackUrl, string token)
         {
-            string body = $"To reset password click: <a href='http://{callbackUrl}/{PasswordRecoveryPath}?token={token}&email={emailTo}'>click</a>";
+            string body = $"Hello," +
+                          $"<br/><br/>" +
+                          $"Please click <a href='http://{callbackUrl}/{PasswordRecoveryPath}?token={token}&email={emailTo}'>here</a> to reset your password." +
+                          $"<br/><br/>" +
+                          $"Regards," +
+                          $"<br/><br/>" +
+                          $"Genius Support";
 
             return SendEmail(emailTo, subject, body);
         }
