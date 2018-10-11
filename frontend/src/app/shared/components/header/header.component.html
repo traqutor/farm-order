@@ -9,7 +9,7 @@
     [opened]="!(isHandset$ | async)">
 
     <div  fxLayoutAlign="center center">
-      <img [src]="this.user && this.user.customer && this.user.customer.logo !== null ? this.user.customer.logo : './assets/genius_fom_logo_small.png'">
+      <img [src]="this.user && this.user.customer && this.user.customer.logo !== null ? this.user.customer.logo : './assets/genius_fom_logo_small.png'" class="logo">
     </div>
 
     <mat-nav-list *ngIf="(user$ | async) as user">
