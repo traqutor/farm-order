@@ -140,6 +140,16 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     return row;
   }
 
+  disableEdit(order: IOrder): boolean {
+    let tmp: boolean;
+    if (order && order.status && order.status.name === 'Confirmed' && this.user.role.name === 'Customer') {
+      tmp = true;
+    } else if (order && order.status && order.status.name === 'Delivered') {
+      tmp = true;
+    }
+    return tmp;
+  }
+
   deleteOrder(order: IOrder) {
     if (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin') {
       this.dialogService
@@ -156,7 +166,6 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       this.snackBar.open('You have no rights to delete order', '', {
         duration: 2500,
       });
-
     }
   }
 
