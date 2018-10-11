@@ -31,8 +31,8 @@ export class OrdersService {
     return this.http.put<IOrder>(`${this.apiUrl}/api/Order/${orderId}`, JSON.stringify(order));
   }
 
-  deleteOrderById(orderId: number): Observable<IOrder> {
-    return this.http.delete<IOrder>(`${this.apiUrl}/api/Order/${orderId}`);
+  deleteOrderById(orderId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/Order/${orderId}`);
   }
 
 

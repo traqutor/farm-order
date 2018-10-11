@@ -140,7 +140,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     return row;
   }
 
-  deleteOreder(order: IOrder) {
+  deleteOrder(order: IOrder) {
     if (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin') {
       this.ordersService.deleteOrderById(order.id).subscribe(() => {
         this.snackBar.open('Order was deleted', '', {
