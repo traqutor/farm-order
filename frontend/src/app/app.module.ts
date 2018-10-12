@@ -19,6 +19,7 @@ import {ChangePasswordDialogComponent} from './shared/dialogs/change-password-di
 import {AlertDialogComponent} from './shared/dialogs/alert-dialog/alert-dialog.component';
 import {OverlayModule} from "@angular/cdk/overlay";
 import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -36,7 +37,8 @@ export const MY_FORMATS = {
 @NgModule({
   declarations: [
     AppComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    PasswordRecoveryComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { User } from '../shared/models/user';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {User} from '../shared/models/user';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +34,15 @@ export class UsersService {
   changePassword(credentials, id): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/api/UserManagement/ChangePassword/${id}`, JSON.stringify(credentials));
   }
+
+  onPasswordRecovery(token: string, email: string,  password: string, confirmPassword: string) {
+    return this.http.post(`${this.apiUrl}/api/Account/ForgotPasswordReset`, {
+      token: token,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword
+    });
+  }
+
 
 }
