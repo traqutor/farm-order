@@ -22,12 +22,14 @@ namespace FarmOrder.Services.Farms
             _context = FarmOrderDBContext.Create();
         }
 
-        public SearchResults<ShedListEntryViewModel> GetSheds(string userId, int farmId, int page)
+        public SearchResults<ShedListEntryViewModel> GetSheds(string userId, bool isAdmin, int farmId, int page)
         {
-            FarmUser farmUser = _context.FarmUsers.SingleOrDefault(fu => fu.UserId == userId && fu.FarmId == farmId);
+            if (!isAdmin) { 
+                FarmUser farmUser = _context.FarmUsers.SingleOrDefault(fu => fu.UserId == userId && fu.FarmId == farmId);
 
-            if(farmUser == null)
-                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+                if (farmUser == null)
+                    throw new HttpResponseException(HttpStatusCode.Unauthorized);
+            }
 
             var query = _context.Sheds.Include(sh => sh.Siloses).Where(s => s.EntityStatus == Data.Entities.EntityStatus.NORMAL && s.FarmId == farmId).OrderBy(s => s.Id).AsQueryable();
 
