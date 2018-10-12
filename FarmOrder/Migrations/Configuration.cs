@@ -28,7 +28,7 @@ namespace FarmOrder.Migrations
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<User>(new UserStore<User>(context));
 
-            //return;
+            return;
 
             #region Roles creation
 

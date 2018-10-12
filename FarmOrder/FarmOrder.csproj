@@ -340,6 +340,10 @@
     <Compile Include="Migrations\201810090609507_CustomerLogoAndCss.Designer.cs">
       <DependentUpon>201810090609507_CustomerLogoAndCss.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810120325356_AddedNotesFieldToOrders.cs" />
+    <Compile Include="Migrations\201810120325356_AddedNotesFieldToOrders.Designer.cs">
+      <DependentUpon>201810120325356_AddedNotesFieldToOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -555,6 +559,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810090609507_CustomerLogoAndCss.resx">
       <DependentUpon>201810090609507_CustomerLogoAndCss.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810120325356_AddedNotesFieldToOrders.resx">
+      <DependentUpon>201810120325356_AddedNotesFieldToOrders.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

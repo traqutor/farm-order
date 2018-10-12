@@ -19,6 +19,8 @@ namespace FarmOrder.Data.Entities.Orders
 
         public int TonsOrdered { get; set; }
 
+        public string Notes { get; set; }
+
         public int RationId { get; set; }
         [ForeignKey("RationId")]
         public virtual Ration Ration { get; set; }
