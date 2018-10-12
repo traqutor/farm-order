@@ -24,7 +24,10 @@ namespace FarmOrder.Controllers.Farms
         [HttpGet]
         public SearchResults<ShedListEntryViewModel> GetShedsForOrderCreation(int farmId, int page = 0)
         {
-            return _service.GetSheds(User.Identity.GetUserId(), farmId, page);
+            if(User.IsInRole("Admin"))
+                return _service.GetSheds(User.Identity.GetUserId(), true, farmId, page);
+
+            return _service.GetSheds(User.Identity.GetUserId(), false, farmId, page);
         }
     }
 }

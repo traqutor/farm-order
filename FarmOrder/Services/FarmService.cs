@@ -67,7 +67,12 @@ namespace FarmOrder.Services
 
         public SearchResults<FarmListEntryViewModel> GetUserAssigned(string userId, bool isAdmin, int? page = null)
         {
-            var query = _context.FarmUsers.Include(fu => fu.Farm).Where(fu => fu.UserId == userId).OrderBy(f => f.Id).AsQueryable();
+            var query = _context.FarmUsers.Include(fu => fu.Farm).OrderBy(f => f.Id).AsQueryable();
+
+            if (!isAdmin)
+            {
+                query = query.Where(fu => fu.UserId == userId);
+            }
 
             int totalCount = query.Count();
 
