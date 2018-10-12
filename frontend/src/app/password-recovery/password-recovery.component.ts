@@ -14,7 +14,7 @@ export class PasswordRecoveryComponent implements OnInit {
 
 
   private passwordRecoveryToken: string;
-  private passwordRecoveryEmail: string;
+  passwordRecoveryEmail: string;
 
   public isOk: boolean;
   public isError: boolean;

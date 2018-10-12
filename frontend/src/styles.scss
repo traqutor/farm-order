@@ -132,3 +132,16 @@ body {
   }
 }
 
+.logInForm {
+  display: flex;
+  flex-direction: column;
+  min-width: 380px;
+  max-width: 500px;
+  width: 50%;
+}
+
+.app-reset-card{
+  margin-top: 64px;
+  width: 400px;
+  max-width: 400px;
+}
