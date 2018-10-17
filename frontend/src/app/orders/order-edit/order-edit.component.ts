@@ -93,7 +93,8 @@ export class OrderEditComponent implements OnInit {
               ]],
               orderChangeReason: [this.orderTmp.orderChangeReason, [
                 Validators.required
-              ]]
+              ]], 
+              notes: [this.orderTmp.notes, []]
             });
 
             this.getRations(this.orderTmp.farm);

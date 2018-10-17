@@ -15,6 +15,7 @@ export interface IOrder {
   ration: Ration;
   sheds: Array<IShed>;
   silos: Array<ISilo>;
+  notes?: string;
 }
 
 export interface Status {
