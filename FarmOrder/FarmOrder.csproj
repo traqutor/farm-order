@@ -396,11 +396,13 @@
     <Content Include="app\assets\genius_fom_logo_small.png" />
     <Content Include="app\favicon.ico" />
     <Content Include="app\index.html" />
-    <Content Include="app\main.d0d077bd42af00794741.js" />
+    <Content Include="app\main.23308a409cddd30b13a5.js" />
     <Content Include="app\polyfills.1e3f193ee3ff9b35d5d8.js" />
     <Content Include="app\runtime.a66f828dca56eeb90e02.js" />
-    <Content Include="app\styles.0ca4d1da2e76c165b93a.css" />
+    <Content Include="app\styles.a0100c96174cab1663af.css" />
     <Content Include="App_Data\FarmOrder.xml" />
+    <Content Include="App_Data\main.23308a409cddd30b13a5.js" />
+    <Content Include="App_Data\styles.a0100c96174cab1663af.css" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
