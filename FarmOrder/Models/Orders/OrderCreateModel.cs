@@ -15,11 +15,12 @@ namespace FarmOrder.Models.Orders
         [Required]
         public int TonsOrdered { get; set; }
         [Required]
+        public string Notes { get; set; }
+        [Required]
         public RationListEntryViewModel Ration { get; set; }
         [Required]
         public FarmListEntryViewModel Farm { get; set; }
         [Required]
         public List<SiloListEntryViewModel> Silos { get; set; }
-        
     }
 }
