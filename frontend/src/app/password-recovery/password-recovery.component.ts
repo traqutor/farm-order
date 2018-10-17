@@ -16,6 +16,7 @@ export class PasswordRecoveryComponent implements OnInit {
   private passwordRecoveryToken: string;
   passwordRecoveryEmail: string;
 
+  public isEmailSend = false;
   public isOk: boolean;
   public isError: boolean;
   public errorMessage: string;
@@ -77,10 +78,12 @@ export class PasswordRecoveryComponent implements OnInit {
         this.recoveryForm.value.password,
         this.recoveryForm.value.confirmPassword)
         .subscribe(() => {
+          this.isEmailSend = true;
           this.isOk = true;
           this.isError = false;
           this.router.navigateByUrl('/login');
         }, (error) => {
+          this.isEmailSend = true;
           this.isError = true;
           this.errorMessage = error.error;
           console.error('Password change ERROR: ', error.error);
