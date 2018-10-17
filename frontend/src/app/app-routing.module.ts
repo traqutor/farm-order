@@ -11,6 +11,7 @@ import {OrderEditComponent} from './orders/order-edit/order-edit.component';
 import {LoginLayoutComponent} from './shared/components/loginlayout/login-layout.component';
 import {HomeLayoutComponent} from './shared/components/home-layout/home-layout.component';
 import {PasswordResetComponent} from "./password-reset/password-reset.component";
+import {PasswordRecoveryComponent} from "./password-recovery/password-recovery.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -33,6 +34,7 @@ const routes: Routes = [
     ]
   },
   {path: 'passwordReset', component: PasswordResetComponent},
+  {path: 'passwordRecovery', component: PasswordRecoveryComponent},
 
 ];
 

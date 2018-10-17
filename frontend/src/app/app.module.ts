@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {FlexLayoutModule} from "@angular/flex-layout";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
@@ -19,6 +20,7 @@ import {ChangePasswordDialogComponent} from './shared/dialogs/change-password-di
 import {AlertDialogComponent} from './shared/dialogs/alert-dialog/alert-dialog.component';
 import {OverlayModule} from "@angular/cdk/overlay";
 import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -36,11 +38,13 @@ export const MY_FORMATS = {
 @NgModule({
   declarations: [
     AppComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    PasswordRecoveryComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     OverlayModule,
     AppMaterialModule,

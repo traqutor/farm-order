@@ -24,6 +24,7 @@ export interface AuthResponse {
 export class AuthService {
 
   apiUrl: string;
+
   private currentUserSubject = new BehaviorSubject<User>({} as User);
   public currentUser = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
 

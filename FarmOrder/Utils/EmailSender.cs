@@ -53,7 +53,7 @@ namespace FarmOrder.Utils
         {
             string body = $"Hello," +
                           $"<br/><br/>" +
-                          $"Please click <a href='http://{callbackUrl}/{PasswordRecoveryPath}?token={token}&email={emailTo}'>here</a> to reset your password." +
+                          $"Please click <a href='http://{callbackUrl}/{PasswordRecoveryPath}?token={HttpUtility.UrlEncode(token)}&email={emailTo}'>here</a> to reset your password." +
                           $"<br/><br/>" +
                           $"Regards," +
                           $"<br/><br/>" +
