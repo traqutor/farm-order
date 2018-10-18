@@ -28,7 +28,7 @@ namespace FarmOrder.Services
 
         public UserListEntryViewModel Get(string userId, bool isAdmin, string searchedUserId)
         {
-            var searchedUser = _context.Users.SingleOrDefault(u => u.Id == searchedUserId);
+            var searchedUser = _context.Users.SingleOrDefault(u => u.Id == searchedUserId && u.EntityStatus == EntityStatus.NORMAL);
 
             if (!isAdmin)
             {
@@ -50,14 +50,14 @@ namespace FarmOrder.Services
 
         public SearchResults<UserListEntryViewModel> GetUsers(string userId, bool isAdmin, int? page, int? customerId, int? siteId)
         {
-            var query = _context.Users.OrderBy(u => u.UserName).AsQueryable();
+            var query = _context.Users.OrderBy(u => u.EntityStatus).ThenBy(u => u.UserName).AsQueryable();
             var possibleRoles = _roleManager.Roles.ToList();
             var adminRole = possibleRoles.SingleOrDefault(r => r.Name == UserSystemRoles.Admin);
 
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
-                query = query.Where(u => u.CustomerId == loggedUser.CustomerId && !u.Roles.Any(r => r.RoleId == adminRole.Id)); //removing the administrator from here
+                query = query.Where(u => u.CustomerId == loggedUser.CustomerId && u.EntityStatus == EntityStatus.NORMAL && !u.Roles.Any(r => r.RoleId == adminRole.Id)); //removing the administrator from here
             }
             else
             {
@@ -179,7 +179,6 @@ namespace FarmOrder.Services
             _userManager.RemovePassword(userToUpdate.Id);
             _userManager.AddPassword(userToUpdate.Id, model.Password);
 
-
             var possibleRoles = _roleManager.Roles.ToList();
             var userToReturn = _context.Users.SingleOrDefault(u => u.Id == userToUpdate.Id);
             return new UserListEntryViewModel(userToReturn, possibleRoles);
@@ -205,9 +204,10 @@ namespace FarmOrder.Services
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
-            _context.FarmUsers.RemoveRange(userToDelete.FarmUsers);
-            _context.CustomerSiteUsers.RemoveRange(userToDelete.CustomerSiteUser);
-            _context.Users.Remove(userToDelete);
+            //_context.FarmUsers.RemoveRange(userToDelete.FarmUsers);
+            //_context.CustomerSiteUsers.RemoveRange(userToDelete.CustomerSiteUser);
+            //_context.Users.Remove(userToDelete);
+            userToDelete.EntityStatus = EntityStatus.DELETED;
             _context.SaveChanges();
         }
 
@@ -307,6 +307,8 @@ namespace FarmOrder.Services
 
             if (userToUpdate.CustomerId != selectedCustomer.Id)
                 userToUpdate.CustomerId = selectedCustomer.Id;
+
+            userToUpdate.EntityStatus = model.EntityStatus;
 
             userToUpdate.ModificationDate = DateTime.UtcNow;
             userToUpdate.ModifiedById = userId;

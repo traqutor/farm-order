@@ -26,5 +26,7 @@ namespace FarmOrder.Models.Users
 
         [Required]
         public string RoleId { get; set; }
+
+        public EntityStatus EntityStatus { get; set; }
     }
 }

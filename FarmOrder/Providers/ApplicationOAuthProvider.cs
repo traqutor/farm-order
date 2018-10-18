@@ -40,6 +40,12 @@ namespace FarmOrder.Providers
                 return;
             }
 
+            if(user.EntityStatus == EntityStatus.DELETED)
+            {
+                context.SetError("invalid_grant", "The user account is blocked.");
+                return;
+            }
+
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
                OAuthDefaults.AuthenticationType);
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,

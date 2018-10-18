@@ -24,7 +24,9 @@ namespace FarmOrder.Models.Users
         public List<FarmListEntryViewModel> Farms { get; set; }
 
         public RoleListEntryViewModel Role { get; set; }
-    
+
+        public EntityStatus EntityStatus { get; set; }
+
         public UserListEntryViewModel()
         {
 
@@ -34,6 +36,7 @@ namespace FarmOrder.Models.Users
         {
             Id = entity.Id;
             UserName = entity.UserName;
+            EntityStatus = entity.EntityStatus;
         }
 
         public UserListEntryViewModel(User entity, List<IdentityRole> roles)
@@ -41,7 +44,9 @@ namespace FarmOrder.Models.Users
             Id = entity.Id;
             UserName = entity.UserName;
 
-            if(entity.Customer != null) { 
+            EntityStatus = entity.EntityStatus;
+
+            if (entity.Customer != null) { 
                 Customer = new CustomerListEntryViewModel(entity.Customer);
                 Customer.CustomerSites = entity.CustomerSiteUser.Select(el => new CustomerSiteListEntryViewModel(el.CustomerSite)).ToList();
             }
