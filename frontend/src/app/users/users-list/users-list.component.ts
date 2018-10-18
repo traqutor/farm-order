@@ -78,22 +78,31 @@ export class UsersListComponent implements OnInit {
   }
 
   deleteUser(userId: string) {
-    this.dialogService
-      .confirm('Confirm Action', 'Are you sure you wanna delete User')
-      .subscribe(dialogRes => {
-        if (dialogRes) {
-          this.usersService.deleteUser(userId)
-            .subscribe(() => {
-              const newUsers = this.dataSource.data.filter(user => user.id !== userId);
-              this.dataSource = new MatTableDataSource<User>(newUsers);
-              this.snackBar.open('User Deleted!', '', {
-                duration: 2000,
-              });
-            }, err => {
-              this.dialogService.alert(err.error);
-            });
-        }
+
+    let tmpUser: User = this.authService.getUser();
+    if (tmpUser.id === userId) {
+      this.snackBar.open('You can not delete its own account!', '', {
+        duration: 2000,
       });
+    } else {
+
+      this.dialogService
+        .confirm('Confirm Action', 'Are you sure you wanna delete User')
+        .subscribe(dialogRes => {
+          if (dialogRes) {
+            this.usersService.deleteUser(userId)
+              .subscribe(() => {
+                const newUsers = this.dataSource.data.filter(user => user.id !== userId);
+                this.dataSource = new MatTableDataSource<User>(newUsers);
+                this.snackBar.open('User Deleted!', '', {
+                  duration: 2000,
+                });
+              }, err => {
+                this.dialogService.alert(err.error);
+              });
+          }
+        });
+    }
   }
 
   activateUser(user: User, userId: string) {
@@ -102,6 +111,7 @@ export class UsersListComponent implements OnInit {
       .subscribe(dialogRes => {
         if (dialogRes) {
           user.entityStatus = 0;
+          user.roleId = user.role.id;
           console.log('user', user);
           this.usersService.putUser(user, userId)
             .subscribe(() => {
@@ -111,11 +121,10 @@ export class UsersListComponent implements OnInit {
                 duration: 2000,
               });
             }, err => {
-              this.dialogService.alert(err.error);
+              this.dialogService.alert(JSON.stringify(err.error) );
             });
         }
       });
-
 
 
   }

@@ -7,6 +7,7 @@ export interface User {
   userName: string;
   customer: Customer;
   farms: Farm[];
+  roleId: string;
   role: Role;
   entityStatus: number;
 }
