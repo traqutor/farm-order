@@ -38,8 +38,6 @@ export class PasswordRecoveryComponent implements OnInit {
         (params: Params) => {
           this.passwordRecoveryToken = params['token'];
           this.passwordRecoveryEmail = params['email'];
-          console.log('passwordRecoveryToken', this.passwordRecoveryToken);
-          console.log('passwordRecoveryEmail', this.passwordRecoveryEmail);
         });
 
     this.recoveryForm = this.formBuilder.group({

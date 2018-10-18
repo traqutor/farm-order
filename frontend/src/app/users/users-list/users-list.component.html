@@ -50,7 +50,7 @@
             {{column.name}}:
           </span>
 
-          {{displayRow(element[column.value])}}
+          {{displayRow(element[column.value], column )}}
 
         </mat-cell>
 
@@ -61,7 +61,7 @@
         <mat-header-cell *matHeaderCellDef> Settings</mat-header-cell>
 
         <mat-cell *matCellDef="let element">
-          <button
+          <button *ngIf="element.entityStatus === 0"
             mat-icon-button
             color="accent"
             matTooltip="Edit User"
@@ -71,21 +71,35 @@
               edit
             </mat-icon>
           </button>
-          <button
+
+          <button *ngIf="element.entityStatus === 0"
             mat-icon-button
             color="primary"
             matTooltip="Delete User"
             (click)="deleteUser(element.id)"
           >
             <mat-icon>
-              delete
+              lock
             </mat-icon>
           </button>
+
+          <button *ngIf="element.entityStatus === 1"
+                  mat-icon-button
+                  color="warn"
+                  matTooltip="Activate User"
+                  (click)="activateUser(element, element.id )"
+          >
+            <mat-icon>
+              lock_open
+            </mat-icon>
+          </button>
+
+
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
-      <mat-row  mat-row *matRowDef="let row; columns: columnsToRender;"></mat-row>
+      <mat-row mat-row *matRowDef="let row; columns: columnsToRender;"></mat-row>
     </mat-table>
   </div>
 </div>

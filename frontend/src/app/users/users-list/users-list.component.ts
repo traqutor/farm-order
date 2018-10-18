@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { UsersService } from '../users.service';
-import { SharedService } from '../../shared/shared.service';
-import { Observable } from 'rxjs';
-import { User } from '../../shared/models/user';
-import { MatSelect, MatSnackBar, MatTableDataSource } from '@angular/material';
-import { DialogService } from '../../shared/dialogs/dialog.service';
-import { Customer } from '../../shared/models/customer';
-import { AuthService } from '../../core/auth/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {UsersService} from '../users.service';
+import {SharedService} from '../../shared/shared.service';
+import {Observable} from 'rxjs';
+import {User} from '../../shared/models/user';
+import {MatSelect, MatSnackBar, MatTableDataSource} from '@angular/material';
+import {DialogService} from '../../shared/dialogs/dialog.service';
+import {Customer} from '../../shared/models/customer';
+import {AuthService} from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-users-list',
@@ -16,13 +16,16 @@ import { AuthService } from '../../core/auth/auth.service';
 export class UsersListComponent implements OnInit {
 
   customers$: Observable<{ results: Array<Customer>, resultCount: number }>;
+
   dataSource = new MatTableDataSource<User>([]);
+
   displayedColumns = [
-    { value: 'userName', name: 'User Name' },
-    { value: 'customer', name: 'Customer' },
-    { value: 'role', name: 'Role' },
+    {value: 'userName', name: 'User Name'},
+    {value: 'customer', name: 'Customer'},
+    {value: 'role', name: 'Role'},
+    {value: 'entityStatus', name: 'Status'},
   ];
-  columnsToRender = ['userName', 'customer', 'role', 'settings'];
+  columnsToRender = ['userName', 'customer', 'role', 'entityStatus', 'settings'];
   user;
   loading = false;
 
@@ -57,11 +60,17 @@ export class UsersListComponent implements OnInit {
     this.customers$ = this.sharedService.getCustomers();
   }
 
-  displayRow(row) {
+  displayRow(row, column) {
+
     if (typeof row === 'object' && row !== null && row.name !== null) {
       return row.name;
+    } else {
+      if (column.value === 'entityStatus') {
+        return row === 0 ? 'Active' : 'Deleted';
+      } else {
+        return row;
+      }
     }
-    return row;
   }
 
   filterTableByCustomer(selectOption: MatSelect) {
@@ -85,6 +94,30 @@ export class UsersListComponent implements OnInit {
             });
         }
       });
+  }
+
+  activateUser(user: User, userId: string) {
+    this.dialogService
+      .confirm('Confirm Action', 'Are you sure you wanna Activate User')
+      .subscribe(dialogRes => {
+        if (dialogRes) {
+          user.entityStatus = 0;
+          console.log('user', user);
+          this.usersService.putUser(user, userId)
+            .subscribe(() => {
+              const newUsers = this.dataSource.data.filter(user => user.id !== userId);
+              this.dataSource = new MatTableDataSource<User>(newUsers);
+              this.snackBar.open('User Activated!', '', {
+                duration: 2000,
+              });
+            }, err => {
+              this.dialogService.alert(err.error);
+            });
+        }
+      });
+
+
+
   }
 
 }

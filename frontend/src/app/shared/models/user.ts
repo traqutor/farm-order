@@ -3,10 +3,10 @@ import { Role } from './role';
 import { Farm } from './farm';
 
 export interface User {
-  id?: string;
+  id: string;
   userName: string;
   customer: Customer;
-  farms: [Farm];
-  roleId: Role;
-  role?: Role;
+  farms: Farm[];
+  role: Role;
+  entityStatus: number;
 }
