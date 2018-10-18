@@ -28,7 +28,7 @@ namespace FarmOrder.Services
 
         public UserListEntryViewModel Get(string userId, bool isAdmin, string searchedUserId)
         {
-            var searchedUser = _context.Users.SingleOrDefault(u => u.Id == searchedUserId && u.EntityStatus == EntityStatus.NORMAL);
+            var searchedUser = _context.Users.SingleOrDefault(u => u.Id == searchedUserId);
 
             if (!isAdmin)
             {
@@ -57,7 +57,7 @@ namespace FarmOrder.Services
             if (!isAdmin)
             {
                 var loggedUser = _context.Users.SingleOrDefault(u => u.Id == userId);
-                query = query.Where(u => u.CustomerId == loggedUser.CustomerId && u.EntityStatus == EntityStatus.NORMAL && !u.Roles.Any(r => r.RoleId == adminRole.Id)); //removing the administrator from here
+                query = query.Where(u => u.CustomerId == loggedUser.CustomerId && !u.Roles.Any(r => r.RoleId == adminRole.Id)); //removing the administrator from here
             }
             else
             {
