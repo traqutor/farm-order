@@ -11,11 +11,11 @@ export interface IOrder {
   orderChangeReason?: OrderChangeReason;
   deliveryDate: string;
   tonsOrdered: number;
+  notes: string;
   farm: Farm;
   ration: Ration;
   sheds: Array<IShed>;
   silos: Array<ISilo>;
-  notes?: string;
 }
 
 export interface Status {

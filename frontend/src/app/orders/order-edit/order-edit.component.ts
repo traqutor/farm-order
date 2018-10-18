@@ -68,6 +68,9 @@ export class OrderEditComponent implements OnInit {
             this.orderTmp = order;
             this.orderTotalTonnage = order.tonsOrdered;
 
+            console.log(order);
+            console.log(this.orderTmp);
+
             this.order = this.fb.group({
               tonsOrdered: [this.orderTmp.tonsOrdered, [
                 Validators.required,
@@ -93,8 +96,8 @@ export class OrderEditComponent implements OnInit {
               ]],
               orderChangeReason: [this.orderTmp.orderChangeReason, [
                 Validators.required
-              ]], 
-              notes: [this.orderTmp.notes, []]
+              ]],
+              notes: [this.orderTmp.notes]
             });
 
             this.getRations(this.orderTmp.farm);
@@ -102,7 +105,6 @@ export class OrderEditComponent implements OnInit {
             this.getFarms();
 
             this.sheds$ = this.sharedService.getSheds(this.orderTmp.farm.id, null);
-
 
             this.sheds$.subscribe((res: { results: Array<IShed>, resultsCount: number }) => {
 

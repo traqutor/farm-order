@@ -15,6 +15,7 @@ namespace FarmOrder.Models.Orders
         {
             Id = el.Id;
             TonsOrdered = el.TonsOrdered;
+            Notes = el.Notes;
             Ration = new RationListEntryViewModel(el.Ration);
             Farm = new FarmListEntryViewModel(el.Farm);
             CreationDate = el.CreationDate;

@@ -59,7 +59,8 @@ export class OrderNewComponent implements OnInit {
     orderChangeReason: null,
     ration: null,
     status: null,
-    tonsOrdered: null
+    tonsOrdered: null,
+    notes: null
   };
 
   ngOnInit() {
