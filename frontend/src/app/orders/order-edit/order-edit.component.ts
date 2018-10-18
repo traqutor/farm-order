@@ -68,9 +68,6 @@ export class OrderEditComponent implements OnInit {
             this.orderTmp = order;
             this.orderTotalTonnage = order.tonsOrdered;
 
-            console.log(order);
-            console.log(this.orderTmp);
-
             this.order = this.fb.group({
               tonsOrdered: [this.orderTmp.tonsOrdered, [
                 Validators.required,

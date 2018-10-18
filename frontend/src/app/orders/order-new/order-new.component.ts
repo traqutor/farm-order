@@ -87,7 +87,8 @@ export class OrderNewComponent implements OnInit {
         ration: [null, [
           Validators.required
         ]],
-        silos: [[]]
+        silos: [[]],
+        notes: [null, []]
       });
 
       if (this.tmpFarm.id !== null) {
