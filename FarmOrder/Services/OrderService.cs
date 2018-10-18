@@ -233,6 +233,7 @@ namespace FarmOrder.Services
             oldOrder.ChangeReasonId = changeReason.Id;
             oldOrder.DeliveryDate = model.DeliveryDate;
             oldOrder.TonsOrdered = model.TonsOrdered;
+            oldOrder.Notes = model.Notes;
             oldOrder.RationId = selectedRation.Id;
 
             List<OrderSilo> bindingsToRemove = new List<OrderSilo>();
@@ -319,6 +320,7 @@ namespace FarmOrder.Services
                 StatusId = defaultStatus.Id,
                 TonsOrdered = model.TonsOrdered,
                 DeliveryDate = model.DeliveryDate,
+                Notes = model.Notes,
                 FarmId = selectedFarm.Id,
                 RationId = selectedRation.Id
             };

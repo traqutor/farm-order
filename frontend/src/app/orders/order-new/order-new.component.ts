@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
-import {Location} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { Location } from '@angular/common';
 
-import {Farm} from '../../shared/models/farm';
-import {SharedService} from '../../shared/shared.service';
-import {OrdersService} from '../orders.service';
-import {DialogService} from '../../shared/dialogs/dialog.service';
-import {Ration} from '../../shared/models/ration';
-import {IShed} from "../../shared/models/shed";
-import {ISilo} from "../../shared/models/silo";
-import {IOrder} from "../../shared/models/order";
-import {IShedxSilo} from "../../shared/models/sheldxsilo";
+import { Farm } from '../../shared/models/farm';
+import { SharedService } from '../../shared/shared.service';
+import { OrdersService } from '../orders.service';
+import { DialogService } from '../../shared/dialogs/dialog.service';
+import { Ration } from '../../shared/models/ration';
+import { IShed } from "../../shared/models/shed";
+import { ISilo } from "../../shared/models/silo";
+import { IOrder } from "../../shared/models/order";
+import { IShedxSilo } from "../../shared/models/sheldxsilo";
 
 @Component({
   selector: 'app-order-new',
@@ -23,13 +23,13 @@ import {IShedxSilo} from "../../shared/models/sheldxsilo";
 export class OrderNewComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
-              private sharedService: SharedService,
-              private ordersService: OrdersService,
-              private router: Router,
-              private route: ActivatedRoute,
-              private snackBar: MatSnackBar,
-              private _location: Location,
-              private dialogService: DialogService) {
+    private sharedService: SharedService,
+    private ordersService: OrdersService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
+    private _location: Location,
+    private dialogService: DialogService) {
   }
 
   order: FormGroup;
@@ -43,7 +43,7 @@ export class OrderNewComponent implements OnInit {
   allShedsXSilos: Array<IShedxSilo> = [];
   orderShedsXSilos: Array<IShedxSilo> = [];
 
-  tmpFarm: Farm = {id: null, name: null};
+  tmpFarm: Farm = { id: null, name: null };
 
   farms: Array<Farm> = [];
   orderTotalTonnage: number = 0;
@@ -59,7 +59,8 @@ export class OrderNewComponent implements OnInit {
     orderChangeReason: null,
     ration: null,
     status: null,
-    tonsOrdered: null
+    tonsOrdered: null,
+    notes: null
   };
 
   ngOnInit() {
@@ -86,7 +87,8 @@ export class OrderNewComponent implements OnInit {
         ration: [null, [
           Validators.required
         ]],
-        silos: [[]]
+        silos: [[]],
+        notes: [null, []]
       });
 
       if (this.tmpFarm.id !== null) {
@@ -113,8 +115,8 @@ export class OrderNewComponent implements OnInit {
 
   addSilo() {
     let shredxsilo: IShedxSilo = {
-      shed: {id: null, silos: [], name: null},
-      silo: {id: null, shedId: null, name: null, amount: 0, capacity: 0}
+      shed: { id: null, silos: [], name: null },
+      silo: { id: null, shedId: null, name: null, amount: 0, capacity: 0 }
     };
     if (this.orderShedsXSilos.length <= 9) {
       this.orderShedsXSilos.push(shredxsilo);
@@ -154,7 +156,7 @@ export class OrderNewComponent implements OnInit {
       this.allFarmSheds = res;
       this.allFarmSheds.results.forEach((shed: IShed) => {
         shed.silos.forEach((silo: ISilo) => {
-          this.allShedsXSilos.push({shed, silo});
+          this.allShedsXSilos.push({ shed, silo });
         });
       });
 
@@ -179,7 +181,7 @@ export class OrderNewComponent implements OnInit {
   }
 
   onShedvalueChange(shed: IShedxSilo) {
-    shed.silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+    shed.silo = { id: null, shedId: null, name: null, amount: 0, capacity: 0 };
   }
 
   onSiloSelectChange(shedxsilo: IShedxSilo, index: number) {
@@ -188,7 +190,7 @@ export class OrderNewComponent implements OnInit {
       this.orderShedsXSilos.forEach((shedxsiloTmp: IShedxSilo, indexTmp) => {
 
         if (shedxsilo.shed.id === shedxsiloTmp.shed.id && shedxsilo.silo.id === shedxsiloTmp.silo.id && indexTmp !== index) {
-          shedxsilo.silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+          shedxsilo.silo = { id: null, shedId: null, name: null, amount: 0, capacity: 0 };
           this.snackBar.open('There is such silos selected!', '', {
             duration: 2500,
           });
@@ -216,8 +218,8 @@ export class OrderNewComponent implements OnInit {
   removeSilo(index: number) {
     // BSF 20181011 - Modified to reset row rather than deleting
     // this.orderShedsXSilos.splice(index, 1);
-    this.orderShedsXSilos[index].shed = {id: null, name: null, silos: []};
-    this.orderShedsXSilos[index].silo = {id: null, shedId: null, name: null, amount: 0, capacity: 0};
+    this.orderShedsXSilos[index].shed = { id: null, name: null, silos: [] };
+    this.orderShedsXSilos[index].silo = { id: null, shedId: null, name: null, amount: 0, capacity: 0 };
 
     this.recalculateOrderTonnage();
   };
@@ -234,7 +236,7 @@ export class OrderNewComponent implements OnInit {
 
     this.order.controls.silos.setValue(tmpSilos);
 
-    const {value, valid} = this.order;
+    const { value, valid } = this.order;
     value.deliveryDate.toISOString();
 
     if (valid) {
@@ -246,7 +248,7 @@ export class OrderNewComponent implements OnInit {
             if (dialogRes) {
               this.ordersService.postOrder(value)
                 .subscribe(() => {
-                  this.router.navigate(['../'], {relativeTo: this.route});
+                  this.router.navigate(['../'], { relativeTo: this.route });
                   this.snackBar.open('Order Created!', '', {
                     duration: 2000,
                   });
@@ -259,7 +261,7 @@ export class OrderNewComponent implements OnInit {
       else {
         this.ordersService.postOrder(value)
           .subscribe(() => {
-            this.router.navigate(['../'], {relativeTo: this.route});
+            this.router.navigate(['../'], { relativeTo: this.route });
             this.snackBar.open('Order Created!', '', {
               duration: 2000,
             });

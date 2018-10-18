@@ -14,12 +14,12 @@ namespace FarmOrder.Models.Orders
         public DateTime DeliveryDate { get; set; }
         [Required]
         public int TonsOrdered { get; set; }
+        public string Notes { get; set; }
         [Required]
         public RationListEntryViewModel Ration { get; set; }
         [Required]
         public FarmListEntryViewModel Farm { get; set; }
         [Required]
         public List<SiloListEntryViewModel> Silos { get; set; }
-        
     }
 }
