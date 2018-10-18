@@ -77,7 +77,7 @@ export class UsersListComponent implements OnInit {
     this.dataSource.filter = selectOption.value.name;
   }
 
-  deleteUser(userId: string) {
+  deleteUser(user: User, userId: string) {
 
     let tmpUser: User = this.authService.getUser();
     if (tmpUser.id === userId) {
@@ -92,9 +92,10 @@ export class UsersListComponent implements OnInit {
           if (dialogRes) {
             this.usersService.deleteUser(userId)
               .subscribe(() => {
-                const newUsers = this.dataSource.data.filter(user => user.id !== userId);
-                this.dataSource = new MatTableDataSource<User>(newUsers);
-                this.snackBar.open('User Deleted!', '', {
+                user.entityStatus = 1;
+                // const newUsers = this.dataSource.data.filter(user => user.id !== userId);
+                // this.dataSource = new MatTableDataSource<User>(newUsers);
+                this.snackBar.open('User Blocked!', '', {
                   duration: 2000,
                 });
               }, err => {
@@ -115,8 +116,8 @@ export class UsersListComponent implements OnInit {
           console.log('user', user);
           this.usersService.putUser(user, userId)
             .subscribe(() => {
-              const newUsers = this.dataSource.data.filter(user => user.id !== userId);
-              this.dataSource = new MatTableDataSource<User>(newUsers);
+              // const newUsers = this.dataSource.data.filter(user => user.id !== userId);
+              // this.dataSource = new MatTableDataSource<User>(newUsers);
               this.snackBar.open('User Activated!', '', {
                 duration: 2000,
               });
