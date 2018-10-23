@@ -1,0 +1,147 @@
+/* You can add global styles to this file, and also import other style files */
+@import "/assets/farms-theme.scss";
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.app-padding-small {
+  padding: 8px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 64px);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.padding-content {
+  padding: 16px;
+}
+
+.small-padding-content {
+  padding: 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+.push {
+  height: 50px;
+}
+
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  position: fixed;
+}
+
+.silo-amount-input {
+  padding-right: 8px;
+  padding-left: 8px;
+  width: 80px;
+}
+
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}
+
+.logo {
+  margin: 8px;
+  height: 48px;
+  // width: 184px;
+}
+
+.logo-large {
+  margin: 8px;
+  height: 250px;
+  // width: 184px;
+}
+
+
+.app-table-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+.mobile-label {
+  display: none;
+}
+
+.to-hide{
+  display: flex;
+}
+
+@media(max-width: 800px) {
+
+  .app-table-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 90vw;
+  }
+
+  .mobile-label {
+    width: 80px;
+    display: inline-block;
+    font-weight: bold;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row {
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+  }
+
+  .to-hide{
+    display: none;
+  }
+}
+
+.logInForm {
+  display: flex;
+  flex-direction: column;
+  min-width: 380px;
+  max-width: 500px;
+  width: 50%;
+}
+
+.app-reset-card{
+  margin-top: 64px;
+  width: 400px;
+  max-width: 400px;
+}

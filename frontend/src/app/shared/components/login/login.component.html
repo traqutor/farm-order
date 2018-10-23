@@ -1,0 +1,36 @@
+<mat-toolbar color="primary">
+</mat-toolbar>
+
+<div class="container">
+  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+
+    <mat-card class="mat-elevation-z4"
+              fxLayout="column"
+              fxLayoutAlign="center center">
+
+      <img src="./assets/genius_fom_logo.png" class="logo-large">
+
+      <form class="logInForm" (ngSubmit)="onSignIn(f)" #f="ngForm">
+        <mat-form-field>
+          <input matInput placeholder="Login" type="text" name="login" ngModel>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Password" type="password" name="password" ngModel>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="err">{{errMessage.toString()}}</div>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="!f.valid">Sign In</button>
+
+      </form>
+
+      <div fxLayout="row" fxLayoutAlign="center center" class="app-padding-small">
+        <button mat-button routerLink="/passwordReset">Forgot your password?</button>
+      </div>
+
+      <mat-progress-bar *ngIf="isLogging" color="primary" [mode]="'indeterminate'">
+      </mat-progress-bar>
+
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,196 @@
+<div class="padding-content"
+     fxFlex
+     fxLayout="column"
+>
+  <div
+    fxLayout="row"
+  >
+    <div>
+      <h2 class="mat-title">New Order</h2>
+      <p class="mat-subheading-2">Define new order.</p>
+    </div>
+  </div>
+
+
+  <div *ngIf="order" class="padding-content">
+
+    <form [formGroup]="order" fxFlex="60" fxFlex.lt-md="100" fxLayout="column" >
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tons ordered</mat-label>
+        <input matInput
+               type="number"
+               formControlName="tonsOrdered"
+               (change)="getTotalOrderAmount()"
+        >
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('required') && order.get('tonsOrdered').touched">
+          Tons ordered is required.
+        </mat-error>
+        <mat-error
+          *ngIf="order.get('tonsOrdered').hasError('min') && order.get('tonsOrdered').touched">
+          Minimum tons ordered is 1.
+        </mat-error>
+      </mat-form-field>
+
+      <!--farms-->
+      <mat-form-field appearance="outline">
+        <mat-label>Farm</mat-label>
+        <mat-select #option placeholder="Select Farm" formControlName="farm"
+                    (valueChange)="getRations(option.value); getSheds(option.value)">
+          <mat-option *ngFor="let farm of farms" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('farm').hasError('required') && order.get('farm').touched">
+          Farm is required.
+        </mat-error>
+      </mat-form-field>
+
+      <!--ration-->
+      <mat-form-field appearance="outline"
+                      *ngIf="this.order.value.farm !== null && (rations$ | async) as rations">
+        <mat-label>Ration</mat-label>
+        <mat-select placeholder="Select Ration" formControlName="ration">
+          <mat-option *ngFor="let ration of rations.results" [value]="ration">
+            {{ration.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="order.get('ration').hasError('required') && order.get('ration').touched">
+          Ration is required.
+        </mat-error>
+      </mat-form-field>
+
+      <!--sheds-->
+
+      <div *ngFor="let shedxsilo of orderShedsXSilos; let i = index"
+           fxLayout="row"
+           fxLayoutAlign="start center">
+
+        <mat-form-field fxFlex="20" *ngIf="allFarmSheds" appearance="outline">
+
+          <mat-label>Sheds</mat-label>
+
+          <mat-select #selectedSheds
+                      placeholder="Shed"
+                      (valueChange)="onShedvalueChange(shedxsilo)"
+                      [(ngModel)]="shedxsilo.shed"
+                      [ngModelOptions]="{standalone: true}"
+                      [compareWith]="compare">
+            <mat-option *ngFor="let shed of allFarmSheds.results" [value]="shed">
+              {{shed.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="30" appearance="outline">
+
+          <mat-label>Silos</mat-label>
+
+          <mat-select placeholder="Silo"
+                      [(ngModel)]="shedxsilo.silo"
+                      [ngModelOptions]="{standalone: true}"
+                      (valueChange)="onSiloSelectChange(shedxsilo, i)"
+                      [compareWith]="compare">
+
+            <mat-option *ngFor="let silo of shedxsilo.shed.silos" [value]="silo">
+              {{silo.name}}
+            </mat-option>
+
+          </mat-select>
+
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline"
+                        class="silo-amount-input">
+          <mat-label>Amount</mat-label>
+
+          <input type="number"
+                 matInput
+                 maxlength="2"
+                 min="0"
+                 [max]="shedxsilo.silo.capacity"
+                 [(ngModel)]="shedxsilo.silo.amount"
+                 [ngModelOptions]="{standalone: true}"
+                 (ngModelChange)="recalculateOrderTonnage()">
+        </mat-form-field>
+
+        <div>(MAX <b>{{shedxsilo.silo.capacity}}</b> tons)
+
+        </div>
+
+        <button mat-icon-button
+                (click)="removeSilo(i)"
+                matTooltip="Remove silo">
+          <mat-icon>clear</mat-icon>
+        </button>
+
+      </div>
+
+
+      <!-- <div fxLayout="row" fxLayoutAlign="start center">
+        <p>Allocated / Total ordered tonnage:
+          <button mat-button
+                  [color]="orderTotalTonnage<orderSilosTonnage? 'warn': 'accent'"
+          > {{orderSilosTonnage}} / {{orderTotalTonnage}}
+          </button>
+        </p>
+        <span class="spacer"></span>
+        <button mat-raised-button
+                color="accent"
+                matTooltip="Add silo"
+                (click)="addSilo()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div> -->
+
+
+      <div>
+        <p>Allocated / Total ordered tonnage:
+          <button mat-button
+                  [color]="orderTotalTonnage<orderSilosTonnage? 'warn': 'primary'"
+          > {{orderSilosTonnage}} / {{orderTotalTonnage}}
+          </button>
+        </p>
+      </div>
+
+
+      <!--order date-->
+      <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="dp3" placeholder="Delivery Date" formControlName="deliveryDate">
+        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Notes -->
+      <mat-form-field appearance="outline">
+        <mat-label>Notes</mat-label>
+        <input matInput
+               type="text"
+               formControlName="notes"
+        >
+      </mat-form-field>
+
+      <div fxLayout="row" class="button-row">
+
+        <button
+          mat-raised-button
+          (click)="onSubmit()"
+          color="accent"
+          [disabled]="submitDisabled()"
+        >
+          Add Order
+        </button>
+
+        <button mat-raised-button (click)="cancel()">
+          Cancel
+        </button>
+
+      </div>
+    </form>
+  </div>
+
+</div>

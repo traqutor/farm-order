@@ -1,0 +1,114 @@
+<div class="padding-content"
+     fxFlex
+     fxLayout="column">
+  <div fxLayout="row"
+       fxLayout.xs="column">
+    <div>
+      <h2 class="mat-title">System Users List</h2>
+      <p class="mat-subheading-2">List of users defined in system.</p>
+    </div>
+    <div class="spacer"></div>
+    <div>
+      <button
+        mat-raised-button
+        color="accent"
+        [routerLink]="'new'"
+      >
+        ADD USER
+      </button>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="(customers$ | async) as customers">
+    <mat-form-field class="half-width" [ngClass.xs]="{'half-width':false, 'full-width':true}">
+      <mat-select #option (valueChange)="filterTableByCustomer(option)" placeholder="Filter users by Customer">
+        <mat-option value="">
+          All Customers
+        </mat-option>
+        <mat-option *ngFor="let customer of customers.results" [value]="customer">
+          {{customer.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+
+  <div class="app-table-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
+
+      <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column.value">
+
+        <mat-header-cell *matHeaderCellDef>
+          {{column.name}}
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let element">
+
+          <span class="mobile-label">
+            {{column.name}}:
+          </span>
+
+          {{displayRow(element[column.value], column )}}
+
+        </mat-cell>
+
+      </ng-container>
+
+      <ng-container matColumnDef="settings">
+
+        <mat-header-cell *matHeaderCellDef> Settings</mat-header-cell>
+
+        <mat-cell *matCellDef="let element">
+          <button *ngIf="element.entityStatus === 0"
+            mat-icon-button
+            color="accent"
+            matTooltip="Edit User"
+            [routerLink]="element.id+'/edit'"
+          >
+            <mat-icon>
+              edit
+            </mat-icon>
+          </button>
+
+          <button *ngIf="element.entityStatus === 0"
+            mat-icon-button
+            color="primary"
+            matTooltip="Delete User"
+            (click)="deleteUser(element, element.id)"
+          >
+            <mat-icon>
+              lock
+            </mat-icon>
+          </button>
+
+          <button *ngIf="element.entityStatus === 1"
+                  mat-icon-button
+                  color="warn"
+                  matTooltip="Activate User"
+                  (click)="activateUser(element, element.id )"
+          >
+            <mat-icon>
+              lock_open
+            </mat-icon>
+          </button>
+
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
+      <mat-row mat-row *matRowDef="let row; columns: columnsToRender;"></mat-row>
+    </mat-table>
+  </div>
+</div>
+
+<div *ngIf="loading" class="overlay">
+  <mat-progress-spinner
+    class="spinner"
+    color="accent"
+    mode="indeterminate"
+  >
+  </mat-progress-spinner>
+</div>

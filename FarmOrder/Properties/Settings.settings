@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FarmOrder.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SMTP_email" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">***@gmail.com</Value>
+    </Setting>
+    <Setting Name="SMTP_password" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Potatoes123</Value>
+    </Setting>
+    <Setting Name="SMTP_host" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">smtp.gmail.com</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

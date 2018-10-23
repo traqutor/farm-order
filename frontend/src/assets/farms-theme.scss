@@ -1,0 +1,106 @@
+
+
+@import '~@angular/material/theming';
+@include mat-core();
+
+// Typography
+$custom-typography: mat-typography-config(
+  // $font-family: Raleway,
+  // $headline: mat-typography-level(24px, 48px, 400),
+  // $body-1: mat-typography-level(16px, 24px, 400)
+);
+@include angular-material-typography($custom-typography);
+
+// Default colors
+$my-app-primary: mat-palette($mat-grey, 900);
+$my-app-accent:  mat-palette($mat-orange);
+
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent);
+@include angular-material-theme($my-app-theme);
+
+// Dark theme
+$dark-primary: mat-palette($mat-purple, 900, 900, 900);
+$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-warn:    mat-palette($mat-deep-orange);
+
+$dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+.dark-theme {
+  @include angular-material-theme($dark-theme);
+}
+
+// Light theme
+$light-primary: mat-palette($mat-grey, 200, 500, 300);
+$light-accent: mat-palette($mat-brown, 200);
+$light-warn: mat-palette($mat-deep-orange, 200);
+
+$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+
+.light-theme {
+  @include angular-material-theme($light-theme)
+}
+
+// Profisol theme
+// Example of creation of the custom theme for Customer
+
+$light-primary: mat-palette($mat-blue, 900);
+$light-accent: mat-palette($mat-light-green);
+$light-warn: mat-palette($mat-red, 200);
+
+$profisol-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+
+.profisol-theme {
+  @include angular-material-theme($profisol-theme)
+}
+
+// Baiada theme
+
+$baiada-main: (
+  50: rgba(114,195,180, .05),
+  100: rgba(114,195,180, .1),
+  200: rgba(114,195,180, .2),
+  300: rgba(114,195,180, .3),
+  400: rgba(114,195,180, .4),
+  500: rgba(114,195,180, .5),
+  600: rgba(114,195,180, .6),
+  700: rgba(114,195,180, .7),
+  800: rgba(114,195,180, .8),
+  900: rgba(114,195,180, .9),
+  A100: rgba(114,195,180, 1),
+  A200: rgba(114,195,180, 1),
+  A400: rgba(114,195,180, 1),
+  A700: rgba(114,195,180, 1),
+  contrast: (
+    50: white,
+    100: white,
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: white,
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+$light-primary: mat-palette($baiada-main, 900);
+$light-accent: mat-palette($baiada-main, 600);
+$light-warn: mat-palette($mat-deep-orange, 200);
+
+$baiada-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+
+.baiada-theme {
+  @include angular-material-theme($baiada-theme)
+}
+
+//ready to use themes names:
+//default-theme
+//profisol-theme
+//dark-theme
+//light-theme
+

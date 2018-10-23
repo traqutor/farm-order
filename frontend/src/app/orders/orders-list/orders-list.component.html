@@ -1,0 +1,153 @@
+<div class="padding-content"
+     fxFlex
+     fxLayout="column">
+  <div fxLayout="row" fxLayout.xs="column">
+    <div>
+      <h2 class="mat-title">Orders List</h2>
+      <p class="mat-subheading-2">List of orders defined in system.</p>
+    </div>
+    <div class="spacer"></div>
+    <div>
+      <button
+        mat-raised-button
+        color="accent"
+        [routerLink]="'new'"
+      >
+        ADD ORDER
+      </button>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div [ngClass]="{'hidden':user.role.name !== 'Admin'}"
+       fxLayout="row" fxLayout.lt-md="column">
+
+    <mat-form-field fxFlex="30" class="small-padding-content">
+      <mat-select #matSelect placeholder="Filter orders by farms">
+        <mat-option value="">
+          ALL
+        </mat-option>
+        <span *ngIf="(farms$ | async) as farms">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </span>
+      </mat-select>
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+      <mat-form-field class="small-padding-content">
+        <input matInput #dateFrom [(ngModel)]="dateFromValue" [matDatepicker]="dp1" placeholder="from date">
+        <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+        <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="small-padding-content">
+
+        <input matInput #dateTo [min]="dateFromValue" [(ngModel)]="dateToValue" [matDatepicker]="dp2"
+               placeholder="to date">
+        <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+        <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="padding-content">
+      <button
+        matTooltip="Search oders"
+        mat-icon-button
+        (click)="filterByDate()"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <button
+        matTooltip="Refresh"
+        mat-icon-button
+        (click)="matSelect.value = ''; dateFromValue = null; dateToValue = null; filterByDate()"
+      >
+        <mat-icon>cached</mat-icon>
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="app-table-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource" class="full-width">
+
+      <ng-container *ngFor="let column of displayedColumns"
+                    [matColumnDef]="column.value">
+
+        <mat-header-cell *matHeaderCellDef
+                         [class]="column.hideMobile ? 'to-hide': ''">
+          {{column.name}}
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let element"
+                  [class]="column.hideMobile ? 'to-hide': ''">
+
+          <span class="mobile-label">
+            {{column.name}}:
+          </span>
+
+          {{displayRow(element[column.value], column)}}
+
+        </mat-cell>
+
+      </ng-container>
+
+      <ng-container matColumnDef="settings">
+
+        <mat-header-cell *matHeaderCellDef> Settings</mat-header-cell>
+
+        <mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            color="accent"
+            [disabled]="disableEdit(element)"
+            matTooltip="Edit Order"
+            [routerLink]="element.id+'/edit'"
+          >
+            <mat-icon>
+              edit
+            </mat-icon>
+          </button>
+
+          <button
+            *ngIf="this.user &&  this.user.role && (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin' )"
+            mat-icon-button
+            color="warn"
+            matTooltip="Delete Order"
+            (click)="deleteOrder(element)"
+          >
+            <mat-icon>
+              delete
+            </mat-icon>
+          </button>
+
+        </mat-cell>
+
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
+      <mat-row class="mat-row-gray" *matRowDef="let row; columns: columnsToRender;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator
+      [length]="orderLength"
+      [pageSize]="20"
+    >
+    </mat-paginator>
+
+  </div>
+</div>
+<div *ngIf="loading" class="overlay">
+  <mat-progress-spinner
+    class="spinner"
+    color="accent"
+    mode="indeterminate"
+  >
+  </mat-progress-spinner>
+</div>
