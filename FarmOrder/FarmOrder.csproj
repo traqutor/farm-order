@@ -345,6 +345,10 @@
     <Compile Include="Migrations\201810120325356_AddedNotesFieldToOrders.Designer.cs">
       <DependentUpon>201810120325356_AddedNotesFieldToOrders.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810230455589_AddedUserNotificationAndIsEmergencyFlagToOrder.cs" />
+    <Compile Include="Migrations\201810230455589_AddedUserNotificationAndIsEmergencyFlagToOrder.Designer.cs">
+      <DependentUpon>201810230455589_AddedUserNotificationAndIsEmergencyFlagToOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -565,6 +569,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810120325356_AddedNotesFieldToOrders.resx">
       <DependentUpon>201810120325356_AddedNotesFieldToOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810230455589_AddedUserNotificationAndIsEmergencyFlagToOrder.resx">
+      <DependentUpon>201810230455589_AddedUserNotificationAndIsEmergencyFlagToOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

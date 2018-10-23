@@ -50,6 +50,7 @@ namespace FarmOrder.Data
         public virtual DbSet<FarmRation> FarmsRations { get; set; }
         public virtual DbSet<OrderSilo> OrdersSilos { get; set; }
         public virtual DbSet<FarmUser> FarmUsers { get; set; }
+        public virtual DbSet<UserNotification> UserNotifications { get; set; }
 
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
