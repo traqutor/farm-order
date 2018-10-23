@@ -290,6 +290,7 @@
     <Compile Include="Data\Entities\Orders\OrderSilo.cs" />
     <Compile Include="Data\Entities\Orders\OrderStatus.cs" />
     <Compile Include="Data\Entities\User.cs" />
+    <Compile Include="Data\Entities\UserNotification.cs" />
     <Compile Include="Data\Entities\UserSystemRoles.cs" />
     <Compile Include="Data\FarmOrderDBContext.cs" />
     <Compile Include="Data\Initializers\FarmOrderDBContextInitializer.cs" />

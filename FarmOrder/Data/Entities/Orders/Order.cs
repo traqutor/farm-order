@@ -3,8 +3,6 @@ using FarmOrder.Data.Entities.Farms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace FarmOrder.Data.Entities.Orders
 {
@@ -12,6 +10,7 @@ namespace FarmOrder.Data.Entities.Orders
     {
         public int Id { get; set; }
 
+        public bool IsEmergency { get; set; }
      
         public DateTime DeliveryDate { get; set; }
 
