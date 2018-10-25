@@ -54,10 +54,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.loading = true;
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.user = this.authService.getUser();
-    this.subscribe = merge(this.paginator.page, interval(5000), this.matSelect.valueChange)
+
+    this.subscribe = merge(this.paginator.page, interval(15000), this.matSelect.valueChange)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -89,6 +91,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.dialogService.alert(err.error);
         });
+
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Tablet)
