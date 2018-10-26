@@ -14,6 +14,8 @@ namespace FarmOrder.Models.Orders
         public OrderListEntryViewModel(Order el)
         {
             Id = el.Id;
+
+            IsEmegency = el.IsEmergency;
             TonsOrdered = el.TonsOrdered;
             Notes = el.Notes;
             Ration = new RationListEntryViewModel(el.Ration);
@@ -47,6 +49,7 @@ namespace FarmOrder.Models.Orders
         }
 
         public int Id { get; set; }
+        
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
 

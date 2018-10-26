@@ -230,6 +230,7 @@ namespace FarmOrder.Services
 
             oldOrder.ModificationDate = DateTime.UtcNow;
             oldOrder.ModifiedById = userId;
+            //oldOrder.IsEmergency = model.IsEmegency;
             oldOrder.StatusId = orderStatus.Id;
             oldOrder.ChangeReasonId = changeReason.Id;
             oldOrder.DeliveryDate = model.DeliveryDate;
@@ -298,9 +299,6 @@ namespace FarmOrder.Services
             if (dates.Any(d => d < DateTime.UtcNow))
                 errors.Add("Can not set the past date.");
 
-            if (model.TonsOrdered <= 0)
-                errors.Add("Can not order less than 1 tone.");
-
             if (selectedFarm == null)
                 errors.Add("Farm unavalibe select correct farm.");
 
@@ -328,9 +326,10 @@ namespace FarmOrder.Services
                     CreationDate = DateTime.UtcNow,
                     ModificationDate = DateTime.UtcNow,
                     StatusId = defaultStatus.Id,
-                    TonsOrdered = model.TonsOrdered,
+                    TonsOrdered = sum,
                     DeliveryDate = deliveryDate,
                     Notes = model.Notes,
+                    IsEmergency = model.IsEmegency,
                     FarmId = selectedFarm.Id,
                     RationId = selectedRation.Id
                 };
@@ -403,6 +402,7 @@ namespace FarmOrder.Services
             Order order = new Order()
             {
                 CreatedById = userId,
+                IsEmergency = model.IsEmegency,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 StatusId = defaultStatus.Id,

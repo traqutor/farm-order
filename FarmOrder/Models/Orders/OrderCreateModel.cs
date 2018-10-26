@@ -14,6 +14,7 @@ namespace FarmOrder.Models.Orders
         public DateTime DeliveryDate { get; set; }
         [Required]
         public int TonsOrdered { get; set; }
+        public bool IsEmegency { get; set; }
         public string Notes { get; set; }
         [Required]
         public RationListEntryViewModel Ration { get; set; }
