@@ -1,5 +1,6 @@
 ﻿using FarmOrder.Models;
 using FarmOrder.Models.Orders;
+using FarmOrder.Models.Orders.MultipleOrders;
 using FarmOrder.Services;
 using Microsoft.AspNet.Identity;
 using System;
@@ -56,6 +57,25 @@ namespace FarmOrder.Controllers
                 return _service.Add(User.Identity.GetUserId(), true, model, Request);
             else
                 return _service.Add(User.Identity.GetUserId(), false, model, Request);
+        }
+
+        [Route("api/Order/CreateMultiple")]
+        public MultipleOrderModel CreateMultiple([FromBody]MultipleOrderModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var error = new
+                {
+                    message = "Invalid request",
+                    errors = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
+                };
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, error));
+            }
+
+            if (User.IsInRole("Admin"))
+                return _service.AddMultiple(User.Identity.GetUserId(), true, model, Request);
+            else
+                return _service.AddMultiple(User.Identity.GetUserId(), false, model, Request);
         }
 
         public OrderListEntryViewModel Put(int id, [FromBody]OrderEditModel model)

@@ -9,8 +9,7 @@ namespace FarmOrder.Models.Farms
 {
     public class SiloListEntryViewModel
     {
-        private OrderSilo os;
-
+   
         public int Id { get; set; }
         public string Name { get; set; }
 

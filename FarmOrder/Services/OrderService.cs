@@ -13,6 +13,7 @@ using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using FarmOrder.Data.Entities;
+using FarmOrder.Models.Orders.MultipleOrders;
 
 namespace FarmOrder.Services
 {
@@ -141,7 +142,7 @@ namespace FarmOrder.Services
                 Results = query.Include("Silos.Silo").ToList().Select(el => new OrderListEntryViewModel(el)).ToList()
             };
         }
-
+        
         public void Delete(string userId, bool isAdmin, int id, HttpRequestMessage request)
         {
             Order oldOrder = _context.Orders.SingleOrDefault(o => o.Id == id);
@@ -254,7 +255,7 @@ namespace FarmOrder.Services
                         Amount = el.Amount,
                         CreationDate = DateTime.UtcNow,
                         ModificationDate = DateTime.UtcNow,
-                        EntityStatus = Data.Entities.EntityStatus.NORMAL
+                        EntityStatus = EntityStatus.NORMAL
                     });
                 }
                 else
@@ -270,6 +271,93 @@ namespace FarmOrder.Services
             _context.SaveChanges();
 
             return new OrderListEntryViewModel(oldOrder);
+        }
+
+        public MultipleOrderModel AddMultiple(string userId, bool isAdmin, MultipleOrderModel model, HttpRequestMessage request)
+        {
+            var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
+            var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.Farms.Any(f => f.FarmId == model.Farm.Id));
+
+            int[] silosesIds = model.Silos.Select(s => s.Id).ToArray();
+            var selectedSiloses = _context.Silos.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId);
+
+            List<string> errors = new List<string>();
+
+            if (!isAdmin)
+            {
+                var loggedUser = _context.Users.Include(u => u.FarmUsers).SingleOrDefault(u => u.Id == userId);
+
+                bool farmAvalibleForUser = loggedUser.FarmUsers.Any(f => selectedFarm.Id == f.FarmId);
+
+                if (!farmAvalibleForUser)
+                    selectedFarm = null;
+            }
+
+            var dates = model.Silos.SelectMany(s => s.DateAmount.Select(da => da.Date)).Distinct().ToList();
+
+            if (dates.Any(d => d < DateTime.UtcNow))
+                errors.Add("Can not set the past date.");
+
+            if (model.TonsOrdered <= 0)
+                errors.Add("Can not order less than 1 tone.");
+
+            if (selectedFarm == null)
+                errors.Add("Farm unavalibe select correct farm.");
+
+            if (selectedRation == null)
+                errors.Add("Ration unavalibe select correct ration.");
+
+            if (selectedSiloses == null || selectedSiloses.Count() <= 0)
+                errors.Add("Atleast one silo needs to be selected.");
+
+            if (errors.Count > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new { message= "Invalid request", errors = errors }));
+
+            var defaultStatus = _context.OrderStatuses.SingleOrDefault(s => s.Name == "Open");
+
+            foreach (var deliveryDate in dates)
+            {
+                var silos = model.Silos.Where(s => s.DateAmount.Any(da => da.Date == deliveryDate));
+                var sum = silos.Sum(s => s.DateAmount.Where(da => da.Date == deliveryDate).Sum(da => da.Amount));
+                if (sum == 0) //skipping the order creation if there is no allocated amount for the given date
+                    continue;
+
+                Order order = new Order()
+                {
+                    CreatedById = userId,
+                    CreationDate = DateTime.UtcNow,
+                    ModificationDate = DateTime.UtcNow,
+                    StatusId = defaultStatus.Id,
+                    TonsOrdered = model.TonsOrdered,
+                    DeliveryDate = deliveryDate,
+                    Notes = model.Notes,
+                    FarmId = selectedFarm.Id,
+                    RationId = selectedRation.Id
+                };
+
+                foreach (var silo in silos)
+                {
+                    int amount = silo.DateAmount.FirstOrDefault(da => da.Date == deliveryDate).Amount;
+                    if(amount != 0) { 
+                        OrderSilo os = new OrderSilo()
+                        {
+                            Order = order,
+                            SiloId = silo.Id,
+                            Amount = amount,
+                            EntityStatus = EntityStatus.NORMAL,
+                            CreationDate = DateTime.UtcNow,
+                            ModificationDate = DateTime.UtcNow
+                        };
+                        order.Silos.Add(os);
+                    }
+                }
+
+                _context.Orders.Add(order);
+            }
+
+            _context.SaveChanges();
+
+            return model;
         }
 
         public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)
