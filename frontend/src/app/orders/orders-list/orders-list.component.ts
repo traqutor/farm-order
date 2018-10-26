@@ -1,17 +1,18 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSelect, MatSnackBar} from '@angular/material';
+import {MatDialog, MatPaginator, MatSelect, MatSnackBar} from '@angular/material';
 import {DatePipe} from '@angular/common';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {interval, merge, Observable, of} from 'rxjs';
 
 import {OrdersService} from '../orders.service';
-import {IOrder} from '../../shared/models/order';
+import {IMultipleOrder, IOrder} from '../../shared/models/order';
 import {Farm} from '../../shared/models/farm';
 import {SharedService} from '../../shared/shared.service';
 import {AuthService} from '../../core/auth/auth.service';
 import {DialogService} from '../../shared/dialogs/dialog.service';
 import {User} from '../../shared/models/user';
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {MultipleOrderDialogComponent} from "../multiple-order-dialog/multiple-order-dialog.component";
 
 @Component({
   selector: 'app-orders-list',
@@ -50,6 +51,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar,
               private sharedService: SharedService,
               private authService: AuthService,
+              private dialog: MatDialog,
               private dialogService: DialogService) {
   }
 
@@ -170,6 +172,28 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         duration: 2500,
       });
     }
+  }
+
+  orderProcess() {
+
+    const dialogRef = this.dialog.open(MultipleOrderDialogComponent, {
+      width: '80%',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed()
+      .subscribe((resolvedOrder: IMultipleOrder) => {
+
+        if (resolvedOrder) {
+          this.ordersService.putMultipleOrder(resolvedOrder).subscribe(() => {
+
+            this.filterByDate();
+
+          });
+        }
+
+      });
+
   }
 
   ngOnDestroy() {

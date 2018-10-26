@@ -21,6 +21,7 @@ import {AlertDialogComponent} from './shared/dialogs/alert-dialog/alert-dialog.c
 import {OverlayModule} from "@angular/cdk/overlay";
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
+import { MultipleOrderDialogComponent } from './orders/multiple-order-dialog/multiple-order-dialog.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -39,7 +40,8 @@ export const MY_FORMATS = {
   declarations: [
     AppComponent,
     PasswordResetComponent,
-    PasswordRecoveryComponent
+    PasswordRecoveryComponent,
+    MultipleOrderDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +66,7 @@ export const MY_FORMATS = {
     ConfirmDialogComponent,
     ChangePasswordDialogComponent,
     AlertDialogComponent,
+    MultipleOrderDialogComponent,
   ],
   bootstrap: [AppComponent]
 })

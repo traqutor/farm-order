@@ -1,0 +1,126 @@
+<h1 mat-dialog-title>Order Process</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="orderForm" fxLayout="column">
+
+
+    <!--farm-->
+    <mat-form-field appearance="outline">
+
+      <mat-label>Farm</mat-label>
+
+      <mat-select #optionFarm
+                  placeholder="Select Farm"
+                  formControlName="farm"
+                  (valueChange)="getRations(optionFarm.value); getSheds(optionFarm.value)">
+        <mat-option *ngFor="let frm of farms" [value]="frm">
+          {{frm.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-error
+        *ngIf="orderForm.get('farm').hasError('required') && orderForm.get('farm').touched">
+        Farm is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <!--rations-->
+    <mat-form-field appearance="outline"
+                    *ngIf="this.orderForm.value.farm !== null">
+
+      <mat-label>Ration</mat-label>
+
+      <mat-select placeholder="Select Ration"
+                  formControlName="ration">
+        <mat-option *ngFor="let rtn of rations" [value]="rtn">
+          {{rtn.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-error
+        *ngIf="orderForm.get('ration').hasError('required') && orderForm.get('ration').touched">
+        Ration is required.
+      </mat-error>
+    </mat-form-field>
+
+
+    <div formArrayName="silos"
+         *ngFor="let silo of silos.controls; let i = index"
+         class="position">
+
+      <div *ngIf="allFarmSheds"
+           [formGroupName]="i"
+           fxLayout="row">
+
+        <!--shed-->
+        <mat-form-field appearance="outline">
+
+          <mat-label>Shed</mat-label>
+
+          <mat-select #optionShed
+                      placeholder="Shed"
+                      formControlName="shed"
+                      (valueChange)="shedSelected(optionShed.value, i)">
+            <mat-option *ngFor="let shd of allFarmSheds" [value]="shd">
+              {{shd.name}}
+            </mat-option>
+          </mat-select>
+
+        </mat-form-field>
+
+        <!--silo-->
+        <mat-form-field appearance="outline">
+
+          <mat-label>Silo</mat-label>
+
+          <mat-select formControlName="id">
+            <mat-option *ngFor="let sil of orderSheds[i].silos" [value]="sil">
+              {{sil.name}}
+            </mat-option>
+          </mat-select>
+
+        </mat-form-field>
+
+
+
+      </div>
+
+    </div>
+
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Notes</mat-label>
+
+      <input matInput
+             type="string"
+             placeholder="Notes"
+             formControlName="notes">
+
+    </mat-form-field>
+
+  </form>
+
+  <!--<pre>{{ orderForm.value | json }}</pre>-->
+
+</div>
+
+<div mat-dialog-actions>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!orderForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+
+</div>
+
+

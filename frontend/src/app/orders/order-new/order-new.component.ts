@@ -124,7 +124,6 @@ export class OrderNewComponent implements OnInit {
       this.snackBar.open('The limit of silos is 10 per order!', '', {
         duration: 2500,
       });
-
     }
     this.recalculateOrderTonnage();
   }
@@ -151,7 +150,7 @@ export class OrderNewComponent implements OnInit {
 
       let tmp: Array<IShed> = [];
 
-      // take all sheds an make the list shed_x_silo
+      // take all sheds and make the list shed_x_silo
 
       this.allFarmSheds = res;
       this.allFarmSheds.results.forEach((shed: IShed) => {
