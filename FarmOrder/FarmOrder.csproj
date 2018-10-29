@@ -360,12 +360,15 @@
     <Compile Include="Models\Farms\ShedListEntryViewModel.cs" />
     <Compile Include="Models\Farms\SiloListEntryViewModel.cs" />
     <Compile Include="Models\Farms\SiloSearchModel.cs" />
+    <Compile Include="Models\Orders\MultipleOrders\DateAmountModel.cs" />
+    <Compile Include="Models\Orders\MultipleOrders\MultipleOrderModel.cs" />
     <Compile Include="Models\Orders\OrderChangeReasonListEntryViewModel.cs" />
     <Compile Include="Models\Orders\OrderCreateModel.cs" />
     <Compile Include="Models\Orders\OrderEditModel.cs" />
     <Compile Include="Models\Orders\OrderListEntryViewModel.cs" />
     <Compile Include="Models\Orders\OrderSearchModel.cs" />
     <Compile Include="Models\Orders\OrderStatusListEntryViewModel.cs" />
+    <Compile Include="Models\Orders\MultipleOrders\SiloWithMultipleAmountModel.cs" />
     <Compile Include="Models\SearchResults.cs" />
     <Compile Include="Models\Users\RoleListEntryViewModel.cs" />
     <Compile Include="Models\Users\UserCreateModel.cs" />

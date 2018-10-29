@@ -1,19 +1,13 @@
 ﻿using FarmOrder.Models.CustomerSites;
 using FarmOrder.Models.Farms;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
-namespace FarmOrder.Models.Orders
+namespace FarmOrder.Models.Orders.MultipleOrders
 {
-    public class OrderCreateModel
+    public class MultipleOrderModel
     {
-        [Required]
-        public DateTime DeliveryDate { get; set; }
-        [Required]
-        public int TonsOrdered { get; set; }
+
         public bool IsEmegency { get; set; }
         public string Notes { get; set; }
         [Required]
@@ -21,6 +15,6 @@ namespace FarmOrder.Models.Orders
         [Required]
         public FarmListEntryViewModel Farm { get; set; }
         [Required]
-        public List<SiloListEntryViewModel> Silos { get; set; }
+        public List<SiloWithMultipleAmountModel> Silos { get; set; }
     }
 }
