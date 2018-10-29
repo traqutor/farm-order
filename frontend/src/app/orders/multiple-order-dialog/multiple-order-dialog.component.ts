@@ -134,6 +134,7 @@ export class MultipleOrderDialogComponent implements OnInit {
       silos: []
     };
 
+    // clean up the object form from null values
     this.orderForm.value.silos.forEach((sil: ISiloWithMultipleAmount) => {
       if (sil.id) {
         let tmpSilo: ISiloWithMultipleAmount = {id: sil.id, dateAmount: sil.dateAmount};
@@ -142,7 +143,7 @@ export class MultipleOrderDialogComponent implements OnInit {
     });
 
 
-    this.orderService.putMultipleOrder(this.orderForm.value).subscribe(() => {
+    this.orderService.putMultipleOrder(tmpOrder).subscribe(() => {
       this.dialogRef.close(this.orderForm.value);
     }, error => {
       this.errorMessage = JSON.stringify(error);
