@@ -294,7 +294,7 @@ namespace FarmOrder.Services
                     selectedFarm = null;
             }
 
-            var dates = model.Silos.SelectMany(s => s.DateAmount.Select(da => da.Date)).Distinct().ToList();
+            var dates = model.Silos.SelectMany(s => s.DateAmount).Select(da => da.Date.Date).Distinct().ToList();
 
             if (dates.Any(d => d < DateTime.UtcNow))
                 errors.Add("Can not set the past date.");
@@ -315,8 +315,8 @@ namespace FarmOrder.Services
 
             foreach (var deliveryDate in dates)
             {
-                var silos = model.Silos.Where(s => s.DateAmount.Any(da => da.Date == deliveryDate));
-                var sum = silos.Sum(s => s.DateAmount.Where(da => da.Date == deliveryDate).Sum(da => da.Amount));
+                var silos = model.Silos.Where(s => s.DateAmount.Any(da => da.Date.Date == deliveryDate));
+                var sum = silos.Sum(s => s.DateAmount.Where(da => da.Date.Date == deliveryDate).Sum(da => da.Amount));
                 if (sum == 0) //skipping the order creation if there is no allocated amount for the given date
                     continue;
 
@@ -336,7 +336,7 @@ namespace FarmOrder.Services
 
                 foreach (var silo in silos)
                 {
-                    int amount = silo.DateAmount.FirstOrDefault(da => da.Date == deliveryDate).Amount;
+                    int amount = silo.DateAmount.FirstOrDefault(da => da.Date.Date == deliveryDate).Amount;
                     if(amount != 0) { 
                         OrderSilo os = new OrderSilo()
                         {
