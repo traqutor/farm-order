@@ -7,6 +7,7 @@ import {Farm} from "../../shared/models/farm";
 import {SharedService} from "../../shared/shared.service";
 import {Ration} from "../../shared/models/ration";
 import {IShed} from "../../shared/models/shed";
+import index from "@angular/cli/lib/cli";
 
 
 @Component({

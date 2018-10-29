@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
-import {IOrder} from '../shared/models/order';
+import {IMultipleOrder, IOrder} from '../shared/models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class OrdersService {
   }
 
   postOrder(order: IOrder) {
-    return this.http.post(`${this.apiUrl}/api/Order`, JSON.stringify(order));
+    return this.http.post(`${this.apiUrl}/api/Order`, order);
   }
 
   getOrderById(orderId: number): Observable<IOrder> {
@@ -28,12 +28,16 @@ export class OrdersService {
   }
 
   putOrder(orderId: number, order: IOrder): Observable<IOrder> {
-    return this.http.put<IOrder>(`${this.apiUrl}/api/Order/${orderId}`, JSON.stringify(order));
+    return this.http.put<IOrder>(`${this.apiUrl}/api/Order/${orderId}`, order);
   }
 
   deleteOrderById(orderId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/Order/${orderId}`);
   }
 
+  putMultipleOrder(order: IMultipleOrder) {
+    return this.http.post(`${this.apiUrl}/api/Order`, order);
+
+  }
 
 }

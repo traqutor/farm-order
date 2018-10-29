@@ -27,3 +27,21 @@ export interface OrderChangeReason {
   id?: number;
   name: string;
 }
+
+export interface IMultipleOrder {
+  ration: Ration;
+  farm: Farm;
+  silos: Array<ISiloWithMultipleAmount>
+  notes: string;
+}
+
+export interface ISiloWithMultipleAmount {
+  shed: IShed;
+  id: number;
+  dateAmount: Array<IDateAmount>
+}
+
+export interface IDateAmount {
+  amount: number,
+  date: Date
+}
