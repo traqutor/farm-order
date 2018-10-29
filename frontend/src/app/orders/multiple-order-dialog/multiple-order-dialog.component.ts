@@ -17,7 +17,7 @@ import {OrdersService} from "../orders.service";
 })
 export class MultipleOrderDialogComponent implements OnInit {
 
-  multipleOrder: IMultipleOrder = {farm: null, ration: null, silos: [], notes: null};
+  multipleOrder: IMultipleOrder = {farm: null, ration: null, silos: [], notes: null, isEmergency: false};
   orderForm: FormGroup;
   siloAmount: ISiloWithMultipleAmount = {shed: null, id: null, dateAmount: []};
   farms: Array<Farm>;
@@ -41,7 +41,7 @@ export class MultipleOrderDialogComponent implements OnInit {
       ration: [this.multipleOrder.ration],
       silos: this.formBuilder.array([]),
       notes: [this.multipleOrder.notes],
-
+      isEmergency: [this.multipleOrder.isEmergency],
     });
     this.addSilosAmountRows();
     this.getFarms();
@@ -123,7 +123,23 @@ export class MultipleOrderDialogComponent implements OnInit {
 
   submit() {
     this.errorMessage = null;
-    this.orderService.putMultipleOrder(this.orderForm.value).subscribe(() => {
+
+    const tmpOrder: IMultipleOrder = {
+      farm: this.orderForm.value.farm,
+      isEmergency: false,
+      notes: this.orderForm.value.notes,
+      ration: this.orderForm.value.ration,
+      silos: []
+    };
+
+    this.orderForm.value.silos.forEach((sil: ISiloWithMultipleAmount) => {
+      if (sil.id) {
+        let tmpSilo: ISiloWithMultipleAmount = {id: sil.id, dateAmount: sil.dateAmount};
+        tmpOrder.silos.push(tmpSilo);
+      }
+    });
+
+    this.orderService.putMultipleOrder(tmpOrder).subscribe(() => {
       this.dialogRef.close(this.orderForm.value);
     }, error => {
       this.errorMessage = JSON.stringify(error);
