@@ -162,6 +162,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         .subscribe(dialogRes => {
           if (dialogRes)
             this.ordersService.deleteOrderById(order.id).subscribe(() => {
+              this.filterByDate();
               this.snackBar.open('Order was deleted', '', {
                 duration: 2500,
               });
@@ -186,11 +187,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       .subscribe((resolvedOrder: IMultipleOrder) => {
 
         if (resolvedOrder) {
-          this.ordersService.putMultipleOrder(resolvedOrder).subscribe(() => {
+          this.filterByDate();
 
-            this.filterByDate();
-
-          });
         }
 
       });
