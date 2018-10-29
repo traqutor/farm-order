@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialogRef} from "@angular/material";
 
-import {IDateAmount, IMultipleOrder, ISiloWithMultipleAmount} from "../../shared/models/order";
+import {IMultipleOrder, ISiloWithMultipleAmount} from "../../shared/models/order";
 import {Farm} from "../../shared/models/farm";
 import {SharedService} from "../../shared/shared.service";
 import {Ration} from "../../shared/models/ration";
 import {IShed} from "../../shared/models/shed";
-import index from "@angular/cli/lib/cli";
 
 
 @Component({
