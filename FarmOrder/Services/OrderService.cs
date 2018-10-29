@@ -329,7 +329,7 @@ namespace FarmOrder.Services
                     TonsOrdered = sum,
                     DeliveryDate = deliveryDate,
                     Notes = model.Notes,
-                    IsEmergency = model.IsEmegency,
+                    IsEmergency = model.IsEmergency,
                     FarmId = selectedFarm.Id,
                     RationId = selectedRation.Id
                 };
