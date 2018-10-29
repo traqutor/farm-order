@@ -174,10 +174,11 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     }
   }
 
-  orderProcess() {
+  orderProcess(isEmergency: boolean) {
 
     const dialogRef = this.dialog.open(MultipleOrderDialogComponent, {
       width: '80%',
+      data: isEmergency,
       disableClose: true
     });
 

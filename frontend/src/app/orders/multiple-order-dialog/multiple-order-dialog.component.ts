@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
-import {MatDialogRef} from "@angular/material";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+
 
 import {IMultipleOrder, ISiloWithMultipleAmount} from "../../shared/models/order";
 import {Farm} from "../../shared/models/farm";
@@ -30,7 +31,8 @@ export class MultipleOrderDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<MultipleOrderDialogComponent>,
               private sharedService: SharedService,
               private orderService: OrdersService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              @Inject(MAT_DIALOG_DATA) public isEmergency: boolean) {
   }
 
 
@@ -41,7 +43,7 @@ export class MultipleOrderDialogComponent implements OnInit {
       ration: [this.multipleOrder.ration],
       silos: this.formBuilder.array([]),
       notes: [this.multipleOrder.notes],
-      isEmergency: [this.multipleOrder.isEmergency],
+      isEmergency: [this.isEmergency],
     });
     this.addSilosAmountRows();
     this.getFarms();
@@ -139,7 +141,8 @@ export class MultipleOrderDialogComponent implements OnInit {
       }
     });
 
-    this.orderService.putMultipleOrder(tmpOrder).subscribe(() => {
+
+    this.orderService.putMultipleOrder(this.orderForm.value).subscribe(() => {
       this.dialogRef.close(this.orderForm.value);
     }, error => {
       this.errorMessage = JSON.stringify(error);

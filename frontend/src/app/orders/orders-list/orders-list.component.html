@@ -12,17 +12,17 @@
       <button
         mat-raised-button
         color="accent"
-        (click)="orderProcess()"
+        (click)="orderProcess(false)"
       >
-        ORDER PROCESS
+        STANDARD ORDER
       </button>
 
       <button
         mat-raised-button
-        color="accent"
-        [routerLink]="'new'"
+        color="warn"
+        (click)="orderProcess(true)"
       >
-        ADD ORDER
+        EMERGENCY PROCESS
       </button>
 
     </div>
