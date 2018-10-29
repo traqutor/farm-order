@@ -8,7 +8,7 @@ export interface IOrder {
   creationDate?: string;
   modificationDate?: string;
   status?: Status;
-  isEmegency: boolean;
+  isEmergency: boolean;
   orderChangeReason?: OrderChangeReason;
   deliveryDate: string;
   tonsOrdered: number;
@@ -32,7 +32,7 @@ export interface OrderChangeReason {
 export interface IMultipleOrder {
   ration: Ration;
   farm: Farm;
-  isEmegency: boolean;
+  isEmergency: boolean;
   silos: Array<ISiloWithMultipleAmount>;
   notes: string;
 }

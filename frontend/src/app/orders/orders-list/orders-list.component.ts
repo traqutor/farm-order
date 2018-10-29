@@ -45,7 +45,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   farmOption;
   orderLength = 0;
   user: User;
-  subscription: Subscription;
+  subscriptions: Array<Subscription> = [];
   loading = false;
 
   constructor(private ordersService: OrdersService,
@@ -64,7 +64,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.user = this.authService.getUser();
 
-    this.subscription = merge(this.paginator.page, interval(15000), this.matSelect.valueChange)
+    this.subscriptions.push(merge(this.paginator.page, interval(15000), this.matSelect.valueChange)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -92,27 +92,29 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
           this.loading = false;
 
-          this.standardOrdersSource.length = 0;
-          this.emergencyOrdersSource.length = 0;
+          const standardOrders: Array<IOrder> = [];
+          const emergencyOrders: Array<IOrder> = [];
+
 
           for (const element of data) {
-
-            if (element.isEmegency) {
-              this.emergencyOrdersSource.push(element);
+            if (element.isEmergency) {
+              emergencyOrders.push(element);
             } else {
-              this.standardOrdersSource.push(element);
+              standardOrders.push(element);
             }
-
           }
 
-          console.log('this.standardOrdersSource', this.standardOrdersSource);
-          console.log('this.emergencyOrdersSource', this.emergencyOrdersSource);
+
+          this.standardOrdersSource = standardOrders;
+          this.emergencyOrdersSource = emergencyOrders;
+
           return this.standardOrdersSource;
+
         },
         err => {
           this.loading = false;
           this.dialogService.alert(err.error);
-        });
+        }));
 
   }
 
@@ -123,7 +125,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
 
   filterByDate() {
-    this.ordersService.getOrders({
+    this.subscriptions.push(this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
       farm: this.farmOption,
@@ -143,29 +145,33 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         return of([]);
       })
     ).subscribe(data => {
+
         this.loading = false;
 
-        const standardOrders : Array<IOrder> = [];
+        const standardOrders: Array<IOrder> = [];
+        const emergencyOrders: Array<IOrder> = [];
 
         for (const element of data) {
 
-          if (element.isEmegency) {
-            this.emergencyOrdersSource.push(element);
+          if (element.isEmergency) {
+            emergencyOrders.push(element);
           } else {
             standardOrders.push(element);
           }
 
         }
 
-        console.log('this.standardOrdersSource', standardOrders);
-        console.log('this.emergencyOrdersSource', this.emergencyOrdersSource);
-        return this.standardOrdersSource = standardOrders;
+
+        this.emergencyOrdersSource = emergencyOrders;
+        this.standardOrdersSource = standardOrders;
+
+        return this.standardOrdersSource;
 
       },
       err => {
         this.loading = false;
         this.dialogService.alert(err.error);
-      });
+      }));
   }
 
   displayRow(row, column): string {
@@ -232,7 +238,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    })
   }
 
 }

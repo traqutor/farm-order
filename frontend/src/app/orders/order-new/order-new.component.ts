@@ -51,7 +51,7 @@ export class OrderNewComponent implements OnInit {
   orderTmp: IOrder = {
     id: null,
     farm: null,
-    isEmegency: false,
+    isEmergency: false,
     silos: [],
     sheds: [],
     creationDate: null,
