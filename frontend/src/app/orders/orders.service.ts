@@ -36,7 +36,7 @@ export class OrdersService {
   }
 
   putMultipleOrder(order: IMultipleOrder) {
-    return this.http.post(`${this.apiUrl}/api/Order`, order);
+    return this.http.post(`${this.apiUrl}/api/Order/CreateMultiple`, order);
 
   }
 

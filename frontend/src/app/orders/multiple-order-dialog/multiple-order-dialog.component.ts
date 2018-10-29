@@ -7,6 +7,7 @@ import {Farm} from "../../shared/models/farm";
 import {SharedService} from "../../shared/shared.service";
 import {Ration} from "../../shared/models/ration";
 import {IShed} from "../../shared/models/shed";
+import {OrdersService} from "../orders.service";
 
 
 @Component({
@@ -24,8 +25,11 @@ export class MultipleOrderDialogComponent implements OnInit {
   allFarmSheds: Array<IShed>;
   orderSheds: Array<IShed> = [];
 
+  errorMessage: string;
+
   constructor(public dialogRef: MatDialogRef<MultipleOrderDialogComponent>,
               private sharedService: SharedService,
+              private orderService: OrdersService,
               private formBuilder: FormBuilder) {
   }
 
@@ -115,8 +119,12 @@ export class MultipleOrderDialogComponent implements OnInit {
 
 
   submit() {
-    console.log('this.orderForm.value', this.orderForm.value);
-    // this.dialogRef.close(this.orderForm.value);
+    this.errorMessage = null;
+    this.orderService.putMultipleOrder(this.orderForm.value).subscribe(() => {
+      this.dialogRef.close(this.orderForm.value);
+    }, error => {
+      this.errorMessage = JSON.stringify(error);
+    });
   }
 
 }
