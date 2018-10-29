@@ -22,6 +22,7 @@ import {MultipleOrderDialogComponent} from "../multiple-order-dialog/multiple-or
 export class OrdersListComponent implements OnInit, OnDestroy {
 
   dataSource: IOrder[] = [];
+  dataSource2: IOrder[] = [];
   displayedColumns = [
     {value: 'status', name: 'Status', hideMobile: false},
     {value: 'orderChangeReason', name: 'Order change reason', hideMobile: false},
@@ -87,7 +88,14 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         })
       ).subscribe(data => {
           this.loading = false;
-          return this.dataSource = data;
+          for (const element of data) {
+            if (element.isStandart === true) {
+              this.dataSource.push(element);
+            } else {
+              this.dataSource2.push(element);
+            }
+          }
+          return; // this.dataSource = data;
         },
         err => {
           this.loading = false;

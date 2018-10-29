@@ -9,20 +9,36 @@
     <div class="spacer"></div>
     <div>
 
+      <!--<button-->
+        <!--mat-raised-button-->
+        <!--color="accent"-->
+        <!--(click)="orderProcess()"-->
+      <!--&gt;-->
+        <!--ORDER PROCESS-->
+      <!--</button>-->
+
+      <!--<button-->
+        <!--mat-raised-button-->
+        <!--color="accent"-->
+        <!--[routerLink]="'new'"-->
+      <!--&gt;-->
+        <!--ADD ORDER-->
+      <!--</button>-->
+
       <button
         mat-raised-button
         color="accent"
         (click)="orderProcess()"
       >
-        ORDER PROCESS
+        ADD STANDARD ORDER
       </button>
 
       <button
         mat-raised-button
         color="accent"
-        [routerLink]="'new'"
+        (click)="orderProcess()"
       >
-        ADD ORDER
+        ADD EMERGENCY ORDER
       </button>
 
     </div>
@@ -83,75 +99,159 @@
 
   </div>
 
-  <div class="app-table-container mat-elevation-z8">
-    <mat-table #table [dataSource]="dataSource" class="full-width">
+  <mat-tab-group>
+    <mat-tab label="Standard Order">
+      <div class="padding-content"
+           fxFlex
+           fxLayout="column">
+        <div class="app-table-container mat-elevation-z8">
+          <mat-table #table [dataSource]="dataSource" class="full-width">
 
-      <ng-container *ngFor="let column of displayedColumns"
-                    [matColumnDef]="column.value">
+            <ng-container *ngFor="let column of displayedColumns"
+                          [matColumnDef]="column.value">
 
-        <mat-header-cell *matHeaderCellDef
-                         [class]="column.hideMobile ? 'to-hide': ''">
-          {{column.name}}
-        </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef
+                               [class]="column.hideMobile ? 'to-hide': ''">
+                {{column.name}}
+              </mat-header-cell>
 
-        <mat-cell *matCellDef="let element"
-                  [class]="column.hideMobile ? 'to-hide': ''">
+              <mat-cell *matCellDef="let element"
+                        [class]="column.hideMobile ? 'to-hide': ''">
+
+                <span class="mobile-label">
+                  {{column.name}}:
+                </span>
+
+                {{displayRow(element[column.value], column)}}
+
+              </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="settings">
+
+              <mat-header-cell *matHeaderCellDef> Settings</mat-header-cell>
+
+              <mat-cell *matCellDef="let element">
+                <button
+                  mat-icon-button
+                  color="accent"
+                  [disabled]="disableEdit(element)"
+                  matTooltip="Edit Order"
+                  [routerLink]="element.id+'/edit'"
+                >
+                  <mat-icon>
+                    edit
+                  </mat-icon>
+                </button>
+
+                <button
+                  *ngIf="this.user &&  this.user.role && (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin' )"
+                  mat-icon-button
+                  color="warn"
+                  matTooltip="Delete Order"
+                  (click)="deleteOrder(element)"
+                >
+                  <mat-icon>
+                    delete
+                  </mat-icon>
+                </button>
+
+              </mat-cell>
+
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
+            <mat-row class="mat-row-gray" *matRowDef="let row; columns: columnsToRender;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator
+            [length]="orderLength"
+            [pageSize]="20"
+          >
+          </mat-paginator>
+
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Emergency Order">
+      <div class="padding-content"
+           fxFlex
+           fxLayout="column">
+        <div class="app-table-container mat-elevation-z8">
+          <mat-table #table [dataSource]="dataSource2" class="full-width">
+
+            <ng-container *ngFor="let column of displayedColumns"
+                          [matColumnDef]="column.value">
+
+              <mat-header-cell *matHeaderCellDef
+                               [class]="column.hideMobile ? 'to-hide': ''">
+                {{column.name}}
+              </mat-header-cell>
+
+              <mat-cell *matCellDef="let element"
+                        [class]="column.hideMobile ? 'to-hide': ''">
 
           <span class="mobile-label">
             {{column.name}}:
           </span>
 
-          {{displayRow(element[column.value], column)}}
+                {{displayRow(element[column.value], column)}}
 
-        </mat-cell>
+              </mat-cell>
 
-      </ng-container>
+            </ng-container>
 
-      <ng-container matColumnDef="settings">
+            <ng-container matColumnDef="settings">
 
-        <mat-header-cell *matHeaderCellDef> Settings</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef> Settings</mat-header-cell>
 
-        <mat-cell *matCellDef="let element">
-          <button
-            mat-icon-button
-            color="accent"
-            [disabled]="disableEdit(element)"
-            matTooltip="Edit Order"
-            [routerLink]="element.id+'/edit'"
+              <mat-cell *matCellDef="let element">
+                <button
+                  mat-icon-button
+                  color="accent"
+                  [disabled]="disableEdit(element)"
+                  matTooltip="Edit Order"
+                  [routerLink]="element.id+'/edit'"
+                >
+                  <mat-icon>
+                    edit
+                  </mat-icon>
+                </button>
+
+                <button
+                  *ngIf="this.user &&  this.user.role && (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin' )"
+                  mat-icon-button
+                  color="warn"
+                  matTooltip="Delete Order"
+                  (click)="deleteOrder(element)"
+                >
+                  <mat-icon>
+                    delete
+                  </mat-icon>
+                </button>
+
+              </mat-cell>
+
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
+            <mat-row class="mat-row-gray" *matRowDef="let row; columns: columnsToRender;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator
+            [length]="orderLength"
+            [pageSize]="20"
           >
-            <mat-icon>
-              edit
-            </mat-icon>
-          </button>
+          </mat-paginator>
 
-          <button
-            *ngIf="this.user &&  this.user.role && (this.user.role.name === 'Admin' || this.user.role.name === 'CustomerAdmin' )"
-            mat-icon-button
-            color="warn"
-            matTooltip="Delete Order"
-            (click)="deleteOrder(element)"
-          >
-            <mat-icon>
-              delete
-            </mat-icon>
-          </button>
-
-        </mat-cell>
-
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columnsToRender"></mat-header-row>
-      <mat-row class="mat-row-gray" *matRowDef="let row; columns: columnsToRender;"></mat-row>
-
-    </mat-table>
-
-    <mat-paginator
-      [length]="orderLength"
-      [pageSize]="20"
-    >
-    </mat-paginator>
-
-  </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 <div *ngIf="loading" class="overlay">
   <mat-progress-spinner
