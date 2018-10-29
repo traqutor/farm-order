@@ -279,7 +279,7 @@ namespace FarmOrder.Services
             var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
             var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.Farms.Any(f => f.FarmId == model.Farm.Id));
 
-            int[] silosesIds = model.Silos.Select(s => s.Id).ToArray();
+            int[] silosesIds = model.Silos.Where(s => s.Id.HasValue).Select(s => s.Id.Value).ToArray();
             var selectedSiloses = _context.Silos.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId);
 
             List<string> errors = new List<string>();
@@ -341,7 +341,7 @@ namespace FarmOrder.Services
                         OrderSilo os = new OrderSilo()
                         {
                             Order = order,
-                            SiloId = silo.Id,
+                            SiloId = silo.Id.Value,
                             Amount = amount,
                             EntityStatus = EntityStatus.NORMAL,
                             CreationDate = DateTime.UtcNow,

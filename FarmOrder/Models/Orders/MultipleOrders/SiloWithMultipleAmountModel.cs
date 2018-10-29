@@ -11,7 +11,7 @@ namespace FarmOrder.Models.Orders.MultipleOrders
 {
     public class SiloWithMultipleAmountModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         /// <summary>
         /// Amount ordered by the user in specific order - if displayed somehwere else (not in order context) its 0 
         /// </summary>

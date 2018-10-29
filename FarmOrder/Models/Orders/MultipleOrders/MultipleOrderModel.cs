@@ -7,7 +7,6 @@ namespace FarmOrder.Models.Orders.MultipleOrders
 {
     public class MultipleOrderModel
     {
-
         public bool IsEmergency { get; set; }
         public string Notes { get; set; }
         [Required]
