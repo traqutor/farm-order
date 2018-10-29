@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSelect, MatSnackBar} from '@angular/material';
 import {DatePipe} from '@angular/common';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
-import {interval, merge, Observable, of} from 'rxjs';
+import {interval, merge, Observable, of, Subscription} from 'rxjs';
 
 import {OrdersService} from '../orders.service';
 import {IMultipleOrder, IOrder} from '../../shared/models/order';
@@ -21,7 +21,9 @@ import {MultipleOrderDialogComponent} from "../multiple-order-dialog/multiple-or
 })
 export class OrdersListComponent implements OnInit, OnDestroy {
 
-  dataSource: IOrder[] = [];
+  standardOrdersSource: IOrder[] = [];
+  emergencyOrdersSource: IOrder[] = [];
+
   displayedColumns = [
     {value: 'status', name: 'Status', hideMobile: false},
     {value: 'orderChangeReason', name: 'Order change reason', hideMobile: false},
@@ -32,6 +34,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     {value: 'ration', name: 'Ration', hideMobile: false},
     {value: 'farm', name: 'Farm', hideMobile: false}
   ];
+
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   columnsToRender = ['status', 'creationDate', 'modificationDate', 'deliveryDate', 'orderChangeReason', 'tonsOrdered', 'ration', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -42,7 +45,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   farmOption;
   orderLength = 0;
   user: User;
-  subscribe;
+  subscription: Subscription;
   loading = false;
 
   constructor(private ordersService: OrdersService,
@@ -61,7 +64,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.user = this.authService.getUser();
 
-    this.subscribe = merge(this.paginator.page, interval(15000), this.matSelect.valueChange)
+    this.subscription = merge(this.paginator.page, interval(15000), this.matSelect.valueChange)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -85,9 +88,26 @@ export class OrdersListComponent implements OnInit, OnDestroy {
           this.loading = false;
           return of([]);
         })
-      ).subscribe(data => {
+      ).subscribe((data: Array<IOrder>) => {
+
           this.loading = false;
-          return this.dataSource = data;
+
+          this.standardOrdersSource.length = 0;
+          this.emergencyOrdersSource.length = 0;
+
+          for (const element of data) {
+
+            if (element.isEmegency) {
+              this.emergencyOrdersSource.push(element);
+            } else {
+              this.standardOrdersSource.push(element);
+            }
+
+          }
+
+          console.log('this.standardOrdersSource', this.standardOrdersSource);
+          console.log('this.emergencyOrdersSource', this.emergencyOrdersSource);
+          return this.standardOrdersSource;
         },
         err => {
           this.loading = false;
@@ -124,7 +144,23 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       })
     ).subscribe(data => {
         this.loading = false;
-        return this.dataSource = data;
+
+        const standardOrders : Array<IOrder> = [];
+
+        for (const element of data) {
+
+          if (element.isEmegency) {
+            this.emergencyOrdersSource.push(element);
+          } else {
+            standardOrders.push(element);
+          }
+
+        }
+
+        console.log('this.standardOrdersSource', standardOrders);
+        console.log('this.emergencyOrdersSource', this.emergencyOrdersSource);
+        return this.standardOrdersSource = standardOrders;
+
       },
       err => {
         this.loading = false;
@@ -196,7 +232,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscribe.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }

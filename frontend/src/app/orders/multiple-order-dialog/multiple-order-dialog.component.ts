@@ -18,7 +18,7 @@ import {OrdersService} from "../orders.service";
 })
 export class MultipleOrderDialogComponent implements OnInit {
 
-  multipleOrder: IMultipleOrder = {farm: null, ration: null, silos: [], notes: null, isEmergency: false};
+  multipleOrder: IMultipleOrder = {farm: null, ration: null, silos: [], notes: null, isEmegency: false};
   orderForm: FormGroup;
   siloAmount: ISiloWithMultipleAmount = {shed: null, id: null, dateAmount: []};
   farms: Array<Farm>;
@@ -32,7 +32,7 @@ export class MultipleOrderDialogComponent implements OnInit {
               private sharedService: SharedService,
               private orderService: OrdersService,
               private formBuilder: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) public isEmergency: boolean) {
+              @Inject(MAT_DIALOG_DATA) public isEmegency: boolean) {
   }
 
 
@@ -43,7 +43,7 @@ export class MultipleOrderDialogComponent implements OnInit {
       ration: [this.multipleOrder.ration],
       silos: this.formBuilder.array([]),
       notes: [this.multipleOrder.notes],
-      isEmergency: [this.isEmergency],
+      isEmegency: [this.isEmegency],
     });
     this.addSilosAmountRows();
     this.getFarms();
@@ -128,7 +128,7 @@ export class MultipleOrderDialogComponent implements OnInit {
 
     const tmpOrder: IMultipleOrder = {
       farm: this.orderForm.value.farm,
-      isEmergency: false,
+      isEmegency: this.orderForm.value.isEmegency,
       notes: this.orderForm.value.notes,
       ration: this.orderForm.value.ration,
       silos: []
