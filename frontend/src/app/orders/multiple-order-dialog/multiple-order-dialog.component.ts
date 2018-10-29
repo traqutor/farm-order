@@ -87,10 +87,12 @@ export class MultipleOrderDialogComponent implements OnInit {
 
   addSiloAmountDateRow(siloIndex: number) {
     let tmpDate = new Date();
+    tmpDate.setDate(tmpDate.getDate() + 7);
+
     const control = (<FormArray>this.orderForm.controls['silos']).at(siloIndex).get('dateAmount') as FormArray;
     for (let i = 0; i < 4; i++) {
-      let dDate: Date = new Date(tmpDate.getDate() + i);
-      control.push(this.buildDateAmountFormGroup(dDate));
+      control.push(this.buildDateAmountFormGroup(tmpDate));
+      tmpDate.setDate(tmpDate.getDate() + 1);
     }
   }
 
@@ -111,8 +113,10 @@ export class MultipleOrderDialogComponent implements OnInit {
   }
 
   buildDateAmountFormGroup(date: Date): FormGroup {
+    console.log('date', date);
+    const dDate: Date = new Date(date);
     return this.formBuilder.group({
-      date: [date],
+      date: [dDate],
       amount: [0],
     });
   }
