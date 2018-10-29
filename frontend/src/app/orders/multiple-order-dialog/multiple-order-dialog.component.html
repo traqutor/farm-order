@@ -74,7 +74,7 @@
           <mat-label>Silo</mat-label>
 
           <mat-select formControlName="id">
-            <mat-option *ngFor="let sil of orderSheds[i].silos" [value]="sil">
+            <mat-option *ngFor="let sil of orderSheds[i].silos" [value]="sil.id">
               {{sil.name}}
             </mat-option>
           </mat-select>
@@ -124,10 +124,7 @@
       {{errorMessage}}
     </mat-error>
 
-
   </form>
-
-  <pre>{{ orderForm.value | json }}</pre>
 
 </div>
 

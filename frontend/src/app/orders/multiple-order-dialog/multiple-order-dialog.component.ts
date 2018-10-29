@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
-import {MatDialogRef} from "@angular/material";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+
 
 import {IMultipleOrder, ISiloWithMultipleAmount} from "../../shared/models/order";
 import {Farm} from "../../shared/models/farm";
@@ -17,7 +18,7 @@ import {OrdersService} from "../orders.service";
 })
 export class MultipleOrderDialogComponent implements OnInit {
 
-  multipleOrder: IMultipleOrder = {farm: null, ration: null, silos: [], notes: null};
+  multipleOrder: IMultipleOrder = {farm: null, ration: null, silos: [], notes: null, isEmergency: false};
   orderForm: FormGroup;
   siloAmount: ISiloWithMultipleAmount = {shed: null, id: null, dateAmount: []};
   farms: Array<Farm>;
@@ -30,7 +31,8 @@ export class MultipleOrderDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<MultipleOrderDialogComponent>,
               private sharedService: SharedService,
               private orderService: OrdersService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              @Inject(MAT_DIALOG_DATA) public isEmergency: boolean) {
   }
 
 
@@ -41,7 +43,7 @@ export class MultipleOrderDialogComponent implements OnInit {
       ration: [this.multipleOrder.ration],
       silos: this.formBuilder.array([]),
       notes: [this.multipleOrder.notes],
-
+      isEmergency: [this.isEmergency],
     });
     this.addSilosAmountRows();
     this.getFarms();
@@ -123,7 +125,25 @@ export class MultipleOrderDialogComponent implements OnInit {
 
   submit() {
     this.errorMessage = null;
-    this.orderService.putMultipleOrder(this.orderForm.value).subscribe(() => {
+
+    const tmpOrder: IMultipleOrder = {
+      farm: this.orderForm.value.farm,
+      isEmergency: this.orderForm.value.isEmergency,
+      notes: this.orderForm.value.notes,
+      ration: this.orderForm.value.ration,
+      silos: []
+    };
+
+    // clean up the object form from null values
+    this.orderForm.value.silos.forEach((sil: ISiloWithMultipleAmount) => {
+      if (sil.id) {
+        let tmpSilo: ISiloWithMultipleAmount = {id: sil.id, dateAmount: sil.dateAmount};
+        tmpOrder.silos.push(tmpSilo);
+      }
+    });
+
+
+    this.orderService.putMultipleOrder(tmpOrder).subscribe(() => {
       this.dialogRef.close(this.orderForm.value);
     }, error => {
       this.errorMessage = JSON.stringify(error);

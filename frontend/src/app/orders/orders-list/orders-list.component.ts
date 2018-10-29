@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSelect, MatSnackBar} from '@angular/material';
 import {DatePipe} from '@angular/common';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
-import {interval, merge, Observable, of} from 'rxjs';
+import {interval, merge, Observable, of, Subscription} from 'rxjs';
 
 import {OrdersService} from '../orders.service';
 import {IMultipleOrder, IOrder} from '../../shared/models/order';
@@ -21,8 +21,9 @@ import {MultipleOrderDialogComponent} from "../multiple-order-dialog/multiple-or
 })
 export class OrdersListComponent implements OnInit, OnDestroy {
 
-  dataSource: IOrder[] = [];
-  dataSource2: IOrder[] = [];
+  standardOrdersSource: IOrder[] = [];
+  emergencyOrdersSource: IOrder[] = [];
+
   displayedColumns = [
     {value: 'status', name: 'Status', hideMobile: false},
     {value: 'orderChangeReason', name: 'Order change reason', hideMobile: false},
@@ -33,6 +34,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     {value: 'ration', name: 'Ration', hideMobile: false},
     {value: 'farm', name: 'Farm', hideMobile: false}
   ];
+
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   columnsToRender = ['status', 'creationDate', 'modificationDate', 'deliveryDate', 'orderChangeReason', 'tonsOrdered', 'ration', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -43,7 +45,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   farmOption;
   orderLength = 0;
   user: User;
-  subscribe;
+  subscriptions: Array<Subscription> = [];
   loading = false;
 
   constructor(private ordersService: OrdersService,
@@ -62,7 +64,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
     this.user = this.authService.getUser();
 
-    this.subscribe = merge(this.paginator.page, interval(15000), this.matSelect.valueChange)
+    this.subscriptions.push(merge(this.paginator.page, interval(15000), this.matSelect.valueChange)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -86,21 +88,33 @@ export class OrdersListComponent implements OnInit, OnDestroy {
           this.loading = false;
           return of([]);
         })
-      ).subscribe(data => {
+      ).subscribe((data: Array<IOrder>) => {
+
           this.loading = false;
+
+          const standardOrders: Array<IOrder> = [];
+          const emergencyOrders: Array<IOrder> = [];
+
+
           for (const element of data) {
-            if (element.isStandart === true) {
-              this.dataSource.push(element);
+            if (element.isEmergency) {
+              emergencyOrders.push(element);
             } else {
-              this.dataSource2.push(element);
+              standardOrders.push(element);
             }
           }
-          return; // this.dataSource = data;
+
+
+          this.standardOrdersSource = standardOrders;
+          this.emergencyOrdersSource = emergencyOrders;
+
+          return this.standardOrdersSource;
+
         },
         err => {
           this.loading = false;
           this.dialogService.alert(err.error);
-        });
+        }));
 
   }
 
@@ -111,7 +125,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
 
   filterByDate() {
-    this.ordersService.getOrders({
+    this.subscriptions.push(this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
       farm: this.farmOption,
@@ -131,13 +145,33 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         return of([]);
       })
     ).subscribe(data => {
+
         this.loading = false;
-        return this.dataSource = data;
+
+        const standardOrders: Array<IOrder> = [];
+        const emergencyOrders: Array<IOrder> = [];
+
+        for (const element of data) {
+
+          if (element.isEmergency) {
+            emergencyOrders.push(element);
+          } else {
+            standardOrders.push(element);
+          }
+
+        }
+
+
+        this.emergencyOrdersSource = emergencyOrders;
+        this.standardOrdersSource = standardOrders;
+
+        return this.standardOrdersSource;
+
       },
       err => {
         this.loading = false;
         this.dialogService.alert(err.error);
-      });
+      }));
   }
 
   displayRow(row, column): string {
@@ -170,6 +204,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         .subscribe(dialogRes => {
           if (dialogRes)
             this.ordersService.deleteOrderById(order.id).subscribe(() => {
+              this.filterByDate();
               this.snackBar.open('Order was deleted', '', {
                 duration: 2500,
               });
@@ -182,10 +217,11 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     }
   }
 
-  orderProcess() {
+  orderProcess(isEmergency: boolean) {
 
     const dialogRef = this.dialog.open(MultipleOrderDialogComponent, {
       width: '80%',
+      data: isEmergency,
       disableClose: true
     });
 
@@ -193,11 +229,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       .subscribe((resolvedOrder: IMultipleOrder) => {
 
         if (resolvedOrder) {
-          this.ordersService.putMultipleOrder(resolvedOrder).subscribe(() => {
+          this.filterByDate();
 
-            this.filterByDate();
-
-          });
         }
 
       });
@@ -205,7 +238,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscribe.unsubscribe();
+    this.subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    })
   }
 
 }

@@ -279,7 +279,7 @@ namespace FarmOrder.Services
             var selectedFarm = _context.Farms.SingleOrDefault(f => f.Id == model.Farm.Id);
             var selectedRation = _context.Rations.SingleOrDefault(r => r.Id == model.Ration.Id && r.Farms.Any(f => f.FarmId == model.Farm.Id));
 
-            int[] silosesIds = model.Silos.Select(s => s.Id).ToArray();
+            int[] silosesIds = model.Silos.Where(s => s.Id.HasValue).Select(s => s.Id.Value).ToArray();
             var selectedSiloses = _context.Silos.Where(s => silosesIds.Contains(s.Id) && model.Farm.Id == s.Shed.FarmId);
 
             List<string> errors = new List<string>();
@@ -294,7 +294,7 @@ namespace FarmOrder.Services
                     selectedFarm = null;
             }
 
-            var dates = model.Silos.SelectMany(s => s.DateAmount.Select(da => da.Date)).Distinct().ToList();
+            var dates = model.Silos.SelectMany(s => s.DateAmount).Select(da => da.Date.Date).Distinct().ToList();
 
             if (dates.Any(d => d < DateTime.UtcNow))
                 errors.Add("Can not set the past date.");
@@ -315,8 +315,8 @@ namespace FarmOrder.Services
 
             foreach (var deliveryDate in dates)
             {
-                var silos = model.Silos.Where(s => s.DateAmount.Any(da => da.Date == deliveryDate));
-                var sum = silos.Sum(s => s.DateAmount.Where(da => da.Date == deliveryDate).Sum(da => da.Amount));
+                var silos = model.Silos.Where(s => s.DateAmount.Any(da => da.Date.Date == deliveryDate));
+                var sum = silos.Sum(s => s.DateAmount.Where(da => da.Date.Date == deliveryDate).Sum(da => da.Amount));
                 if (sum == 0) //skipping the order creation if there is no allocated amount for the given date
                     continue;
 
@@ -329,19 +329,19 @@ namespace FarmOrder.Services
                     TonsOrdered = sum,
                     DeliveryDate = deliveryDate,
                     Notes = model.Notes,
-                    IsEmergency = model.IsEmegency,
+                    IsEmergency = model.IsEmergency,
                     FarmId = selectedFarm.Id,
                     RationId = selectedRation.Id
                 };
 
                 foreach (var silo in silos)
                 {
-                    int amount = silo.DateAmount.FirstOrDefault(da => da.Date == deliveryDate).Amount;
+                    int amount = silo.DateAmount.FirstOrDefault(da => da.Date.Date == deliveryDate).Amount;
                     if(amount != 0) { 
                         OrderSilo os = new OrderSilo()
                         {
                             Order = order,
-                            SiloId = silo.Id,
+                            SiloId = silo.Id.Value,
                             Amount = amount,
                             EntityStatus = EntityStatus.NORMAL,
                             CreationDate = DateTime.UtcNow,
@@ -402,7 +402,7 @@ namespace FarmOrder.Services
             Order order = new Order()
             {
                 CreatedById = userId,
-                IsEmergency = model.IsEmegency,
+                IsEmergency = model.IsEmergency,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 StatusId = defaultStatus.Id,

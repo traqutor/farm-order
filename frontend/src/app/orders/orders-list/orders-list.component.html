@@ -9,36 +9,20 @@
     <div class="spacer"></div>
     <div>
 
-      <!--<button-->
-        <!--mat-raised-button-->
-        <!--color="accent"-->
-        <!--(click)="orderProcess()"-->
-      <!--&gt;-->
-        <!--ORDER PROCESS-->
-      <!--</button>-->
-
-      <!--<button-->
-        <!--mat-raised-button-->
-        <!--color="accent"-->
-        <!--[routerLink]="'new'"-->
-      <!--&gt;-->
-        <!--ADD ORDER-->
-      <!--</button>-->
-
       <button
         mat-raised-button
         color="accent"
-        (click)="orderProcess()"
+        (click)="orderProcess(false)"
       >
-        ADD STANDARD ORDER
+        STANDARD ORDER
       </button>
 
       <button
         mat-raised-button
-        color="accent"
-        (click)="orderProcess()"
+        color="warn"
+        (click)="orderProcess(true)"
       >
-        ADD EMERGENCY ORDER
+        EMERGENCY PROCESS
       </button>
 
     </div>
@@ -100,12 +84,13 @@
   </div>
 
   <mat-tab-group>
-    <mat-tab label="Standard Order">
+    <mat-tab label="Standard Orders">
       <div class="padding-content"
            fxFlex
            fxLayout="column">
         <div class="app-table-container mat-elevation-z8">
-          <mat-table #table [dataSource]="dataSource" class="full-width">
+
+          <mat-table #table [dataSource]="standardOrdersSource" class="full-width">
 
             <ng-container *ngFor="let column of displayedColumns"
                           [matColumnDef]="column.value">
@@ -176,12 +161,12 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Emergency Order">
+    <mat-tab label="Emergency Orders">
       <div class="padding-content"
            fxFlex
            fxLayout="column">
         <div class="app-table-container mat-elevation-z8">
-          <mat-table #table [dataSource]="dataSource2" class="full-width">
+          <mat-table #table [dataSource]="emergencyOrdersSource" class="full-width">
 
             <ng-container *ngFor="let column of displayedColumns"
                           [matColumnDef]="column.value">
