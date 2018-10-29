@@ -113,7 +113,6 @@ export class MultipleOrderDialogComponent implements OnInit {
   }
 
   buildDateAmountFormGroup(date: Date): FormGroup {
-    console.log('date', date);
     const dDate: Date = new Date(date);
     return this.formBuilder.group({
       date: [dDate],
