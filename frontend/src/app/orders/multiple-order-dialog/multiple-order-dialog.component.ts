@@ -7,6 +7,7 @@ import {Farm} from "../../shared/models/farm";
 import {SharedService} from "../../shared/shared.service";
 import {Ration} from "../../shared/models/ration";
 import {IShed} from "../../shared/models/shed";
+import index from "@angular/cli/lib/cli";
 
 
 @Component({
@@ -39,13 +40,18 @@ export class MultipleOrderDialogComponent implements OnInit {
       notes: [this.multipleOrder.notes],
 
     });
-    this.addSiloAmount();
+    this.addSilosAmountRows();
     this.getFarms();
   }
 
   get silos(): FormArray {
     return <FormArray>this.orderForm.get('silos');
   }
+
+  dateAmounts(index: number): FormArray {
+    return (<FormArray>this.orderForm.controls['silos']).at(index).get('dateAmount') as FormArray;
+  }
+
 
   getFarms() {
     this.sharedService.getUserAssignedFarms(null)
@@ -68,15 +74,24 @@ export class MultipleOrderDialogComponent implements OnInit {
   }
 
 
-  addSiloAmount(): void {
+  addSilosAmountRows(): void {
     for (let i = 0; i <= 9; i++) {
-      this.silos.push(this.buildSilo());
+      this.silos.push(this.buildSiloFormGroup());
+      this.addSiloAmountDateRow(i);
       this.orderSheds.push({id: null, name: null, silos: null})
     }
   }
 
+  addSiloAmountDateRow(siloIndex: number) {
+    let tmpDate = new Date();
+    const control = (<FormArray>this.orderForm.controls['silos']).at(siloIndex).get('dateAmount') as FormArray;
+    for (let i = 0; i < 4; i++) {
+      let dDate: Date = new Date(tmpDate.getDate() + i);
+      control.push(this.buildDateAmountFormGroup(dDate));
+    }
+  }
+
   shedSelected(shed: IShed, index: number) {
-    console.log('index', index);
     this.orderSheds[index] = shed;
   }
 
@@ -84,31 +99,25 @@ export class MultipleOrderDialogComponent implements OnInit {
     this.silos.removeAt(i);
   }
 
-  buildSilo(): FormGroup {
-    let dateAmount: Array<IDateAmount> = [];
-    let tmpDate = new Date();
-    for (let i = 0; i < 4; i++) {
-      dateAmount.push({date: tmpDate, amount: 0});
-    }
+  buildSiloFormGroup(): FormGroup {
     return this.formBuilder.group({
       shed: [this.siloAmount.shed],
       id: [this.siloAmount.id],
-      dateAmount: this.buildDateAmount(),
+      dateAmount: this.formBuilder.array([]),
     });
   }
 
-  buildDateAmount(): Array<FormGroup> {
-    let tmpArray: Array<FormGroup> = [];
-    let tmpDate = new Date();
-    for (let i = 0; i < 4; i++) {
-      tmpArray.push(new FormGroup({date: new FormControl(tmpDate), amount: new FormControl(0) } ));
-    }
-    return tmpArray;
+  buildDateAmountFormGroup(date: Date): FormGroup {
+    return this.formBuilder.group({
+      date: [date],
+      amount: [0],
+    });
   }
 
 
   submit() {
-    this.dialogRef.close(this.orderForm.value);
+    console.log('this.orderForm.value', this.orderForm.value);
+    // this.dialogRef.close(this.orderForm.value);
   }
 
 }

@@ -47,8 +47,7 @@
 
 
     <div formArrayName="silos"
-         *ngFor="let silo of silos.controls; let i = index"
-         class="position">
+         *ngFor="let silo of silos.controls; let i = index">
 
       <div *ngIf="allFarmSheds"
            [formGroupName]="i"
@@ -83,7 +82,26 @@
 
         </mat-form-field>
 
+        <div formArrayName="dateAmount"
+             fxLayout="row"
+             *ngFor="let dAmount of dateAmounts(i).controls; let x = index">
 
+          <div [formGroupName]="x">
+
+            <mat-form-field fxFlex appearance="outline" class="app-amount-input-field">
+
+              <mat-label>Amount</mat-label>
+
+              <input matInput
+                     type="string"
+                     placeholder="Amount"
+                     formControlName="amount">
+
+            </mat-form-field>
+
+
+          </div>
+        </div>
 
       </div>
 
@@ -103,7 +121,7 @@
 
   </form>
 
-  <!--<pre>{{ orderForm.value | json }}</pre>-->
+  <pre>{{ orderForm.value | json }}</pre>
 
 </div>
 
