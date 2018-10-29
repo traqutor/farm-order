@@ -15,7 +15,7 @@ namespace FarmOrder.Models.Orders
         {
             Id = el.Id;
 
-            IsEmegency = el.IsEmergency;
+            IsEmergency = el.IsEmergency;
             TonsOrdered = el.TonsOrdered;
             Notes = el.Notes;
             Ration = new RationListEntryViewModel(el.Ration);

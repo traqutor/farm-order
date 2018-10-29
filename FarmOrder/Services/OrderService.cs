@@ -402,7 +402,7 @@ namespace FarmOrder.Services
             Order order = new Order()
             {
                 CreatedById = userId,
-                IsEmergency = model.IsEmegency,
+                IsEmergency = model.IsEmergency,
                 CreationDate = DateTime.UtcNow,
                 ModificationDate = DateTime.UtcNow,
                 StatusId = defaultStatus.Id,
