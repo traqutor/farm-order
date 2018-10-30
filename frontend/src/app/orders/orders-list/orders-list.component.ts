@@ -40,7 +40,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
 
-  dateFromValue: string;
+  dDate = new Date();
+
+  dateFromValue: string ;
   dateToValue: string;
   farmOption;
   orderLength = 0;
@@ -59,6 +61,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    // this.dateFromValue = this.dDate.setDate(this.dDate.getDate()).toISOStrng();
 
     this.loading = true;
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
