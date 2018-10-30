@@ -35,7 +35,7 @@ export class MultipleOrderDialogComponent implements OnInit {
   numberOfSiloDayOrders;
   siloDayOrdersSums: Array<IDaySum> = [];
 
-  errorMessage: string;
+  errorMessage: Array<string>;
 
   constructor(public dialogRef: MatDialogRef<MultipleOrderDialogComponent>,
               private sharedService: SharedService,
@@ -283,7 +283,8 @@ export class MultipleOrderDialogComponent implements OnInit {
     this.orderService.putMultipleOrder(tmpOrder).subscribe(() => {
       this.dialogRef.close(this.orderForm.value);
     }, error => {
-      this.errorMessage = JSON.stringify(error);
+      console.log('error', error.error);
+      this.errorMessage = error.error.errors ? error.error.errors : [];
     });
   }
 

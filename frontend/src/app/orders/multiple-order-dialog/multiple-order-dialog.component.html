@@ -1,4 +1,5 @@
-<h1 mat-dialog-title>Order Process</h1>
+<h1 mat-dialog-title *ngIf="!isEmergency">Standard Order </h1>
+<h1 mat-dialog-title *ngIf="isEmergency">Emergency Order </h1>
 
 <div mat-dialog-content>
 
@@ -154,8 +155,8 @@
     </mat-form-field>
 
     <mat-error
-      *ngIf="errorMessage">
-      {{errorMessage}}
+      *ngFor="let message of errorMessage">
+      <p>{{message}}</p>
     </mat-error>
 
   </form>
