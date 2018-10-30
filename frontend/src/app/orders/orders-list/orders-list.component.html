@@ -1,6 +1,7 @@
 <div class="padding-content"
      fxFlex
      fxLayout="column">
+
   <div fxLayout="row" fxLayout.xs="column">
     <div>
       <h2 class="mat-title">Orders List</h2>
@@ -30,64 +31,66 @@
 
   <mat-divider></mat-divider>
 
-  <div [ngClass]="{'hidden':user.role.name !== 'Admin'}"
-       fxLayout="row" fxLayout.lt-md="column">
-
-    <mat-form-field fxFlex="30" class="small-padding-content">
-      <mat-select #matSelect placeholder="Filter orders by farms">
-        <mat-option value="">
-          ALL
-        </mat-option>
-        <span *ngIf="(farms$ | async) as farms">
-          <mat-option *ngFor="let farm of farms.results" [value]="farm">
-            {{farm.name}}
-          </mat-option>
-        </span>
-      </mat-select>
-    </mat-form-field>
-
-    <div fxLayout="row" fxLayout.lt-sm="column">
-      <mat-form-field class="small-padding-content">
-        <input matInput #dateFrom [(ngModel)]="dateFromValue" [matDatepicker]="dp1" placeholder="from date">
-        <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
-        <mat-datepicker #dp1 disabled="false"></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field class="small-padding-content">
-
-        <input matInput #dateTo [min]="dateFromValue" [(ngModel)]="dateToValue" [matDatepicker]="dp2"
-               placeholder="to date">
-        <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
-        <mat-datepicker #dp2 disabled="false"></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="padding-content">
-      <button
-        matTooltip="Search oders"
-        mat-icon-button
-        (click)="filterByDate()"
-      >
-        <mat-icon>search</mat-icon>
-      </button>
-
-      <button
-        matTooltip="Refresh"
-        mat-icon-button
-        (click)="matSelect.value = ''; dateFromValue = null; dateToValue = null; filterByDate()"
-      >
-        <mat-icon>cached</mat-icon>
-      </button>
-
-    </div>
-
-  </div>
 
   <mat-tab-group>
     <mat-tab label="Standard Orders">
       <div class="padding-content"
            fxFlex
            fxLayout="column">
+
+        <div [ngClass]="{'hidden':user.role.name !== 'Admin'}"
+             fxLayout="row" fxLayout.lt-md="column">
+
+          <mat-form-field fxFlex="30" class="small-padding-content">
+            <mat-select #matSelect placeholder="Filter orders by farms">
+              <mat-option value="">
+                ALL
+              </mat-option>
+              <span *ngIf="(farms$ | async) as farms">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </span>
+            </mat-select>
+          </mat-form-field>
+
+          <div fxLayout="row" fxLayout.lt-sm="column">
+            <mat-form-field class="small-padding-content">
+              <input matInput #dateFrom [(ngModel)]="dateFromValue" [matDatepicker]="dp1" placeholder="from date">
+              <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+              <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="small-padding-content">
+
+              <input matInput #dateTo [min]="dateFromValue" [(ngModel)]="dateToValue" [matDatepicker]="dp2"
+                     placeholder="to date">
+              <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+              <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="padding-content">
+            <button
+              matTooltip="Search oders"
+              mat-icon-button
+              (click)="filterByDate()"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+
+            <button
+              matTooltip="Refresh"
+              mat-icon-button
+              (click)="matSelect.value = ''; dateFromValue = null; dateToValue = null; filterByDate()"
+            >
+              <mat-icon>cached</mat-icon>
+            </button>
+
+          </div>
+
+        </div>
+
         <div class="app-table-container mat-elevation-z8">
 
           <mat-table #table [dataSource]="standardOrdersSource" class="full-width">
@@ -165,6 +168,61 @@
       <div class="padding-content"
            fxFlex
            fxLayout="column">
+
+        <div [ngClass]="{'hidden':user.role.name !== 'Admin'}"
+             fxLayout="row" fxLayout.lt-md="column">
+
+          <mat-form-field fxFlex="30" class="small-padding-content">
+            <mat-select #matEmergencySelect placeholder="Filter orders by farms">
+              <mat-option value="">
+                ALL
+              </mat-option>
+              <span *ngIf="(farms$ | async) as farms">
+          <mat-option *ngFor="let farm of farms.results" [value]="farm">
+            {{farm.name}}
+          </mat-option>
+        </span>
+            </mat-select>
+          </mat-form-field>
+
+          <div fxLayout="row" fxLayout.lt-sm="column">
+            <mat-form-field class="small-padding-content">
+              <input matInput #dateFrom [(ngModel)]="dateEmergencyFromValue" [matDatepicker]="emdp1" placeholder="from date">
+              <mat-datepicker-toggle matSuffix [for]="emdp1"></mat-datepicker-toggle>
+              <mat-datepicker #emdp1 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="small-padding-content">
+
+              <input matInput #dateTo [min]="dateEmergencyFromValue" [(ngModel)]="dateEmergencyToValue" [matDatepicker]="emdp2"
+                     placeholder="to date">
+              <mat-datepicker-toggle matSuffix [for]="emdp2"></mat-datepicker-toggle>
+              <mat-datepicker #emdp2 disabled="false"></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="padding-content">
+            <button
+              matTooltip="Search oders"
+              mat-icon-button
+              (click)="filterEmergencyByDate()"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+
+            <button
+              matTooltip="Refresh"
+              mat-icon-button
+              (click)="matSelect.value = ''; dateEmergencyFromValue = null; dateEmergencyToValue = null; filterByDate()"
+            >
+              <mat-icon>cached</mat-icon>
+            </button>
+
+          </div>
+
+        </div>
+
+
         <div class="app-table-container mat-elevation-z8">
           <mat-table #table [dataSource]="emergencyOrdersSource" class="full-width">
 

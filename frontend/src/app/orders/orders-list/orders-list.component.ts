@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSelect, MatSnackBar} from '@angular/material';
 import {DatePipe} from '@angular/common';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {catchError, map, startWith, switchMap, throttle} from 'rxjs/operators';
 import {interval, merge, Observable, of, Subscription} from 'rxjs';
 import * as moment from 'moment';
 
@@ -40,13 +40,18 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   columnsToRender = ['status', 'creationDate', 'modificationDate', 'deliveryDate', 'orderChangeReason', 'tonsOrdered', 'ration', 'farm', 'settings'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) emergencyPaginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
+  @ViewChild('matEmergencySelect') matEmergencySelect: MatSelect;
 
   dDate = new Date();
 
   dateFromValue: string;
   dateToValue: string;
-  farmOption;
+
+  dateEmergencyFromValue: string;
+  dateEmergencyToValue: string;
+
   orderLength = 0;
   user: User;
   subscriptions: Array<Subscription> = [];
@@ -65,6 +70,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.setStartEndPeriodStandardDate();
+    this.setStartEndPeriodEmergencyDate();
 
     this.loading = true;
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
@@ -112,7 +118,6 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
 
           this.standardOrdersSource = standardOrders;
-          this.emergencyOrdersSource = emergencyOrders;
 
           return this.standardOrdersSource;
 
@@ -122,27 +127,96 @@ export class OrdersListComponent implements OnInit, OnDestroy {
           this.dialogService.alert(err.error);
         }));
 
+    this.subscriptions.push(merge(this.emergencyPaginator.page, interval(15000), this.matEmergencySelect.valueChange)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.ordersService.getOrders({
+            page: this.emergencyPaginator.pageIndex,
+            customers: [],
+            farm: this.matEmergencySelect.value,
+            statuses: [],
+            changeReasons: [],
+            startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
+            endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
+            orderByAttribute: 0,
+            sortOrder: 0
+          });
+        }),
+        map(data => {
+          this.orderLength = data.resultsCount;
+          return data.results;
+        }),
+        catchError(() => {
+          this.loading = false;
+          return of([]);
+        })
+      ).subscribe((data: Array<IOrder>) => {
+
+          this.loading = false;
+
+          const standardOrders: Array<IOrder> = [];
+          const emergencyOrders: Array<IOrder> = [];
+
+
+          for (const element of data) {
+            if (element.isEmergency) {
+              emergencyOrders.push(element);
+            } else {
+              standardOrders.push(element);
+            }
+          }
+
+
+          this.emergencyOrdersSource = emergencyOrders;
+
+          return this.emergencyOrdersSource;
+
+        },
+        err => {
+          this.loading = false;
+          this.dialogService.alert(err.error);
+        }));
+
+
   }
 
   setStartEndPeriodStandardDate() {
 
-    let checkFrom = moment().weekday(4).hour(11).minute(15);
-    let checkTo = moment().weekday(1).hour(11).minute(15);
+    let now = moment();
 
-    let from = moment();
+    let startDay = moment(now.weekday(1).hour(11).minute(15));
+    let endDay = moment(now.weekday(4).hour(11).minute(15));
+
+    if (moment().isBefore(startDay)) {
+      console.log('before start Day');
+      endDay = moment(now.weekday(1).hour(11).minute(15));
+      startDay = moment(now.weekday(-3).hour(11).minute(15));
+    } else {
+      console.log('after start day');
+      startDay = moment(now.weekday(1).hour(11).minute(15));
+      endDay = moment(now.weekday(4).hour(11).minute(15));
+    }
+
+    console.log('now', now.toString());
+    console.log('start Day', startDay.toString());
+    console.log('end Day', endDay.toString());
+
+    let from = moment(startDay);
     let to = moment();
 
-    if (moment().isBetween(checkFrom, checkTo)) {
-      from.weekday(4);
-      from.add(7, 'days');
-      to.weekday(4);
-      to.add(11, 'days')
+    from.add(7, 'days');
+
+    if (startDay.weekday() === 1) {
+      to = moment(from);
+      to.add(2, 'days');
     } else {
-      from.weekday(1);
-      from.add(5, 'days');
-      to.weekday(1);
-      to.add(7, 'days')
+      to = moment(from);
+      to.add(3, 'days');
     }
+
+    console.log('from', from.toString());
+    console.log('to', to.toString());
 
     this.dateFromValue = from.toISOString();
     this.dateToValue = to.toISOString();
@@ -150,13 +224,47 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
 
-  check() {
-    var now = moment();
-    var hourToCheck = (now.day() !== 0) ? 17 : 15;
-    var dateToCheck = now.hour(hourToCheck).minute(30);
+  setStartEndPeriodEmergencyDate() {
 
-    return moment().isBetween(dateToCheck, dateToCheck);
+    let now = moment();
+
+    let startDay = moment(now.weekday(1).hour(11).minute(15));
+    let endDay = moment(now.weekday(4).hour(11).minute(15));
+
+
+    if (moment().isBefore(startDay)) {
+      console.log('before start Day');
+      endDay = moment(now.weekday(1).hour(11).minute(15));
+      startDay = moment(now.weekday(-3).hour(11).minute(15));
+    } else {
+      console.log('after start day');
+      startDay = moment(now.weekday(1).hour(11).minute(15));
+      endDay = moment(now.weekday(4).hour(11).minute(15));
+    }
+
+
+    console.log('start Day', startDay.toString());
+    console.log('end Day', endDay.toString());
+
+    let from = moment(endDay);
+    let to = moment();
+
+    if (startDay.weekday() === 1) {
+      to = moment(from);
+      to.add(3, 'days');
+    } else {
+      to = moment(from);
+      to.add(2, 'days');
+    }
+
+    console.log('from', from.toString());
+    console.log('to', to.toString());
+
+
+    this.dateEmergencyFromValue = from.toISOString();
+    this.dateEmergencyToValue = to.toISOString();
   }
+
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Tablet)
     .pipe(
@@ -168,7 +276,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.ordersService.getOrders({
       page: this.paginator.pageIndex,
       customers: [],
-      farm: this.farmOption,
+      farm: this.matSelect.value,
       statuses: [],
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
@@ -201,8 +309,6 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
         }
 
-
-        this.emergencyOrdersSource = emergencyOrders;
         this.standardOrdersSource = standardOrders;
 
         return this.standardOrdersSource;
@@ -213,6 +319,57 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         this.dialogService.alert(err.error);
       }));
   }
+
+  filterEmergencyByDate() {
+    this.subscriptions.push(this.ordersService.getOrders({
+      page: this.emergencyPaginator.pageIndex,
+      customers: [],
+      farm: this.matEmergencySelect.value,
+      statuses: [],
+      changeReasons: [],
+      startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
+      endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
+      orderByAttribute: 0,
+      sortOrder: 0
+    }).pipe(
+      map(data => {
+        this.orderLength = data.resultsCount;
+        return data.results;
+      }),
+      catchError(() => {
+        this.loading = false;
+        return of([]);
+      })
+    ).subscribe(data => {
+
+        this.loading = false;
+
+        const standardOrders: Array<IOrder> = [];
+        const emergencyOrders: Array<IOrder> = [];
+
+        for (const element of data) {
+
+          if (element.isEmergency) {
+            emergencyOrders.push(element);
+          } else {
+            standardOrders.push(element);
+          }
+
+        }
+
+        this.emergencyOrdersSource = emergencyOrders;
+
+        console.log('this.emergencyOrdersSource', this.emergencyOrdersSource);
+
+        return this.emergencyOrdersSource;
+
+      },
+      err => {
+        this.loading = false;
+        this.dialogService.alert(err.error);
+      }));
+  }
+
 
   displayRow(row, column): string {
     if (typeof row === 'object' && row !== null && row.name !== null) {
@@ -270,6 +427,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
         if (resolvedOrder) {
           this.filterByDate();
+          this.filterEmergencyByDate();
 
         }
 
