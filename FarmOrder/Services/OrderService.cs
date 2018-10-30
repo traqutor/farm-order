@@ -122,12 +122,12 @@ namespace FarmOrder.Services
 
             if(searchModel.StartDate != null)
             {
-                query = query.Where(o => o.DeliveryDate >= searchModel.StartDate);
+                query = query.Where(o => o.DeliveryDate.Date >= searchModel.StartDate.Value.Date);
             }
 
             if (searchModel.EndDate != null)
             {
-                query = query.Where(o => o.DeliveryDate <= searchModel.EndDate);
+                query = query.Where(o => o.DeliveryDate.Date <= searchModel.EndDate.Value.Date);
             }
 
             int count = query.Count();
