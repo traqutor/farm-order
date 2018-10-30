@@ -158,7 +158,8 @@ namespace FarmOrder.Services
                 }
             }
 
-            if (oldOrder.DeliveryDate.Subtract(DateTime.UtcNow).TotalHours < 24)
+            var timespan = oldOrder.DeliveryDate.Subtract(DateTime.UtcNow);
+            if (timespan.TotalHours < 24)
                 errors.Add("Can not modify order thats less than 24 hours to delivery.");
 
             if (errors.Count() > 0)
