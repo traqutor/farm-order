@@ -9,6 +9,7 @@ import {SharedService} from "../../shared/shared.service";
 import {Ration} from "../../shared/models/ration";
 import {IShed} from "../../shared/models/shed";
 import {OrdersService} from "../orders.service";
+import * as moment from "moment";
 
 
 @Component({
@@ -25,6 +26,8 @@ export class MultipleOrderDialogComponent implements OnInit {
   rations: Array<Ration>;
   allFarmSheds: Array<IShed>;
   orderSheds: Array<IShed> = [];
+  startOrderDate;
+
 
   errorMessage: string;
 
@@ -37,6 +40,12 @@ export class MultipleOrderDialogComponent implements OnInit {
 
 
   ngOnInit() {
+
+    if (this.isEmergency) {
+      this.setStartEndPeriodEmergencyDate();
+    } else {
+      this.setStartEndPeriodStandardDate();
+    }
 
     this.orderForm = this.formBuilder.group({
       farm: [this.multipleOrder.farm],
@@ -88,9 +97,7 @@ export class MultipleOrderDialogComponent implements OnInit {
   }
 
   addSiloAmountDateRow(siloIndex: number) {
-    let tmpDate = new Date();
-    tmpDate.setDate(tmpDate.getDate() + 7);
-
+    let tmpDate = new Date(this.startOrderDate);
     const control = (<FormArray>this.orderForm.controls['silos']).at(siloIndex).get('dateAmount') as FormArray;
     for (let i = 0; i < 4; i++) {
       control.push(this.buildDateAmountFormGroup(tmpDate));
@@ -120,6 +127,89 @@ export class MultipleOrderDialogComponent implements OnInit {
       date: [dDate],
       amount: [0],
     });
+  }
+
+
+  setStartEndPeriodStandardDate() {
+
+    let now = moment();
+
+    let startDay = moment(now.weekday(1).hour(11).minute(15));
+    let endDay = moment(now.weekday(4).hour(11).minute(15));
+
+    if (moment().isBefore(startDay)) {
+      console.log('before start Day');
+      endDay = moment(now.weekday(1).hour(11).minute(15));
+      startDay = moment(now.weekday(-3).hour(11).minute(15));
+    } else {
+      console.log('after start day');
+      startDay = moment(now.weekday(1).hour(11).minute(15));
+      endDay = moment(now.weekday(4).hour(11).minute(15));
+    }
+
+    console.log('now', now.toString());
+    console.log('start Day', startDay.toString());
+    console.log('end Day', endDay.toString());
+
+    let from = moment(startDay);
+    let to = moment();
+
+    from.add(7, 'days');
+
+    if (startDay.weekday() === 1) {
+      to = moment(from);
+      to.add(2, 'days');
+    } else {
+      to = moment(from);
+      to.add(3, 'days');
+    }
+
+    console.log('from', from.toString());
+    console.log('to', to.toString());
+
+    this.startOrderDate = from;
+
+  }
+
+
+  setStartEndPeriodEmergencyDate() {
+
+    let now = moment();
+
+    let startDay = moment(now.weekday(1).hour(11).minute(15));
+    let endDay = moment(now.weekday(4).hour(11).minute(15));
+
+
+    if (moment().isBefore(startDay)) {
+      console.log('before start Day');
+      endDay = moment(now.weekday(1).hour(11).minute(15));
+      startDay = moment(now.weekday(-3).hour(11).minute(15));
+    } else {
+      console.log('after start day');
+      startDay = moment(now.weekday(1).hour(11).minute(15));
+      endDay = moment(now.weekday(4).hour(11).minute(15));
+    }
+
+
+    console.log('start Day', startDay.toString());
+    console.log('end Day', endDay.toString());
+
+    let from = moment(endDay);
+    let to = moment();
+
+    if (startDay.weekday() === 1) {
+      to = moment(from);
+      to.add(3, 'days');
+    } else {
+      to = moment(from);
+      to.add(2, 'days');
+    }
+
+    console.log('from', from.toString());
+    console.log('to', to.toString());
+
+    this.startOrderDate = from;
+
   }
 
 

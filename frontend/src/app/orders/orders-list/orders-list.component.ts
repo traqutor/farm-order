@@ -427,6 +427,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
         if (resolvedOrder) {
           this.filterByDate();
+          this.filterEmergencyByDate();
 
         }
 
