@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using FarmOrder.Data.Entities;
 using FarmOrder.Models.Orders.MultipleOrders;
+using FarmOrder.Utils;
 
 namespace FarmOrder.Services
 {
@@ -325,6 +326,8 @@ namespace FarmOrder.Services
 
             var defaultStatus = _context.OrderStatuses.SingleOrDefault(s => s.Name == "Open");
 
+            List<Order> createdOrders = new List<Order>();
+
             foreach (var deliveryDate in dates)
             {
                 var silos = model.Silos.Where(s => s.DateAmount.Any(da => da.Date.Date == deliveryDate));
@@ -363,12 +366,41 @@ namespace FarmOrder.Services
                     }
                 }
 
-                _context.Orders.Add(order);
+                createdOrders.Add(order);
             }
 
+            _context.Orders.AddRange(createdOrders);
             _context.SaveChanges();
 
+            if (model.IsEmergency)
+            {
+                bool succeeded = sendEmergencyOrderEmails(createdOrders, userId);
+
+                if (!succeeded) {
+                    errors.Add("Created orders but failed sending all emails.");
+                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Invalid request", errors = errors }));
+                }
+            }
+
             return model;
+        }
+
+        private bool sendEmergencyOrderEmails(List<Order> orders, string userId)
+        {
+            var userNotifications = _context.UserNotifications.Where(un => un.UserId == userId);
+            bool failedSending = false;
+
+            foreach (var order in orders)
+            {
+                foreach (var userNotification in userNotifications)
+                {
+                    bool sent = EmailSender.SendEmergencyOrderEmail(userNotification.RecipientEmailAddress, order);
+                    if (!sent)
+                        failedSending = true;
+                }
+            }
+
+            return !failedSending;
         }
 
         public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)

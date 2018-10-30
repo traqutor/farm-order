@@ -55,6 +55,5 @@ namespace FarmOrder.Data
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
         public virtual DbSet<OrderChangeReason> OrderChangeReasons { get; set; }
-
     }
 }

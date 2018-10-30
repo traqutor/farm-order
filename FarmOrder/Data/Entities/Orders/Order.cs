@@ -36,8 +36,6 @@ namespace FarmOrder.Data.Entities.Orders
         [ForeignKey("ChangeReasonId")]
         public virtual OrderChangeReason ChangeReason { get; set; }
 
-
-
         public string CreatedById { get; set; }
         [ForeignKey("CreatedById")]
         public User CreatedBy { get; set; }
