@@ -39,9 +39,11 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   columnsToRender = ['status', 'creationDate', 'modificationDate', 'deliveryDate', 'orderChangeReason', 'tonsOrdered', 'ration', 'farm', 'settings'];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatPaginator) emergencyPaginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
+
+  @ViewChild(MatPaginator) emergencyPaginator: MatPaginator;
   @ViewChild('matEmergencySelect') matEmergencySelect: MatSelect;
 
   dDate = new Date();
@@ -53,6 +55,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   dateEmergencyToValue: string;
 
   orderLength = 0;
+  emergencyOrderLength = 0;
   user: User;
   subscriptions: Array<Subscription> = [];
   loading = false;
@@ -89,7 +92,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
             endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
             orderByAttribute: 1,
-            sortOrder: 1
+            sortOrder: 1,
+            isEmergency: false
           });
         }),
         map(data => {
@@ -116,10 +120,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             }
           }
 
-
-          this.standardOrdersSource = standardOrders;
-
-          return this.standardOrdersSource;
+          return this.standardOrdersSource = data;
 
         },
         err => {
@@ -140,11 +141,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
             endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
             orderByAttribute: 1,
-            sortOrder: 1
+            sortOrder: 1,
+            isEmergency: true
           });
         }),
         map(data => {
-          this.orderLength = data.resultsCount;
+          this.emergencyOrderLength = data.resultsCount;
           return data.results;
         }),
         catchError(() => {
@@ -155,22 +157,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
           this.loading = false;
 
-          const standardOrders: Array<IOrder> = [];
-          const emergencyOrders: Array<IOrder> = [];
-
-
-          for (const element of data) {
-            if (element.isEmergency) {
-              emergencyOrders.push(element);
-            } else {
-              standardOrders.push(element);
-            }
-          }
-
-
-          this.emergencyOrdersSource = emergencyOrders;
-
-          return this.emergencyOrdersSource;
+          return this.emergencyOrdersSource = data;
 
         },
         err => {
@@ -282,7 +269,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
       endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
       orderByAttribute: 1,
-      sortOrder: 1
+      sortOrder: 1,
+      isEmergency: false
     }).pipe(
       map(data => {
         this.orderLength = data.resultsCount;
@@ -296,22 +284,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
         this.loading = false;
 
-        const standardOrders: Array<IOrder> = [];
-        const emergencyOrders: Array<IOrder> = [];
-
-        for (const element of data) {
-
-          if (element.isEmergency) {
-            emergencyOrders.push(element);
-          } else {
-            standardOrders.push(element);
-          }
-
-        }
-
-        this.standardOrdersSource = standardOrders;
-
-        return this.standardOrdersSource;
+        return this.standardOrdersSource = data;
 
       },
       err => {
@@ -330,10 +303,11 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
       endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
       orderByAttribute: 1,
-      sortOrder: 1
+      sortOrder: 1,
+      isEmergency: true
     }).pipe(
       map(data => {
-        this.orderLength = data.resultsCount;
+        this.emergencyOrderLength = data.resultsCount;
         return data.results;
       }),
       catchError(() => {
@@ -344,24 +318,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
         this.loading = false;
 
-        const standardOrders: Array<IOrder> = [];
-        const emergencyOrders: Array<IOrder> = [];
-
-        for (const element of data) {
-
-          if (element.isEmergency) {
-            emergencyOrders.push(element);
-          } else {
-            standardOrders.push(element);
-          }
-
-        }
-
-        this.emergencyOrdersSource = emergencyOrders;
-
-        console.log('this.emergencyOrdersSource', this.emergencyOrdersSource);
-
-        return this.emergencyOrdersSource;
+        return this.emergencyOrdersSource = data;
 
       },
       err => {
