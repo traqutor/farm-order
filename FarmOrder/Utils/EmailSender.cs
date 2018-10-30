@@ -1,4 +1,5 @@
-﻿using FarmOrder.Properties;
+﻿using FarmOrder.Data.Entities.Orders;
+using FarmOrder.Properties;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,22 @@ namespace FarmOrder.Utils
             //message.Dispose();
             return true;
         }
+
+        public static bool SendEmergencyOrderEmail(string emailTo, Order order )
+        {
+            string subject = "Emergency order";
+            string body = $"Hello," +
+                          $"<br/><br/>" +
+                          $"An emergency order has been created and needs to be delivered on {order.DeliveryDate.ToString("dd/MM/yyyy")}." +
+                          $"<br/><br/>" +
+                          $"Regards," +
+                          $"<br/><br/>" +
+                          $"Genius Support";
+
+            return SendEmail(emailTo, subject, body);
+        }
+
+
 
         public static bool SendPasswordRecoveryEmail(string emailTo, string subject, string callbackUrl, string token)
         {
