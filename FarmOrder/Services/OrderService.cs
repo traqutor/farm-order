@@ -221,6 +221,11 @@ namespace FarmOrder.Services
             if (selectedSiloses == null || selectedSiloses.Count() <= 0)
                 errors.Add("Atleast one silo needs to be selected.");
 
+            var timeSpan = oldOrder.DeliveryDate.Subtract(model.DeliveryDate);
+
+            if (timeSpan.TotalDays > 1 || timeSpan.TotalDays < -1)
+                errors.Add("Delivery date can not be changed by more than 1 day.");
+
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
 
