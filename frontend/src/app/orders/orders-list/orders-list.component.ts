@@ -176,18 +176,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     let endDay = moment(now.weekday(4).hour(11).minute(15));
 
     if (moment().isBefore(startDay)) {
-      console.log('before start Day');
       endDay = moment(now.weekday(1).hour(11).minute(15));
       startDay = moment(now.weekday(-3).hour(11).minute(15));
     } else {
-      console.log('after start day');
       startDay = moment(now.weekday(1).hour(11).minute(15));
       endDay = moment(now.weekday(4).hour(11).minute(15));
     }
-
-    console.log('now', now.toString());
-    console.log('start Day', startDay.toString());
-    console.log('end Day', endDay.toString());
 
     let from = moment(startDay);
     let to = moment();
@@ -201,9 +195,6 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       to = moment(from);
       to.add(3, 'days');
     }
-
-    console.log('from', from.toString());
-    console.log('to', to.toString());
 
     this.dateFromValue = moment(from.hour(0).minute(0)).toISOString();
     this.dateToValue = moment(to.hour(0).minute(0)).toISOString();
@@ -220,18 +211,13 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
 
     if (moment().isBefore(startDay)) {
-      console.log('before start Day');
       endDay = moment(now.weekday(1).hour(11).minute(15));
       startDay = moment(now.weekday(-3).hour(11).minute(15));
     } else {
-      console.log('after start day');
       startDay = moment(now.weekday(1).hour(11).minute(15));
       endDay = moment(now.weekday(4).hour(11).minute(15));
     }
 
-
-    console.log('start Day', startDay.toString());
-    console.log('end Day', endDay.toString());
 
     let from = moment(endDay);
     let to = moment();
@@ -243,10 +229,6 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       to = moment(from);
       to.add(2, 'days');
     }
-
-    console.log('from', from.toString());
-    console.log('to', to.toString());
-
 
     this.dateEmergencyFromValue = moment(from.hour(0).minute(0)).toISOString();
     this.dateEmergencyToValue = moment(to.hour(0).minute(0)).toISOString();

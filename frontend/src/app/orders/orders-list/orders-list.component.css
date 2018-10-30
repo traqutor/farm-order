@@ -45,3 +45,7 @@
 .mat-column-created {
   max-width: 124px;
 }
+
+.app-tab-icon {
+  padding-right: 8px;
+}
