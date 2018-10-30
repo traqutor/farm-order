@@ -88,8 +88,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             changeReasons: [],
             startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
             endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
-            orderByAttribute: 0,
-            sortOrder: 0
+            orderByAttribute: 1,
+            sortOrder: 1
           });
         }),
         map(data => {
@@ -139,8 +139,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             changeReasons: [],
             startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
             endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
-            orderByAttribute: 0,
-            sortOrder: 0
+            orderByAttribute: 1,
+            sortOrder: 1
           });
         }),
         map(data => {
@@ -281,8 +281,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
       endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
-      orderByAttribute: 0,
-      sortOrder: 0
+      orderByAttribute: 1,
+      sortOrder: 1
     }).pipe(
       map(data => {
         this.orderLength = data.resultsCount;
@@ -329,8 +329,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       changeReasons: [],
       startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
       endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
-      orderByAttribute: 0,
-      sortOrder: 0
+      orderByAttribute: 1,
+      sortOrder: 1
     }).pipe(
       map(data => {
         this.orderLength = data.resultsCount;

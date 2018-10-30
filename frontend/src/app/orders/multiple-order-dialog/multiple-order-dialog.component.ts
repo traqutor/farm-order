@@ -108,7 +108,7 @@ export class MultipleOrderDialogComponent implements OnInit {
 
 
   recalculateSumOfRationAmount() {
-    // this.prepareSiloDayOrdersSums();
+    this.prepareSiloDayOrdersSums();
     this.orderForm.get('silos').value.forEach(el => {
       console.log(el);
       el.dateAmount.forEach((am, index) => {
@@ -146,18 +146,6 @@ export class MultipleOrderDialogComponent implements OnInit {
     this.orderForm.get('silos').value.forEach((el, i) => {
       if (el.shed && el.silo && el.shed.id === shed.id && silo.id === el.silo.id && index !== i) {
         console.log(el);
-        silo = {
-          id: null, name: null,
-          capacity: null,
-          amount: null,
-          shedId: null
-        }
-        el.silo = {
-          id: null, name: null,
-          capacity: null,
-          amount: null,
-          shedId: null
-        };
         this.snackBar.open('There is such silos selected!', '', {
           duration: 2500,
         });
