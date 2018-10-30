@@ -99,12 +99,12 @@
               <input matInput
                      type="number"
                      (change)="recalculateSumOfRationAmount()"
+                     min="0"
                      [max]="silo.value['silo'] ? silo.value['silo'].capacity : 1000"
                      placeholder="Amount"
                      formControlName="amount">
               <mat-hint align="start"> {{dAmount.value['date'] | date : 'dd/MM/yyyy' }}</mat-hint>
             </mat-form-field>
-
 
           </div>
         </div>
@@ -128,6 +128,8 @@
     </div>
 
     <div  fxLayout="row" fxLayout.lt-md="column" class="app-padding-small">
+
+      <div fxShow="lt-md" style="width: 408px;"></div>
 
       <mat-form-field *ngFor="let sum of siloDayOrdersSums"
                       appearance="outline"
@@ -176,6 +178,13 @@
           type="button"
           mat-dialog-close>Cancel
   </button>
+
+  <button *ngIf="isSending"  mat-button
+          type="button"
+          disabled
+          >Sending...
+  </button>
+
 
 </div>
 
