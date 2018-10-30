@@ -73,13 +73,14 @@
 
           <mat-label>Silo</mat-label>
 
-          <mat-select formControlName="id">
-            <mat-option *ngFor="let sil of orderSheds[i].silos" [value]="sil.id">
+          <mat-select formControlName="silo">
+            <mat-option *ngFor="let sil of orderSheds[i].silos" [value]="sil">
               {{sil.name}}
             </mat-option>
           </mat-select>
 
         </mat-form-field>
+
 
         <div formArrayName="dateAmount"
              fxLayout="row"
@@ -92,7 +93,8 @@
               <mat-label> {{dAmount.value['date'] | date : 'EEEE' }}</mat-label>
 
               <input matInput
-                     type="string"
+                     type="number"
+                     [max]="silo.value['silo'] ? silo.value['silo'].capacity : 1000"
                      placeholder="Amount"
                      formControlName="amount">
               <mat-hint align="start"> {{dAmount.value['date'] | date : 'dd/MM/yyyy' }}</mat-hint>
@@ -101,6 +103,16 @@
 
           </div>
         </div>
+
+        <mat-form-field *ngIf="silo.value['silo']" fxFlex appearance="outline" class="app-amount-input-field">
+          <mat-label>Max day capacity</mat-label>
+          <input matInput
+                 type="number"
+                 disabled
+                 placeholder="Max day capacity"
+                 [ngModelOptions]="{standalone: true}"
+                 [(ngModel)]="silo.value['silo'].capacity">
+        </mat-form-field>
 
       </div>
 

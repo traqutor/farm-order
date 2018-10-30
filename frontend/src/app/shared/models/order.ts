@@ -39,6 +39,7 @@ export interface IMultipleOrder {
 
 export interface ISiloWithMultipleAmount {
   shed?: IShed;
+  silo?: ISilo;
   id: number;
   dateAmount: Array<IDateAmount>;
 }

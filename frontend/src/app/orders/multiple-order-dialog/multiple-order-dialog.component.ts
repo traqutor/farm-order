@@ -20,7 +20,7 @@ export class MultipleOrderDialogComponent implements OnInit {
 
   multipleOrder: IMultipleOrder = {farm: null, ration: null, silos: [], notes: null, isEmergency: false};
   orderForm: FormGroup;
-  siloAmount: ISiloWithMultipleAmount = {shed: null, id: null, dateAmount: []};
+  siloAmount: ISiloWithMultipleAmount = {shed: null, id: null, silo: null, dateAmount: []};
   farms: Array<Farm>;
   rations: Array<Ration>;
   allFarmSheds: Array<IShed>;
@@ -109,7 +109,7 @@ export class MultipleOrderDialogComponent implements OnInit {
   buildSiloFormGroup(): FormGroup {
     return this.formBuilder.group({
       shed: [this.siloAmount.shed],
-      id: [this.siloAmount.id],
+      silo: [this.siloAmount.silo],
       dateAmount: this.formBuilder.array([]),
     });
   }
@@ -136,8 +136,8 @@ export class MultipleOrderDialogComponent implements OnInit {
 
     // clean up the object form from null values
     this.orderForm.value.silos.forEach((sil: ISiloWithMultipleAmount) => {
-      if (sil.id) {
-        let tmpSilo: ISiloWithMultipleAmount = {id: sil.id, dateAmount: sil.dateAmount};
+      if (sil.silo && sil.silo.id) {
+        let tmpSilo: ISiloWithMultipleAmount = {id: sil.silo.id, dateAmount: sil.dateAmount};
         tmpOrder.silos.push(tmpSilo);
       }
     });

@@ -3,6 +3,8 @@ import {MatDialog, MatPaginator, MatSelect, MatSnackBar} from '@angular/material
 import {DatePipe} from '@angular/common';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {interval, merge, Observable, of, Subscription} from 'rxjs';
+import * as moment from 'moment';
+
 
 import {OrdersService} from '../orders.service';
 import {IMultipleOrder, IOrder} from '../../shared/models/order';
@@ -40,6 +42,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
 
+  dDate = new Date();
+
   dateFromValue: string;
   dateToValue: string;
   farmOption;
@@ -59,6 +63,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.setStartEndPeriodStandardDate();
 
     this.loading = true;
     this.farms$ = this.sharedService.getUserAssignedFarms(null);
@@ -116,6 +122,40 @@ export class OrdersListComponent implements OnInit, OnDestroy {
           this.dialogService.alert(err.error);
         }));
 
+  }
+
+  setStartEndPeriodStandardDate() {
+
+    let checkFrom = moment().weekday(4).hour(11).minute(15);
+    let checkTo = moment().weekday(1).hour(11).minute(15);
+
+    let from = moment();
+    let to = moment();
+
+    if (moment().isBetween(checkFrom, checkTo)) {
+      from.weekday(4);
+      from.add(7, 'days');
+      to.weekday(4);
+      to.add(11, 'days')
+    } else {
+      from.weekday(1);
+      from.add(5, 'days');
+      to.weekday(1);
+      to.add(7, 'days')
+    }
+
+    this.dateFromValue = from.toISOString();
+    this.dateToValue = to.toISOString();
+
+  }
+
+
+  check() {
+    var now = moment();
+    var hourToCheck = (now.day() !== 0) ? 17 : 15;
+    var dateToCheck = now.hour(hourToCheck).minute(30);
+
+    return moment().isBetween(dateToCheck, dateToCheck);
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Tablet)
