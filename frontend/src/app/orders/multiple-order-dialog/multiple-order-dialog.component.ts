@@ -136,8 +136,8 @@ export class MultipleOrderDialogComponent implements OnInit {
 
     // clean up the object form from null values
     this.orderForm.value.silos.forEach((sil: ISiloWithMultipleAmount) => {
-      if (sil.id) {
-        let tmpSilo: ISiloWithMultipleAmount = {id: sil.id, dateAmount: sil.dateAmount};
+      if (sil.silo && sil.silo.id) {
+        let tmpSilo: ISiloWithMultipleAmount = {id: sil.silo.id, dateAmount: sil.dateAmount};
         tmpOrder.silos.push(tmpSilo);
       }
     });
