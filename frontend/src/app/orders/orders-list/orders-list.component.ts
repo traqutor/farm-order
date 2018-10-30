@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSelect, MatSnackBar} from '@angular/material';
 import {DatePipe} from '@angular/common';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {catchError, map, startWith, switchMap, throttle} from 'rxjs/operators';
 import {interval, merge, Observable, of, Subscription} from 'rxjs';
 import * as moment from 'moment';
 
@@ -126,26 +126,80 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   setStartEndPeriodStandardDate() {
 
-    let checkFrom = moment().weekday(4).hour(11).minute(15);
-    let checkTo = moment().weekday(1).hour(11).minute(15);
+    let now = moment().subtract(6, 'days').hour(11).minute(10);
+    let aaaaa = moment().subtract(6, 'days');
+
+    let startDay = moment(aaaaa.weekday(1).hour(11).minute(15));
+    let endDay = moment(aaaaa.weekday(4).hour(11).minute(15));
+
+
+    if (now.isBefore(startDay)) {
+      console.log('before start Day');
+      endDay = moment(aaaaa.weekday(1).hour(11).minute(15));
+      startDay = moment(aaaaa.weekday(-3).hour(11).minute(15));
+    } else {
+      console.log('after start day');
+      startDay = moment(aaaaa.weekday(1).hour(11).minute(15));
+      endDay = moment(aaaaa.weekday(4).hour(11).minute(15));
+    }
+
+    console.log('now', now.toString());
+    console.log('start Day', startDay.toString());
+    console.log('end Day', endDay.toString());
+
+    let from = moment(startDay);
+    let to = moment();
+
+    from.add(7, 'days');
+
+    if (startDay.weekday() === 1) {
+      console.log('between 3 dni');
+      to = moment(from);
+      to.add(2, 'days');
+    } else {
+      console.log('NOTTTTT between 4 dni');
+      to = moment(from);
+      to.add(3, 'days');
+    }
+
+    console.log('from', from.toString());
+    console.log('to', to.toString());
+
+    this.dateFromValue = from.toISOString();
+    this.dateToValue = to.toISOString();
+
+  }
+
+
+  setStartEndPeriodEmergencyDate() {
+
+    let now = moment();
+    console.log('now', now.day());
+    let monday1115 = moment().weekday(1).hour(11).minute(15);
+    let thursday1115 = moment().weekday(4).hour(11).minute(15);
+
+    console.log('now', moment().toString());
+    console.log('checkFrom', monday1115.toString());
+    console.log('checkTo', thursday1115.toString());
 
     let from = moment();
     let to = moment();
 
-    if (moment().isBetween(checkFrom, checkTo)) {
-      from.weekday(4);
-      from.add(7, 'days');
-      to.weekday(4);
-      to.add(11, 'days')
-    } else {
+    if (moment().isBetween(monday1115, thursday1115)) {
+      console.log('isBetween');
       from.weekday(1);
-      from.add(5, 'days');
+      from.add(7, 'days');
       to.weekday(1);
-      to.add(7, 'days')
+      to.add(9, 'days');
+    } else {
+      console.log('is not between');
+      from.weekday(4);
+      to.weekday(4);
+      to.add(3, 'days');
     }
 
-    this.dateFromValue = from.toISOString();
-    this.dateToValue = to.toISOString();
+    // this.dateFromValue = from.toISOString();
+    // this.dateToValue = to.toISOString();
 
   }
 
