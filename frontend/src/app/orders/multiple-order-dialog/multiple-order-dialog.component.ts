@@ -36,6 +36,7 @@ export class MultipleOrderDialogComponent implements OnInit {
   siloDayOrdersSums: Array<IDaySum> = [];
 
   errorMessage: Array<string>;
+  isSending: boolean;
 
   constructor(public dialogRef: MatDialogRef<MultipleOrderDialogComponent>,
               private sharedService: SharedService,
@@ -262,6 +263,7 @@ export class MultipleOrderDialogComponent implements OnInit {
 
   submit() {
     this.errorMessage = null;
+    this.isSending = true;
 
     const tmpOrder: IMultipleOrder = {
       farm: this.orderForm.value.farm,
@@ -281,8 +283,10 @@ export class MultipleOrderDialogComponent implements OnInit {
 
 
     this.orderService.putMultipleOrder(tmpOrder).subscribe(() => {
+      this.isSending = false;
       this.dialogRef.close(this.orderForm.value);
     }, error => {
+      this.isSending = false;
       console.log('error', error.error);
       this.errorMessage = error.error.errors ? error.error.errors : [];
     });
