@@ -154,9 +154,15 @@ namespace FarmOrder.Services
                 if (loggedUser.CustomerId != oldOrder.Farm.CustomerSite.CustomerId)
                 {
                     errors.Add("User does not posses access this farm.");
-                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Unauthorized, errors));
+                    
                 }
             }
+
+            if (oldOrder.DeliveryDate.Subtract(DateTime.UtcNow).TotalHours < 24)
+                errors.Add("Can not modify order thats less than 24 hours to delivery.");
+
+            if (errors.Count() > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Unauthorized, new { message = "Invalid request", errors = errors }));
 
             // BSF 20181012 - Added update to DELETED status
             oldOrder.EntityStatus = EntityStatus.DELETED;
