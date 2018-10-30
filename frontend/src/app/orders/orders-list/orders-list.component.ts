@@ -43,7 +43,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
 
-  @ViewChild(MatPaginator) emergencyPaginator: MatPaginator;
+  @ViewChild('emergencyPaginator') emergencyPaginator: MatPaginator;
   @ViewChild('matEmergencySelect') matEmergencySelect: MatSelect;
 
   dDate = new Date();
