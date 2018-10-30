@@ -377,7 +377,7 @@ namespace FarmOrder.Services
                 bool succeeded = sendEmergencyOrderEmails(createdOrders, userId);
 
                 if (!succeeded) {
-                    errors.Add("Created orders but failed sending all notifications.");
+                    errors.Add("Orders were created but failed sending all notifications.");
                     throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Invalid request", errors = errors }));
                 }
             }
