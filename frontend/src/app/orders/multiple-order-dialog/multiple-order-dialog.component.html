@@ -73,11 +73,14 @@
 
           <mat-label>Silo</mat-label>
 
-          <mat-select formControlName="silo">
+          <mat-select #optionSilo
+            formControlName="silo"
+                      (valueChange)="siloSelect(optionShed.value, optionSilo.value, i)">
             <mat-option *ngFor="let sil of orderSheds[i].silos" [value]="sil">
               {{sil.name}}
             </mat-option>
           </mat-select>
+
 
         </mat-form-field>
 
@@ -94,6 +97,7 @@
 
               <input matInput
                      type="number"
+                     (change)="recalculateSumOfRationAmount()"
                      [max]="silo.value['silo'] ? silo.value['silo'].capacity : 1000"
                      placeholder="Amount"
                      formControlName="amount">
@@ -104,7 +108,9 @@
           </div>
         </div>
 
-        <mat-form-field *ngIf="silo.value['silo']" fxFlex appearance="outline" class="app-amount-input-field">
+        <mat-form-field *ngIf="silo.value['silo']"
+                        appearance="outline"
+                        class="app-amount-input-field">
           <mat-label>Max day capacity</mat-label>
           <input matInput
                  type="number"
@@ -117,6 +123,22 @@
       </div>
 
       <mat-divider></mat-divider>
+
+    </div>
+
+    <div  fxLayout="row" fxLayout.lt-md="column" class="app-padding-small">
+
+      <mat-form-field *ngFor="let sum of siloDayOrdersSums"
+                      appearance="outline"
+                      class="app-amount-input-field">
+        <mat-label>Sum: {{sum.date | date : 'EEEE' }}</mat-label>
+        <input matInput
+               type="number"
+               disabled
+               [ngModelOptions]="{standalone: true}"
+               [(ngModel)]="sum.sum">
+      </mat-form-field>
+
     </div>
 
 
