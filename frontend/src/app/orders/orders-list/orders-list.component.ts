@@ -218,8 +218,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     console.log('from', from.toString());
     console.log('to', to.toString());
 
-    this.dateFromValue = from.toISOString();
-    this.dateToValue = to.toISOString();
+    this.dateFromValue = moment(from.hour(0).minute(0)).toISOString();
+    this.dateToValue = moment(to.hour(0).minute(0)).toISOString();
 
   }
 
@@ -261,8 +261,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     console.log('to', to.toString());
 
 
-    this.dateEmergencyFromValue = from.toISOString();
-    this.dateEmergencyToValue = to.toISOString();
+    this.dateEmergencyFromValue = moment(from.hour(0).minute(0)).toISOString();
+    this.dateEmergencyToValue = moment(to.hour(0).minute(0)).toISOString();
   }
 
 
