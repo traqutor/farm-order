@@ -23,7 +23,7 @@
         color="warn"
         (click)="orderProcess(true)"
       >
-        EMERGENCY PROCESS
+        EMERGENCY ORDER
       </button>
 
     </div>
@@ -33,7 +33,14 @@
 
 
   <mat-tab-group>
-    <mat-tab label="Standard Orders">
+    <mat-tab >
+
+      <ng-template mat-tab-label>
+        <mat-icon color="accent" class="app-tab-icon">assignment</mat-icon>
+        Standard Orders
+      </ng-template>
+
+
       <div class="padding-content"
            fxFlex
            fxLayout="column">
@@ -43,7 +50,7 @@
 
           <mat-form-field fxFlex="30" class="small-padding-content">
             <mat-select #matSelect placeholder="Filter orders by farms">
-              <mat-option value="">
+              <mat-option value="''">
                 ALL
               </mat-option>
               <span *ngIf="(farms$ | async) as farms">
@@ -77,14 +84,6 @@
               (click)="filterByDate()"
             >
               <mat-icon>search</mat-icon>
-            </button>
-
-            <button
-              matTooltip="Refresh"
-              mat-icon-button
-              (click)="matSelect.value = ''; dateFromValue = null; dateToValue = null; filterByDate()"
-            >
-              <mat-icon>cached</mat-icon>
             </button>
 
           </div>
@@ -164,7 +163,13 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Emergency Orders">
+    <mat-tab >
+
+      <ng-template mat-tab-label>
+        <mat-icon color="warn" class="app-tab-icon">assignment_late</mat-icon>
+        Emergency Orders
+      </ng-template>
+
       <div class="padding-content"
            fxFlex
            fxLayout="column">
@@ -174,7 +179,7 @@
 
           <mat-form-field fxFlex="30" class="small-padding-content">
             <mat-select #matEmergencySelect placeholder="Filter orders by farms">
-              <mat-option value="">
+              <mat-option value="''">
                 ALL
               </mat-option>
               <span *ngIf="(farms$ | async) as farms">
@@ -187,14 +192,16 @@
 
           <div fxLayout="row" fxLayout.lt-sm="column">
             <mat-form-field class="small-padding-content">
-              <input matInput #dateFrom [(ngModel)]="dateEmergencyFromValue" [matDatepicker]="emdp1" placeholder="from date">
+              <input matInput #dateFrom [(ngModel)]="dateEmergencyFromValue" [matDatepicker]="emdp1"
+                     placeholder="from date">
               <mat-datepicker-toggle matSuffix [for]="emdp1"></mat-datepicker-toggle>
               <mat-datepicker #emdp1 disabled="false"></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field class="small-padding-content">
 
-              <input matInput #dateTo [min]="dateEmergencyFromValue" [(ngModel)]="dateEmergencyToValue" [matDatepicker]="emdp2"
+              <input matInput #dateTo [min]="dateEmergencyFromValue" [(ngModel)]="dateEmergencyToValue"
+                     [matDatepicker]="emdp2"
                      placeholder="to date">
               <mat-datepicker-toggle matSuffix [for]="emdp2"></mat-datepicker-toggle>
               <mat-datepicker #emdp2 disabled="false"></mat-datepicker>
@@ -208,14 +215,6 @@
               (click)="filterEmergencyByDate()"
             >
               <mat-icon>search</mat-icon>
-            </button>
-
-            <button
-              matTooltip="Refresh"
-              mat-icon-button
-              (click)="matSelect.value = ''; dateEmergencyFromValue = null; dateEmergencyToValue = null; filterByDate()"
-            >
-              <mat-icon>cached</mat-icon>
             </button>
 
           </div>
@@ -286,7 +285,8 @@
           </mat-table>
 
           <mat-paginator
-            [length]="orderLength"
+            #emergencyPaginator
+            [length]="emergencyOrderLength"
             [pageSize]="20"
           >
           </mat-paginator>

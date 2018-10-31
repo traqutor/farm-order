@@ -12,6 +12,8 @@ namespace FarmOrder.Models.Orders
 
         public FarmListEntryViewModel Farm { get; set; }
 
+        public bool IsEmergency { get; set; }
+
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public OrderByAttribute OrderByAttribute { get; set; }

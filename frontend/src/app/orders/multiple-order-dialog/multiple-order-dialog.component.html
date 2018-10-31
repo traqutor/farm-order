@@ -1,4 +1,5 @@
-<h1 mat-dialog-title>Order Process</h1>
+<h1 mat-dialog-title *ngIf="!isEmergency">Standard Order </h1>
+<h1 mat-dialog-title *ngIf="isEmergency">Emergency Order </h1>
 
 <div mat-dialog-content>
 
@@ -73,11 +74,14 @@
 
           <mat-label>Silo</mat-label>
 
-          <mat-select formControlName="silo">
+          <mat-select #optionSilo
+            formControlName="silo"
+                      (valueChange)="siloSelect(optionShed.value, optionSilo.value, i)">
             <mat-option *ngFor="let sil of orderSheds[i].silos" [value]="sil">
               {{sil.name}}
             </mat-option>
           </mat-select>
+
 
         </mat-form-field>
 
@@ -94,17 +98,20 @@
 
               <input matInput
                      type="number"
+                     (change)="recalculateSumOfRationAmount()"
+                     min="0"
                      [max]="silo.value['silo'] ? silo.value['silo'].capacity : 1000"
                      placeholder="Amount"
                      formControlName="amount">
               <mat-hint align="start"> {{dAmount.value['date'] | date : 'dd/MM/yyyy' }}</mat-hint>
             </mat-form-field>
 
-
           </div>
         </div>
 
-        <mat-form-field *ngIf="silo.value['silo']" fxFlex appearance="outline" class="app-amount-input-field">
+        <mat-form-field *ngIf="silo.value['silo']"
+                        appearance="outline"
+                        class="app-amount-input-field">
           <mat-label>Max day capacity</mat-label>
           <input matInput
                  type="number"
@@ -117,6 +124,24 @@
       </div>
 
       <mat-divider></mat-divider>
+
+    </div>
+
+    <div  fxLayout="row" fxLayout.lt-md="column" class="app-padding-small">
+
+      <div fxShow="lt-md" style="width: 408px;"></div>
+
+      <mat-form-field *ngFor="let sum of siloDayOrdersSums"
+                      appearance="outline"
+                      class="app-amount-input-field">
+        <mat-label>Sum: {{sum.date | date : 'EEEE' }}</mat-label>
+        <input matInput
+               type="number"
+               disabled
+               [ngModelOptions]="{standalone: true}"
+               [(ngModel)]="sum.sum">
+      </mat-form-field>
+
     </div>
 
 
@@ -132,8 +157,8 @@
     </mat-form-field>
 
     <mat-error
-      *ngIf="errorMessage">
-      {{errorMessage}}
+      *ngFor="let message of errorMessage">
+      <p>{{message}}</p>
     </mat-error>
 
   </form>
@@ -153,6 +178,13 @@
           type="button"
           mat-dialog-close>Cancel
   </button>
+
+  <button *ngIf="isSending"  mat-button
+          type="button"
+          disabled
+          >Sending...
+  </button>
+
 
 </div>
 

@@ -39,9 +39,11 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   farms$: Observable<{ results: Array<Farm>, resultsCount: number }>;
   columnsToRender = ['status', 'creationDate', 'modificationDate', 'deliveryDate', 'orderChangeReason', 'tonsOrdered', 'ration', 'farm', 'settings'];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatPaginator) emergencyPaginator: MatPaginator;
   @ViewChild('matSelect') matSelect: MatSelect;
+
+  @ViewChild('emergencyPaginator') emergencyPaginator: MatPaginator;
   @ViewChild('matEmergencySelect') matEmergencySelect: MatSelect;
 
   dDate = new Date();
@@ -53,6 +55,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   dateEmergencyToValue: string;
 
   orderLength = 0;
+  emergencyOrderLength = 0;
   user: User;
   subscriptions: Array<Subscription> = [];
   loading = false;
@@ -88,8 +91,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             changeReasons: [],
             startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
             endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
-            orderByAttribute: 0,
-            sortOrder: 0
+            orderByAttribute: 1,
+            sortOrder: 1,
+            isEmergency: false
           });
         }),
         map(data => {
@@ -116,10 +120,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             }
           }
 
-
-          this.standardOrdersSource = standardOrders;
-
-          return this.standardOrdersSource;
+          return this.standardOrdersSource = data;
 
         },
         err => {
@@ -139,12 +140,13 @@ export class OrdersListComponent implements OnInit, OnDestroy {
             changeReasons: [],
             startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
             endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
-            orderByAttribute: 0,
-            sortOrder: 0
+            orderByAttribute: 1,
+            sortOrder: 1,
+            isEmergency: true
           });
         }),
         map(data => {
-          this.orderLength = data.resultsCount;
+          this.emergencyOrderLength = data.resultsCount;
           return data.results;
         }),
         catchError(() => {
@@ -155,22 +157,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
           this.loading = false;
 
-          const standardOrders: Array<IOrder> = [];
-          const emergencyOrders: Array<IOrder> = [];
-
-
-          for (const element of data) {
-            if (element.isEmergency) {
-              emergencyOrders.push(element);
-            } else {
-              standardOrders.push(element);
-            }
-          }
-
-
-          this.emergencyOrdersSource = emergencyOrders;
-
-          return this.emergencyOrdersSource;
+          return this.emergencyOrdersSource = data;
 
         },
         err => {
@@ -189,18 +176,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     let endDay = moment(now.weekday(4).hour(11).minute(15));
 
     if (moment().isBefore(startDay)) {
-      console.log('before start Day');
       endDay = moment(now.weekday(1).hour(11).minute(15));
       startDay = moment(now.weekday(-3).hour(11).minute(15));
     } else {
-      console.log('after start day');
       startDay = moment(now.weekday(1).hour(11).minute(15));
       endDay = moment(now.weekday(4).hour(11).minute(15));
     }
-
-    console.log('now', now.toString());
-    console.log('start Day', startDay.toString());
-    console.log('end Day', endDay.toString());
 
     let from = moment(startDay);
     let to = moment();
@@ -215,11 +196,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       to.add(3, 'days');
     }
 
-    console.log('from', from.toString());
-    console.log('to', to.toString());
-
-    this.dateFromValue = from.toISOString();
-    this.dateToValue = to.toISOString();
+    this.dateFromValue = moment(from.hour(0).minute(0)).toISOString();
+    this.dateToValue = moment(to.hour(0).minute(0)).toISOString();
 
   }
 
@@ -233,18 +211,13 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
 
     if (moment().isBefore(startDay)) {
-      console.log('before start Day');
       endDay = moment(now.weekday(1).hour(11).minute(15));
       startDay = moment(now.weekday(-3).hour(11).minute(15));
     } else {
-      console.log('after start day');
       startDay = moment(now.weekday(1).hour(11).minute(15));
       endDay = moment(now.weekday(4).hour(11).minute(15));
     }
 
-
-    console.log('start Day', startDay.toString());
-    console.log('end Day', endDay.toString());
 
     let from = moment(endDay);
     let to = moment();
@@ -257,12 +230,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       to.add(2, 'days');
     }
 
-    console.log('from', from.toString());
-    console.log('to', to.toString());
-
-
-    this.dateEmergencyFromValue = from.toISOString();
-    this.dateEmergencyToValue = to.toISOString();
+    this.dateEmergencyFromValue = moment(from.hour(0).minute(0)).toISOString();
+    this.dateEmergencyToValue = moment(to.hour(0).minute(0)).toISOString();
   }
 
 
@@ -281,8 +250,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       changeReasons: [],
       startDate: this.dateFromValue !== undefined && this.dateFromValue !== null ? new Date(this.dateFromValue).toISOString() : null,
       endDate: this.dateToValue !== undefined && this.dateToValue !== null ? new Date(this.dateToValue).toISOString() : null,
-      orderByAttribute: 0,
-      sortOrder: 0
+      orderByAttribute: 1,
+      sortOrder: 1,
+      isEmergency: false
     }).pipe(
       map(data => {
         this.orderLength = data.resultsCount;
@@ -296,22 +266,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
         this.loading = false;
 
-        const standardOrders: Array<IOrder> = [];
-        const emergencyOrders: Array<IOrder> = [];
-
-        for (const element of data) {
-
-          if (element.isEmergency) {
-            emergencyOrders.push(element);
-          } else {
-            standardOrders.push(element);
-          }
-
-        }
-
-        this.standardOrdersSource = standardOrders;
-
-        return this.standardOrdersSource;
+        return this.standardOrdersSource = data;
 
       },
       err => {
@@ -329,11 +284,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       changeReasons: [],
       startDate: this.dateEmergencyFromValue !== undefined && this.dateEmergencyFromValue !== null ? new Date(this.dateEmergencyFromValue).toISOString() : null,
       endDate: this.dateEmergencyToValue !== undefined && this.dateEmergencyToValue !== null ? new Date(this.dateEmergencyToValue).toISOString() : null,
-      orderByAttribute: 0,
-      sortOrder: 0
+      orderByAttribute: 1,
+      sortOrder: 1,
+      isEmergency: true
     }).pipe(
       map(data => {
-        this.orderLength = data.resultsCount;
+        this.emergencyOrderLength = data.resultsCount;
         return data.results;
       }),
       catchError(() => {
@@ -344,24 +300,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
         this.loading = false;
 
-        const standardOrders: Array<IOrder> = [];
-        const emergencyOrders: Array<IOrder> = [];
-
-        for (const element of data) {
-
-          if (element.isEmergency) {
-            emergencyOrders.push(element);
-          } else {
-            standardOrders.push(element);
-          }
-
-        }
-
-        this.emergencyOrdersSource = emergencyOrders;
-
-        console.log('this.emergencyOrdersSource', this.emergencyOrdersSource);
-
-        return this.emergencyOrdersSource;
+        return this.emergencyOrdersSource = data;
 
       },
       err => {

@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using FarmOrder.Data.Entities;
 using FarmOrder.Models.Orders.MultipleOrders;
+using FarmOrder.Utils;
 
 namespace FarmOrder.Services
 {
@@ -121,13 +122,17 @@ namespace FarmOrder.Services
 
             if(searchModel.StartDate != null)
             {
-                query = query.Where(o => o.DeliveryDate >= searchModel.StartDate);
+                var startDate = searchModel.StartDate.Value.Date;
+                query = query.Where(o => o.DeliveryDate >= startDate);
             }
 
             if (searchModel.EndDate != null)
             {
-                query = query.Where(o => o.DeliveryDate <= searchModel.EndDate);
+                var endDate = searchModel.EndDate.Value.Date;
+                query = query.Where(o => o.DeliveryDate <= endDate);
             }
+
+            query = query.Where(o => o.IsEmergency == searchModel.IsEmergency);
 
             int count = query.Count();
 
@@ -154,9 +159,16 @@ namespace FarmOrder.Services
                 if (loggedUser.CustomerId != oldOrder.Farm.CustomerSite.CustomerId)
                 {
                     errors.Add("User does not posses access this farm.");
-                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Unauthorized, errors));
+                    
                 }
             }
+
+            var timespan = oldOrder.DeliveryDate.Subtract(DateTime.UtcNow);
+            if (timespan.TotalHours < 24)
+                errors.Add("Can not modify order thats less than 24 hours to delivery.");
+
+            if (errors.Count() > 0)
+                throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Unauthorized, new { message = "Invalid request", errors = errors }));
 
             // BSF 20181012 - Added update to DELETED status
             oldOrder.EntityStatus = EntityStatus.DELETED;
@@ -213,6 +225,11 @@ namespace FarmOrder.Services
 
             if (selectedSiloses == null || selectedSiloses.Count() <= 0)
                 errors.Add("Atleast one silo needs to be selected.");
+
+            var timeSpan = oldOrder.DeliveryDate.Subtract(model.DeliveryDate);
+
+            if (timeSpan.TotalDays > 1 || timeSpan.TotalDays < -1)
+                errors.Add("Delivery date can not be changed by more than 1 day.");
 
             if (errors.Count > 0)
                 throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, errors));
@@ -313,6 +330,8 @@ namespace FarmOrder.Services
 
             var defaultStatus = _context.OrderStatuses.SingleOrDefault(s => s.Name == "Open");
 
+            List<Order> createdOrders = new List<Order>();
+
             foreach (var deliveryDate in dates)
             {
                 var silos = model.Silos.Where(s => s.DateAmount.Any(da => da.Date.Date == deliveryDate));
@@ -351,12 +370,41 @@ namespace FarmOrder.Services
                     }
                 }
 
-                _context.Orders.Add(order);
+                createdOrders.Add(order);
             }
 
+            _context.Orders.AddRange(createdOrders);
             _context.SaveChanges();
 
+            if (model.IsEmergency)
+            {
+                bool succeeded = sendEmergencyOrderEmails(createdOrders, userId);
+
+                if (!succeeded) {
+                    errors.Add("Orders were created but failed sending all notifications.");
+                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Invalid request", errors = errors }));
+                }
+            }
+
             return model;
+        }
+
+        private bool sendEmergencyOrderEmails(List<Order> orders, string userId)
+        {
+            var userNotifications = _context.UserNotifications.Where(un => un.UserId == userId);
+            bool failedSending = false;
+
+            foreach (var order in orders)
+            {
+                foreach (var userNotification in userNotifications)
+                {
+                    bool sent = EmailSender.SendEmergencyOrderEmail(userNotification.RecipientEmailAddress, order);
+                    if (!sent)
+                        failedSending = true;
+                }
+            }
+
+            return !failedSending;
         }
 
         public OrderListEntryViewModel Add(string userId, bool isAdmin, OrderCreateModel model, HttpRequestMessage request)
