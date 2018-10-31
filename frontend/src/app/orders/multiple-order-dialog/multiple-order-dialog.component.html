@@ -100,10 +100,13 @@
                      type="number"
                      (change)="recalculateSumOfRationAmount()"
                      min="0"
+                     md-counter="30"
                      [max]="silo.value['silo'] ? silo.value['silo'].capacity : 1000"
                      placeholder="Amount"
-                     formControlName="amount">
-              <mat-hint align="start"> {{dAmount.value['date'] | date : 'dd/MM/yyyy' }}</mat-hint>
+                     formControlName="amount"
+                     #maxCapacityValue>
+              <mat-hint *ngIf="maxCapacityValue.value <= (silo.value['silo'] ? silo.value['silo'].capacity : 1000)" align="start"> {{dAmount.value['date'] | date : 'dd/MM/yyyy' }}</mat-hint>
+              <mat-hint *ngIf="maxCapacityValue.value > (silo.value['silo'] ? silo.value['silo'].capacity : 1000)" align="start" style="color: #980000">too much</mat-hint>
             </mat-form-field>
 
           </div>

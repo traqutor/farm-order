@@ -150,8 +150,11 @@
                  [max]="shedxsilo.silo.capacity"
                  [(ngModel)]="shedxsilo.silo.amount"
                  [ngModelOptions]="{standalone: true}"
-                 (ngModelChange)="recalculateOrderTonnage()">
+                 (ngModelChange)="recalculateOrderTonnage()"
+                 #maxCapacityValue>
+          <mat-hint *ngIf="maxCapacityValue.value > (shedxsilo.silo.capacity)" align="start" style="color: #980000">too much</mat-hint>
         </mat-form-field>
+
 
         <div>(MAX <b>{{shedxsilo.silo.capacity}}</b> tons)
 

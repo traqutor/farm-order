@@ -284,5 +284,4 @@ export class MultipleOrderDialogComponent implements OnInit {
       this.errorMessage = error.error.errors ? error.error.errors : [];
     });
   }
-
 }
