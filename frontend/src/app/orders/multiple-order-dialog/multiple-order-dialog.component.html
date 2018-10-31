@@ -106,7 +106,7 @@
                      formControlName="amount"
                      #maxCapacityValue>
               <mat-hint *ngIf="maxCapacityValue.value <= (silo.value['silo'] ? silo.value['silo'].capacity : 1000)" align="start"> {{dAmount.value['date'] | date : 'dd/MM/yyyy' }}</mat-hint>
-              <mat-hint *ngIf="maxCapacityValue.value > (silo.value['silo'] ? silo.value['silo'].capacity : 1000)" align="start" style="color: #980000">Too much</mat-hint>
+              <mat-hint *ngIf="maxCapacityValue.value > (silo.value['silo'] ? silo.value['silo'].capacity : 1000)" align="start" class="mat-err-message">Too much</mat-hint>
             </mat-form-field>
 
           </div>
