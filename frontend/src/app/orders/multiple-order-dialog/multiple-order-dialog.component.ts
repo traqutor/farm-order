@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from "@angular/material";
 
 
@@ -265,6 +265,13 @@ export class MultipleOrderDialogComponent implements OnInit {
     this.orderForm.value.silos.forEach((sil: ISiloWithMultipleAmount) => {
       if (sil.silo && sil.silo.id) {
         let tmpSilo: ISiloWithMultipleAmount = {id: sil.silo.id, dateAmount: sil.dateAmount};
+        for (let date of tmpSilo.dateAmount) {
+          const time = moment(date.date);
+          date.date = time.startOf('day').toDate();
+
+        }
+        console.log(tmpSilo.dateAmount);
+        console.log('--------------');
         tmpOrder.silos.push(tmpSilo);
       }
     });
