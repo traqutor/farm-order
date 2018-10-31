@@ -270,8 +270,6 @@ export class MultipleOrderDialogComponent implements OnInit {
           date.date = time.startOf('day').toDate();
 
         }
-        console.log(tmpSilo.dateAmount);
-        console.log('--------------');
         tmpOrder.silos.push(tmpSilo);
       }
     });

@@ -344,6 +344,10 @@ export class OrdersListComponent implements OnInit, OnDestroy {
               this.snackBar.open('Order was deleted', '', {
                 duration: 2500,
               });
+            }, err => {
+              this.snackBar.open(err.error.errors[0], '', {
+                duration: 4000,
+              });
             });
         });
     } else {
