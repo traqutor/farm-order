@@ -8,7 +8,7 @@
 [EntityFramework](https://learn.microsoft.com/en-us/ef/), Version=6.0.0.0.
 
 
-# Repository Name
+# Orders for farms
 
 This repository is created for **demo purposes only**. It serves as an example or showcase and is not intended for production use. Feel free to explore and learn from it.
 
